@@ -18,7 +18,6 @@ class GameTree:
         self.current_node.game.state = GameState.FIRST_TURN
 
     def next(self, action: Action):
-        print(f"executing {action}")
         if not action.is_valid():
             raise ValueError(f"The action could not be executed because it was invalid.\n{action}")
 
