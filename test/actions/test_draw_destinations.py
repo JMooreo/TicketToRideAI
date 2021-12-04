@@ -107,3 +107,10 @@ class DrawDestinationsActionTest(unittest.TestCase):
                 actual = ActionSpace(self.game).can_draw_destinations()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((1,), actual.shape)
+
+    def test_as_string(self):
+        self.game.current_player_index = 0
+        self.assertEqual("draw_dest", str(DrawDestinationsAction(self.game)))
+
+        self.game.current_player_index = 1
+        self.assertEqual("draw_dest", str(DrawDestinationsAction(self.game)))

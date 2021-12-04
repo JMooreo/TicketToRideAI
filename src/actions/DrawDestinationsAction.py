@@ -6,6 +6,9 @@ from src.game.enums.TurnState import TurnState
 
 
 class DrawDestinationsAction(Action):
+    def __str__(self):
+        return "draw_dest"
+
     def is_valid(self):
         return len(self.game.unclaimed_destinations) > 0 and \
                 self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \

@@ -6,6 +6,8 @@ from src.game.enums.TurnState import TurnState
 
 
 class DrawWildCardAction(Action):
+    def __str__(self):
+        return "draw_wild"
 
     def is_valid(self):
         return self.game is not None and \

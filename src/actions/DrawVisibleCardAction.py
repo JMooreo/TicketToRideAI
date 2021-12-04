@@ -11,6 +11,9 @@ class DrawVisibleCardAction(Action):
         super().__init__(game)
         self.color = color
 
+    def __str__(self):
+        return f"draw_{str(self.color)}"
+
     def is_valid(self):
         return self.game.visible_cards.has(CardList((self.color, 1))) and \
                self.game.turn_state in [TurnState.INIT, TurnState.DRAWING_CARDS] and \

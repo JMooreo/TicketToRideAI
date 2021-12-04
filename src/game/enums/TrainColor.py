@@ -2,6 +2,10 @@ from enum import Enum
 
 
 class TrainColor(int, Enum):
+
+    def __str__(self):
+        return self.name.lower()
+
     WHITE = 0
     BLUE = 1
     GREEN = 2

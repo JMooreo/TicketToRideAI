@@ -18,6 +18,9 @@ class ClaimRouteAction(Action):
         self.route = game.map.routes.get(route_id)
         self.player = game.players[self.game.current_player_index]
 
+    def __str__(self):
+        return f"claim_{self.route_id}"
+
     def is_valid(self):
         return self.game.turn_state == TurnState.INIT and \
                self.game.state in [GameState.PLAYING, GameState.LAST_TURN] and \

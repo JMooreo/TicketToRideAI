@@ -141,3 +141,10 @@ class DrawVisibleCardActionTest(unittest.TestCase):
                 actual = ActionSpace(self.game).drawable_visible_colored_cards()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((len(TrainColor)-1,), actual.shape)
+
+    def test_as_string(self):
+        self.game.current_player_index = 0
+        self.assertEqual("draw_yellow", str(DrawVisibleCardAction(self.game, TrainColor.YELLOW)))
+
+        self.game.current_player_index = 1
+        self.assertEqual("draw_orange", str(DrawVisibleCardAction(self.game, TrainColor.ORANGE)))

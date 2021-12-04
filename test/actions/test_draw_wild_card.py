@@ -97,3 +97,6 @@ class DrawWildCardActionTest(unittest.TestCase):
                 actual = ActionSpace(self.game).can_draw_wild()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((1,), actual.shape)
+
+    def test_as_string(self):
+        self.assertEqual("draw_wild", str(DrawWildCardAction(self.game)))

@@ -1,5 +1,3 @@
-from typing import List
-
 from src.actions.Action import Action
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
@@ -13,6 +11,9 @@ class SelectDestinationsAction(Action):
 
         super().__init__(game)
         self.selected_ids = destination_ids
+
+    def __str__(self):
+        return f"select_dest_{'_'.join([str(i) for i in self.selected_ids])}"
 
     def is_valid(self):
         return 0 < len(self.selected_ids) < 4 and \

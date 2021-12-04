@@ -183,3 +183,10 @@ class ClaimRouteActionTest(unittest.TestCase):
                 actual = ActionSpace(self.game).claimable_routes()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((len(self.game.map.routes.keys()),), actual.shape)
+
+    def test_as_string(self):
+        self.game.current_player_index = 0
+        self.assertEqual("claim_2", str(ClaimRouteAction(self.game, 2)))
+
+        self.game.current_player_index = 1
+        self.assertEqual("claim_2", str(ClaimRouteAction(self.game, 2)))

@@ -123,3 +123,8 @@ class SelectDestinationsActionTest(unittest.TestCase):
                 actual = ActionSpace(self.game).claimable_destinations()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((len(self.game.map.destinations.keys()),), actual.shape)
+
+    def test_as_string(self):
+        self.assertEqual("select_dest_1_2_3", str(SelectDestinationsAction(self.game, [1, 2, 3])))
+        self.assertEqual("select_dest_1_2", str(SelectDestinationsAction(self.game, [1, 2])))
+        self.assertEqual("select_dest_1", str(SelectDestinationsAction(self.game, [1])))
