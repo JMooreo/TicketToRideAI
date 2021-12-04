@@ -15,6 +15,9 @@ class ActionSpace:
     def __init__(self, game):
         self.game = game
 
+    def __len__(self):
+        return self.to_np_array().shape[0]
+
     # Everything that you can do given the current game state
 
     def can_draw_wild(self):

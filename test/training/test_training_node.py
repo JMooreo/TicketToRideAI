@@ -23,6 +23,13 @@ class TrainingNodeTest(unittest.TestCase):
         self.game = Game(self.players, USMap())
         self.tree = GameTree(self.game)
 
+    def __do_first_turn(self):
+        self.tree.next(DrawDestinationsAction(self.game))
+        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
+
+        self.tree.next(DrawDestinationsAction(self.game))
+        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
+
     def test_first_turn_switch_after_select_destinations(self):
         self.tree.next(DrawDestinationsAction(self.game))
         self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
