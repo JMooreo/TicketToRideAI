@@ -17,9 +17,8 @@ class SelectDestinationsAction(Action):
     def is_valid(self):
         return 0 < len(self.selected_ids) < 4 and \
             self.game.destinations_are_available(self.selected_ids) and \
-            (self.game.state == GameState.FIRST_TURN or
-             (self.game.state in [GameState.PLAYING, GameState.LAST_TURN]) and
-             self.game.turn_state == TurnState.SELECTING_DESTINATIONS)
+            self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
+            self.game.turn_state == TurnState.SELECTING_DESTINATIONS
 
     def execute(self):
         self.game.take_destinations(self.selected_ids)

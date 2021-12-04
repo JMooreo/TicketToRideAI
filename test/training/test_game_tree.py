@@ -122,6 +122,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertFalse(2 in self.game.unclaimed_routes)
         self.assertTrue(2 in self.players[0].owned_routes)
         self.assertEqual(1, self.players[0].points)
+        self.assertEqual(44, self.players[0].trains)
 
     def test_opponent_draw_destinations_after_first_turn(self):
         self.__do_first_turn()

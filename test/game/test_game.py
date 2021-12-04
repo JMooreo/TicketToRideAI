@@ -21,7 +21,7 @@ class GameTest(unittest.TestCase):
 
         self.assertIs(players, my_game.players)
         self.assertIs(my_map, my_game.map)
-        self.assertEqual(my_game.turn_state, TurnState.SELECTING_DESTINATIONS)
+        self.assertEqual(my_game.turn_state, TurnState.INIT)
         self.assertEqual(my_game.turn_count, 0)
         self.assertEqual([], my_game.available_destinations)
         self.assertEqual(GameState.FIRST_TURN, my_game.state)

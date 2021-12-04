@@ -8,14 +8,6 @@ from src.game.enums.TurnState import TurnState
 class DrawWildCardAction(Action):
 
     def is_valid(self):
-        try:
-            print(self.game is not None,
-               self.game.turn_state == TurnState.INIT,
-               self.game.visible_cards.has(CardList((TrainColor.WILD, 1))),
-               self.game.state in [GameState.PLAYING, GameState.LAST_TURN])
-        except:
-            pass
-
         return self.game is not None and \
                self.game.turn_state == TurnState.INIT and \
                self.game.visible_cards.has(CardList((TrainColor.WILD, 1))) and \

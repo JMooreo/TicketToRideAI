@@ -1,11 +1,14 @@
 import unittest
 
+import numpy as np
+
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
+from src.training.ActionSpace import ActionSpace
 
 
 class DrawDestinationsActionTest(unittest.TestCase):
@@ -89,9 +92,18 @@ class DrawDestinationsActionTest(unittest.TestCase):
             for state in GameState:
                 self.game.state = state
 
-                if (self.game.state == GameState.FIRST_TURN or
-                    (self.game.state in [GameState.PLAYING, GameState.LAST_TURN]) and
+                if (self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and
                         self.game.turn_state == TurnState.INIT):
                     self.assertTrue(self.action.is_valid())
                 else:
                     self.assertFalse(self.action.is_valid(), state)
+
+    def test_action_space(self):
+        for game_state in GameState:
+            self.game.state = game_state
+            for turn_state in TurnState:
+                self.game.turn_state = turn_state
+                expected = np.array([1 if DrawDestinationsAction(self.game).is_valid() else 0])
+                actual = ActionSpace(self.game).can_draw_destinations()
+                self.assertTrue((expected == actual).all())
+                self.assertEqual((1,), actual.shape)

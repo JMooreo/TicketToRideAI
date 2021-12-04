@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.game.CardList import CardList
 from src.game.Game import Game
@@ -8,6 +10,7 @@ from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
+from src.training.ActionSpace import ActionSpace
 
 
 class ClaimRouteActionTest(unittest.TestCase):
@@ -169,3 +172,14 @@ class ClaimRouteActionTest(unittest.TestCase):
         action.execute()
 
         self.assertEqual(45 - amount_of_trains, self.player.trains)
+
+    def test_action_space(self):
+        for game_state in GameState:
+            self.game.state = game_state
+            for turn_state in TurnState:
+                self.game.turn_state = turn_state
+                expected = np.array([1 if ClaimRouteAction(self.game, route).is_valid()
+                                     else 0 for route in self.game.map.routes.keys()])
+                actual = ActionSpace(self.game).claimable_routes()
+                self.assertTrue((expected == actual).all())
+                self.assertEqual((len(self.game.map.routes.keys()),), actual.shape)

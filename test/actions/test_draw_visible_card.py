@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from src.actions.DrawVisibleCardAction import DrawVisibleCardAction
 from src.game.CardList import CardList
 from src.game.Game import Game
@@ -8,6 +10,7 @@ from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
+from src.training.ActionSpace import ActionSpace
 
 
 class DrawVisibleCardActionTest(unittest.TestCase):
@@ -126,3 +129,15 @@ class DrawVisibleCardActionTest(unittest.TestCase):
                     self.assertTrue(action.is_valid())
                 else:
                     self.assertFalse(action.is_valid(), state)
+
+    def test_action_space(self):
+        for game_state in GameState:
+            self.game.state = game_state
+            for turn_state in TurnState:
+                self.game.turn_state = turn_state
+                expected = np.array([1 if DrawVisibleCardAction(self.game, color).is_valid()
+                                     else 0 for color in TrainColor][:-1])
+
+                actual = ActionSpace(self.game).drawable_visible_colored_cards()
+                self.assertTrue((expected == actual).all())
+                self.assertEqual((len(TrainColor)-1,), actual.shape)

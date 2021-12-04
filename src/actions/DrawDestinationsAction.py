@@ -8,9 +8,8 @@ from src.game.enums.TurnState import TurnState
 class DrawDestinationsAction(Action):
     def is_valid(self):
         return len(self.game.unclaimed_destinations) > 0 and \
-               (self.game.state == GameState.FIRST_TURN or
-                (self.game.state in [GameState.PLAYING, GameState.LAST_TURN]) and
-                self.game.turn_state == TurnState.INIT)
+                self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
+                self.game.turn_state == TurnState.INIT
 
     def execute(self):
         sample_size = min(3, len(self.game.unclaimed_destinations))

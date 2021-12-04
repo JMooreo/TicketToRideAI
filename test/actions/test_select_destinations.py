@@ -1,11 +1,14 @@
 import unittest
 
+import numpy as np
+
 from src.actions.SelectDestinationsAction import SelectDestinationsAction
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
+from src.training.ActionSpace import ActionSpace
 
 
 class SelectDestinationsActionTest(unittest.TestCase):
@@ -104,8 +107,19 @@ class SelectDestinationsActionTest(unittest.TestCase):
             for state in GameState:
                 self.game.state = state
 
-                if state == GameState.FIRST_TURN or (state in [GameState.PLAYING, GameState.LAST_TURN] and
-                                                     turn_state == TurnState.SELECTING_DESTINATIONS):
+                if state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
+                        turn_state == TurnState.SELECTING_DESTINATIONS:
                     self.assertTrue(action.is_valid(), state)
                 else:
                     self.assertFalse(action.is_valid(), state)
+
+    def test_action_space(self):
+        for game_state in GameState:
+            self.game.state = game_state
+            for turn_state in TurnState:
+                self.game.turn_state = turn_state
+                expected = np.array([1 if SelectDestinationsAction(self.game, [destination]).is_valid()
+                                     else 0 for destination in self.game.map.destinations.keys()])
+                actual = ActionSpace(self.game).claimable_destinations()
+                self.assertTrue((expected == actual).all())
+                self.assertEqual((len(self.game.map.destinations.keys()),), actual.shape)

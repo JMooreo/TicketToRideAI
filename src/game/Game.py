@@ -18,7 +18,7 @@ class Game:
         self.map = game_map
         self.players = players
         self.state = GameState.FIRST_TURN
-        self.turn_state = TurnState.SELECTING_DESTINATIONS
+        self.turn_state = TurnState.INIT
         self.unclaimed_routes = copy.deepcopy(game_map.routes)
         self.unclaimed_destinations = copy.deepcopy(game_map.destinations)
         self.available_destinations = []
