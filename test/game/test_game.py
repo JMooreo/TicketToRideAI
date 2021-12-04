@@ -60,14 +60,6 @@ class GameTest(unittest.TestCase):
         for _id in destinations:
             self.assertTrue(_id in self.game.unclaimed_destinations)
 
-    def test_one_or_more_destination_ids_not_available(self):
-        self.assertFalse(self.game.destinations_are_available(iter([-9, 100])))
-
-    def test_take_destinations(self):
-        self.game.take_destinations(iter([1, 2, 3]))
-
-        self.assertFalse(self.game.destinations_are_available(iter([1, 2, 3])))
-
     def test_draw_card(self):
         self.game.deck = CardList((TrainColor.YELLOW, 1))
         self.game.visible_cards = CardList((TrainColor.ORANGE, 2), (TrainColor.YELLOW, 3))

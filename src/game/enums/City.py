@@ -2,6 +2,9 @@ from enum import Enum
 
 
 class City(Enum):
+    def __str__(self):
+        return self.name
+
     VANCOUVER = 1
     CALGARY = 2
     WINNIPEG = 3

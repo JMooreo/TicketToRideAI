@@ -11,6 +11,9 @@ class Destination:
         self.points = points
         self.cities = cities
 
+    def __str__(self):
+        return str(self.cities[0]) + "_to_" + str(self.cities[1])
+
     def path_from(self, routes):
         return self.search(path=[Route([self.cities[0], self.cities[0]], RouteCost(TrainColor.WILD, 1))],
                            visited=[],

@@ -19,7 +19,11 @@ class ClaimRouteAction(Action):
         self.player = game.players[self.game.current_player_index]
 
     def __str__(self):
-        return f"claim_{self.route_id}"
+        return f"claim_{str(self.game.map.routes.get(self.route_id))}"
+
+    def __eq__(self, other):
+        return isinstance(other, ClaimRouteAction) and \
+                self.game == other.game
 
     def is_valid(self):
         return self.game.turn_state == TurnState.INIT and \
@@ -29,6 +33,7 @@ class ClaimRouteAction(Action):
                self.route.adjacent_route_id not in self.player.owned_routes
 
     def execute(self):
+        super().execute()
         self.game.unclaimed_routes.pop(self.route_id)
         self.game.turn_state = TurnState.FINISHED
         self.player.owned_routes.append(self.route_id)

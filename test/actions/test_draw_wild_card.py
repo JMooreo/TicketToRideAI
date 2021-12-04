@@ -25,9 +25,8 @@ class DrawWildCardActionTest(unittest.TestCase):
         self.assertIs(self.game, self.action.game)
 
     def test_init_None_game(self):
-        action = DrawWildCardAction(None)
-
-        self.assertFalse(action.is_valid())
+        with self.assertRaises(ValueError):
+            DrawWildCardAction(None)
 
     def test_wild_is_not_available(self):
         self.game.visible_cards = CardList((TrainColor.ORANGE, 5))
@@ -100,3 +99,14 @@ class DrawWildCardActionTest(unittest.TestCase):
 
     def test_as_string(self):
         self.assertEqual("draw_wild", str(DrawWildCardAction(self.game)))
+
+    def test_turn_history(self):
+        player = self.game.players[self.game.current_player_index]
+        self.game.visible_cards = CardList((TrainColor.WILD, 2))
+
+        self.assertEqual([], player.turn_history)
+
+        self.action.execute()
+
+        self.assertEqual(TurnState.FINISHED, self.game.turn_state)
+        self.assertEqual([self.action], player.turn_history)

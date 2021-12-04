@@ -5,7 +5,7 @@ from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.DrawVisibleCardAction import DrawVisibleCardAction
 from src.actions.DrawWildCardAction import DrawWildCardAction
-from src.actions.SelectDestinationsAction import SelectDestinationsAction
+from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -24,15 +24,15 @@ class TrainingNodeTest(unittest.TestCase):
         self.tree = GameTree(self.game)
 
     def __do_first_turn(self):
-        self.tree.next(DrawDestinationsAction(self.game))
-        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
-
-        self.tree.next(DrawDestinationsAction(self.game))
-        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
+        for _ in range(2):
+            self.tree.next(DrawDestinationsAction(self.game))
+            for _ in range(3):
+                self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
     def test_first_turn_switch_after_select_destinations(self):
         self.tree.next(DrawDestinationsAction(self.game))
-        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
+        for _ in range(3):
+            self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
@@ -88,7 +88,8 @@ class TrainingNodeTest(unittest.TestCase):
         self.__do_first_turn()
         self.tree.next(DrawDestinationsAction(self.game))
 
-        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
+        for _ in range(3):
+            self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))

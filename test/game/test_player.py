@@ -6,8 +6,10 @@ from src.game.Player import Player
 
 class PlayerTest(unittest.TestCase):
 
-    def test_init(self):
-        player = Player()
+    def setUp(self):
+        self.player = Player()
 
-        self.assertEqual(CardList(), player.hand)
-        self.assertEqual([], player.owned_destinations)
+    def test_init(self):
+        self.assertEqual(CardList(), self.player.hand)
+        self.assertEqual([], self.player.owned_destinations)
+        self.assertEqual([], self.player.turn_history)

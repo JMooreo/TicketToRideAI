@@ -17,7 +17,7 @@ class Route:
         return city in self.cities
 
     def __str__(self):
-        return f"{self.cities[0]}"[5:] + " <-> " + f"{self.cities[1]}"[5:]
+        return str(self.cities[0]) + "_to_" + str(self.cities[1])
 
     def __repr__(self):
         return str(self)

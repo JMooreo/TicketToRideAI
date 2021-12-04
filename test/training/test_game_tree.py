@@ -2,7 +2,7 @@ import unittest
 
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
-from src.actions.SelectDestinationsAction import SelectDestinationsAction
+from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -19,11 +19,10 @@ class GameTreeTest(unittest.TestCase):
         self.tree = GameTree(self.game)
 
     def __do_first_turn(self):
-        self.tree.next(DrawDestinationsAction(self.game))
-        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
-
-        self.tree.next(DrawDestinationsAction(self.game))
-        self.tree.next(SelectDestinationsAction(self.game, self.game.available_destinations))
+        for _ in range(2):
+            self.tree.next(DrawDestinationsAction(self.game))
+            for _ in range(3):
+                self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
     def test_init(self):
         self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
@@ -36,10 +35,11 @@ class GameTreeTest(unittest.TestCase):
                 break
             self.tree.next(draw)
 
-            select = SelectDestinationsAction(self.game, self.game.available_destinations)
-            if not select.is_valid():
-                break
-            self.tree.next(select)
+            for _ in range(3):
+                select = SelectDestinationAction(self.game, self.game.available_destinations[0])
+                if not select.is_valid():
+                    break
+                self.tree.next(select)
 
         self.assertEqual(15, len(self.players[0].owned_destinations))
         self.assertEqual(15, len(self.players[1].owned_destinations))

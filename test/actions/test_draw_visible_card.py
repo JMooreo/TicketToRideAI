@@ -144,7 +144,24 @@ class DrawVisibleCardActionTest(unittest.TestCase):
 
     def test_as_string(self):
         self.game.current_player_index = 0
-        self.assertEqual("draw_yellow", str(DrawVisibleCardAction(self.game, TrainColor.YELLOW)))
+        self.assertEqual("draw_YELLOW", str(DrawVisibleCardAction(self.game, TrainColor.YELLOW)))
 
         self.game.current_player_index = 1
-        self.assertEqual("draw_orange", str(DrawVisibleCardAction(self.game, TrainColor.ORANGE)))
+        self.assertEqual("draw_ORANGE", str(DrawVisibleCardAction(self.game, TrainColor.ORANGE)))
+
+    def test_turn_history(self):
+        player = self.game.players[self.game.current_player_index]
+        self.game.visible_cards = CardList((TrainColor.BLUE, 2))
+
+        self.assertEqual([], player.turn_history)
+
+        action = DrawVisibleCardAction(self.game, TrainColor.BLUE)
+        action.execute()
+
+        self.assertEqual(TurnState.DRAWING_CARDS, self.game.turn_state)
+        self.assertEqual([action], player.turn_history)
+
+        action.execute()
+
+        self.assertEqual(TurnState.FINISHED, self.game.turn_state)
+        self.assertEqual([action, action], player.turn_history)

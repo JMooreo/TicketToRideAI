@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from src.actions.SelectDestinationsAction import SelectDestinationsAction
+from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
@@ -20,86 +20,71 @@ class SelectDestinationsActionTest(unittest.TestCase):
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
 
     def test_init(self):
-        action = SelectDestinationsAction(self.game, [0, 1])
+        action = SelectDestinationAction(self.game, 0)
 
         self.assertIs(self.game, action.game)
 
-    def test_length_of_selections_too_long(self):
-        action = SelectDestinationsAction(self.game, [0, 1, 2, 3])
+    def test_select_none(self):
+        with self.assertRaises(ValueError):
+            SelectDestinationAction(self.game, None)
 
-        self.assertFalse(action.is_valid())
-
-    def test_length_of_selections_too_short(self):
-        action = SelectDestinationsAction(self.game, [])
-
-        self.assertFalse(action.is_valid())
-
-    def test_one_destination_index_below_minimum(self):
+    def test_destination_index_below_minimum(self):
         with self.assertRaises(IndexError):
-            SelectDestinationsAction(self.game, [-1])
+            SelectDestinationAction(self.game, -1)
 
-    def test_many_destinations_index_below_minimum(self):
+    def test_destination_index_above_maximum(self):
         with self.assertRaises(IndexError):
-            SelectDestinationsAction(self.game, [0, 4, -7])
-
-    def test_one_destination_index_above_maximum(self):
-        with self.assertRaises(IndexError):
-            SelectDestinationsAction(self.game, [-1])
-
-    def test_many_destination_index_above_maximum(self):
-        with self.assertRaises(IndexError):
-            SelectDestinationsAction(self.game, [6, 190, 8])
+            SelectDestinationAction(self.game, 900)
 
     def test_init_valid(self):
         self.game.available_destinations = [0, 1, 2]
         self.game.state = GameState.PLAYING
-        action = SelectDestinationsAction(self.game, [0, 1])
+        action = SelectDestinationAction(self.game, 0)
 
         self.assertTrue(action.is_valid())
 
     def test_destination_not_available(self):
-        action = SelectDestinationsAction(self.game, [1])
+        action = SelectDestinationAction(self.game, 1)
         self.game.available_destinations = []
 
         self.assertFalse(action.is_valid())
 
-    def test_select_more_destinations_than_are_available(self):
-        self.game.available_destinations = [2]
-        action = SelectDestinationsAction(self.game, [2, 3])
-
-        self.assertFalse(action.is_valid())
-
     def test_state_after_action(self):
-        action = SelectDestinationsAction(self.game, [1])
+        action = SelectDestinationAction(self.game, 1)
 
         action.execute()
 
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
     def test_correct_player_gets_the_destinations(self):
-        action = SelectDestinationsAction(self.game, [1, 2, 3])
+        self.game.available_destinations = [1, 2, 3]
+        action = SelectDestinationAction(self.game, 2)
 
         action.execute()
 
-        for i in action.selected_ids:
-            self.assertTrue(i in self.players[0].owned_destinations)
+        self.assertTrue(2 in self.players[0].owned_destinations)
 
     def test_unchosen_destinations_go_back_into_the_deck(self):
         self.game.available_destinations = [2, 3, 5]
         self.game.state = GameState.PLAYING
-        action = SelectDestinationsAction(self.game, [2, 3])
-        self.assertTrue(action.is_valid())
 
+        action = SelectDestinationAction(self.game, 2)
+        self.assertTrue(action.is_valid())
+        action.execute()
+
+        action = SelectDestinationAction(self.game, 3)
+        self.assertTrue(action.is_valid())
         action.execute()
 
         self.assertFalse(2 in self.game.unclaimed_destinations)
         self.assertFalse(3 in self.game.unclaimed_destinations)
         self.assertTrue(5 in self.game.unclaimed_destinations)
-        self.assertEqual([], self.game.available_destinations)
+        self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
+        self.assertEqual([5], self.game.available_destinations)
 
     def test_all_game_states(self):
         self.game.available_destinations = [2, 3, 5]
-        action = SelectDestinationsAction(self.game, [2, 3])
+        action = SelectDestinationAction(self.game, 2)
 
         for turn_state in TurnState:
             self.game.turn_state = turn_state
@@ -118,13 +103,37 @@ class SelectDestinationsActionTest(unittest.TestCase):
             self.game.state = game_state
             for turn_state in TurnState:
                 self.game.turn_state = turn_state
-                expected = np.array([1 if SelectDestinationsAction(self.game, [destination]).is_valid()
+                expected = np.array([1 if SelectDestinationAction(self.game, destination).is_valid()
                                      else 0 for destination in self.game.map.destinations.keys()])
-                actual = ActionSpace(self.game).claimable_destinations()
+                actual = ActionSpace(self.game).selectable_destinations()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((len(self.game.map.destinations.keys()),), actual.shape)
 
     def test_as_string(self):
-        self.assertEqual("select_dest_1_2_3", str(SelectDestinationsAction(self.game, [1, 2, 3])))
-        self.assertEqual("select_dest_1_2", str(SelectDestinationsAction(self.game, [1, 2])))
-        self.assertEqual("select_dest_1", str(SelectDestinationsAction(self.game, [1])))
+        self.assertEqual("select_dest_CALGARY_to_PHOENIX", str(SelectDestinationAction(self.game, 1)))
+        self.assertEqual("select_dest_DALLAS_to_NEW_YORK", str(SelectDestinationAction(self.game, 5)))
+
+    def test_turn_history(self):
+        self.game.available_destinations = [1, 2, 3]
+        player = self.game.players[self.game.current_player_index]
+
+        self.assertEqual([], player.turn_history)
+
+        action = SelectDestinationAction(self.game, 1)
+        action.execute()
+
+        self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
+        self.assertEqual([action], player.turn_history)
+
+        action2 = SelectDestinationAction(self.game, 2)
+        action2.execute()
+
+        self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
+        self.assertEqual([action, action2], player.turn_history)
+
+        action3 = SelectDestinationAction(self.game, 3)
+        action3.execute()
+
+        self.assertEqual(TurnState.FINISHED, self.game.turn_state)
+        self.assertEqual([action, action2, action3], player.turn_history)
+

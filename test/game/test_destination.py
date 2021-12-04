@@ -82,3 +82,7 @@ class DestinationTest(unittest.TestCase):
         ]
 
         self.assertIsNone(destination.path_from(routes))
+
+    def test_to_string(self):
+        destination = Destination([City.BOSTON, City.DULUTH], 21)
+        self.assertEqual("BOSTON_to_DULUTH", str(destination))

@@ -32,9 +32,6 @@ class Game:
 
         self.visible_cards += self.deck.get_random(5)
 
-    def destinations_are_available(self, destination_ids):
-        return all([i in self.available_destinations for i in destination_ids])
-
     def take_destinations(self, destination_ids):
         for i in destination_ids:
             self.unclaimed_destinations.pop(i)

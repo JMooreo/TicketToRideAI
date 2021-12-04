@@ -114,3 +114,13 @@ class DrawDestinationsActionTest(unittest.TestCase):
 
         self.game.current_player_index = 1
         self.assertEqual("draw_dest", str(DrawDestinationsAction(self.game)))
+
+    def test_turn_history(self):
+        player = self.game.players[self.game.current_player_index]
+
+        self.assertEqual([], player.turn_history)
+
+        self.action.execute()
+
+        self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
+        self.assertEqual([self.action], player.turn_history)

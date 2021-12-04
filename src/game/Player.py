@@ -8,3 +8,4 @@ class Player:
         self.owned_destinations = []
         self.owned_routes = []
         self.hand = CardList()
+        self.turn_history = []

@@ -23,7 +23,7 @@ class StrategyTest(unittest.TestCase):
     def test_random_with_action_space(self):
         strategy = Strategy.random(len(self.action_space))
 
-        self.assertEqual(1/140, strategy[0])
+        self.assertEqual(1/len(self.action_space), strategy[0])
         self.assertTrue(np.all(strategy == strategy[0]))
 
     def test_normalize_with_zeros(self):
