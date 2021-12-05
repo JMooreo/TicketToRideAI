@@ -57,3 +57,10 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(52, self.players[1].hand.number_of_cards())
         self.assertEqual(110, (self.players[0].hand + self.players[1].hand + self.game.visible_cards).number_of_cards())
         self.assertEqual(CardList(), self.game.deck)
+
+    def test_turn_history_resets_on_turn_switch(self):
+        self.__do_first_turn()
+
+        self.assertEqual([], self.players[0].turn_history)
+        self.assertEqual([], self.players[1].turn_history)
+

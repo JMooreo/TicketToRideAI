@@ -5,6 +5,7 @@ from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.DrawVisibleCardAction import DrawVisibleCardAction
 from src.actions.DrawWildCardAction import DrawWildCardAction
+from src.actions.FinishSelectingDestinationsAction import FinishSelectingDestinationsAction
 from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.CardList import CardList
 from src.game.Game import Game
@@ -29,6 +30,11 @@ class OpponentNodeTest(unittest.TestCase):
             self.tree.next(DrawDestinationsAction(self.game))
             for _ in range(3):
                 self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
+
+    def __do_training_node_turn(self):
+        self.tree.next(DrawDestinationsAction(self.game))
+        for _ in range(3):
+            self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
     def test_opponent_draw_destinations_after_first_turn(self):
         self.__do_first_turn()
@@ -105,3 +111,39 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.assertEqual(3, len(self.players[0].owned_destinations))
         self.assertEqual(3, len(self.players[1].owned_destinations))
+
+    def test_select_one_destination_then_end_first_turn(self):
+        self.__do_training_node_turn()
+
+        with self.assertRaises(ValueError):
+            self.tree.next(DrawDestinationsAction(self.game))
+            self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
+            self.tree.next(FinishSelectingDestinationsAction(self.game))
+
+    def test_select_one_destination_then_end_turn_after_first_turn(self):
+        self.__do_first_turn()
+        self.__do_training_node_turn()
+
+        self.tree.next(DrawDestinationsAction(self.game))
+        self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
+
+        self.tree.next(FinishSelectingDestinationsAction(self.game))
+
+        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertEqual(TurnState.INIT, self.game.turn_state)
+        self.assertEqual(GameState.PLAYING, self.game.state)
+        self.assertEqual(0, self.game.current_player_index)
+
+    def test_select_two_destinations_then_end_first_turn(self):
+        self.__do_training_node_turn()
+
+        self.tree.next(DrawDestinationsAction(self.game))
+        for _ in range(2):
+            self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
+
+        self.tree.next(FinishSelectingDestinationsAction(self.game))
+
+        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertEqual(TurnState.INIT, self.game.turn_state)
+        self.assertEqual(GameState.PLAYING, self.game.state)
+        self.assertEqual(0, self.game.current_player_index)

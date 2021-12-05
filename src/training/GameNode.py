@@ -24,6 +24,7 @@ class TrainingNode(GameNode):
         action.execute()
 
         if self.game.turn_state == TurnState.FINISHED:
+            self.game.players[0].turn_history = []
             return OpponentNode(self.game)
 
         return self
@@ -38,6 +39,7 @@ class OpponentNode(GameNode):
         action.execute()
 
         if self.game.turn_state == TurnState.FINISHED:
+            self.game.players[1].turn_history = []
             if self.game.state == GameState.FIRST_TURN:
                 self.game.state = GameState.PLAYING
 
