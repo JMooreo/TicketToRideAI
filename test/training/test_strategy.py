@@ -17,13 +17,13 @@ class StrategyTest(unittest.TestCase):
     def test_random_small_size(self):
         strategy = Strategy.random(10)
 
-        self.assertEqual(1 / 10, strategy[0])
+        self.assertEqual(1, strategy[0])
         self.assertTrue(np.all(strategy == strategy[0]))
 
     def test_random_with_action_space(self):
         strategy = Strategy.random(len(self.action_space))
 
-        self.assertEqual(1/len(self.action_space), strategy[0])
+        self.assertEqual(1, strategy[0])
         self.assertTrue(np.all(strategy == strategy[0]))
 
     def test_normalize_with_zeros(self):
@@ -62,3 +62,26 @@ class StrategyTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             strategy = Strategy.random(10)
             Strategy.normalize(strategy, np.ones(7))
+
+    def test_update_from_regrets_negative(self):
+        strategy = np.repeat(1, 10)
+        regrets = np.array([30 if i == 0 else -30 for i in range(10)])
+        weighted_strategy = strategy + regrets
+
+        expected = Strategy.normalize(strategy + regrets, np.ones(len(strategy)))
+        actual = Strategy.normalize_from_regrets(strategy, regrets)
+
+        self.assertTrue((expected == actual).all())
+        self.assertEqual(abs(regrets[0] - regrets[1]), abs(weighted_strategy[0] - weighted_strategy[1]))
+
+    def test_normalize_multiple_times_doesnt_do_anything(self):
+        strategy = np.repeat(1, 10)
+        n1 = Strategy.normalize(strategy, np.ones(len(strategy)))
+        n2 = Strategy.normalize(n1, np.ones(len(strategy)))
+        n3 = Strategy.normalize(n2, np.ones(len(strategy)))
+
+        # Annoying Floating Point rounding error
+        n1 = [round(val, 5) for val in n1]
+        n3 = [round(val, 5) for val in n3]
+
+        self.assertEqual(n1, n3)
