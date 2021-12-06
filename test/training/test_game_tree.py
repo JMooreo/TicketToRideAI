@@ -85,11 +85,9 @@ class GameTreeTest(unittest.TestCase):
             self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-
-        while self.game.turn_state != TurnState.FINISHED:
-            action, chance = action_space.get_action()
-            self.tree.next(action)
-
+        self.tree.simulate_for_n_turns(1)
+        self.assertEqual(GameState.LAST_ROUND, self.game.state)
+        self.tree.simulate_for_n_turns(1)
         self.assertEqual(GameState.GAME_OVER, self.game.state)
 
     def test_random_simulation_state(self):

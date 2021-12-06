@@ -2,6 +2,7 @@ import copy
 
 from src.actions.Action import Action
 from src.game.Game import Game
+from src.game.enums.GameState import GameState
 from src.training.GameTree import GameTree
 
 
@@ -11,6 +12,8 @@ class ActionUtility:
         self.tree = GameTree(self.game)
 
     def of(self, action: Action):
-        self.tree.next(action)
-        self.tree.simulate_random_until_game_over()
+        if self.game.state != GameState.GAME_OVER:
+            self.tree.next(action)
+            self.tree.simulate_random_until_game_over()
+
         return self.game.players[0].points - self.game.players[1].points

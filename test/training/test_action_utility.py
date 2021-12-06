@@ -1,6 +1,7 @@
 import unittest
 
 from src.actions.ClaimRouteAction import ClaimRouteAction
+from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.Game import Game
@@ -41,6 +42,13 @@ class ActionUtilityTest(unittest.TestCase):
 
     def test_action_gets_executed_first_by_the_simulation(self):
         self.assertEqual(1, self.utility.of(ClaimRouteAction(self.utility.game, 1)))
+
+    def test_action_utility_of_game_already_over(self):
+        self.utility.game.state = GameState.GAME_OVER
+        self.utility.game.players[0].points = 80
+        self.utility.game.players[1].points = 30
+
+        self.assertEqual(50, self.utility.of(ClaimRouteAction(self.utility.game, 1)))
 
     def test_selecting_destinations_gives_negative_utility(self):
         self.utility.game.turn_state = TurnState.SELECTING_DESTINATIONS
