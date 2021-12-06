@@ -15,19 +15,19 @@ class GameTree:
         self.current_node.game.state = GameState.FIRST_TURN
 
     def next(self, action: Action, chance=None):
-        if self.game.turn_state == TurnState.INIT:
-            if isinstance(self.current_node, TrainingNode):
-                print("\nPlayer 1:")
-            else:
-                print("\nPlayer 2:")
-
-        log = f"EXECUTING {action}"
-        if chance is not None:
-            log += f" ({round(100*chance, 2)}%)"
-
-        print(log)
-        print()
-        print(self.game)
+        # if self.game.turn_state == TurnState.INIT:
+        #     if isinstance(self.current_node, TrainingNode):
+        #         print("\nPlayer 1:")
+        #     else:
+        #         print("\nPlayer 2:")
+        #
+        # log = f"EXECUTING {action}"
+        # if chance is not None:
+        #     log += f" ({round(100*chance, 2)}%)"
+        #
+        # print(log)
+        # print()
+        # print(self.game)
 
         if action is None or not action.is_valid():
             raise ValueError(f"The action could not be executed because it was invalid.\n{action}")

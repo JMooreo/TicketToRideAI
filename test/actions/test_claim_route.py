@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 import numpy as np
@@ -54,7 +55,7 @@ class ClaimRouteActionTest(unittest.TestCase):
             ClaimRouteAction(self.game, "1")
 
     def test_cannot_claim_an_already_claimed_route(self):
-        self.game.unclaimed_routes = [0, 5, 8]
+        self.game.unclaimed_routes = {0: None, 5: None, 8: None}
 
         action = ClaimRouteAction(self.game, 4)
 
@@ -92,6 +93,19 @@ class ClaimRouteActionTest(unittest.TestCase):
         self.game.players[self.game.current_player_index].routes = [1]
 
         self.assertFalse(action.is_valid())
+
+    def test_claiming_a_route_puts_cards_back_in_the_deck(self):
+        self.game.unclaimed_routes = {1: None, 2: None, 3: None}
+        deck_before = CardList.from_numbers(self.game.deck.list)
+        route = self.game.map.routes.get(3)
+        player = self.game.players[self.game.current_player_index]
+        expected_payment = route.cost.best_payment_option(player.hand)
+
+        action = ClaimRouteAction(self.game, 3)
+        action.execute()
+
+        self.assertEqual(deck_before, self.game.deck - expected_payment)
+
 
     def test_game_state_after(self):
         action = ClaimRouteAction(self.game, 2)

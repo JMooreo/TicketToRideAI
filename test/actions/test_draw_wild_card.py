@@ -98,7 +98,7 @@ class DrawWildCardActionTest(unittest.TestCase):
                 self.assertEqual((1,), actual.shape)
 
     def test_as_string(self):
-        self.assertEqual("draw_wild", str(DrawWildCardAction(self.game)))
+        self.assertEqual("draw_WILD", str(DrawWildCardAction(self.game)))
 
     def test_turn_history(self):
         player = self.game.players[self.game.current_player_index]

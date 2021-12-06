@@ -7,7 +7,7 @@ from src.game.enums.TurnState import TurnState
 
 class DrawWildCardAction(Action):
     def __str__(self):
-        return "draw_wild"
+        return "draw_WILD"
 
     def __eq__(self, other):
         return isinstance(other, DrawWildCardAction) and \

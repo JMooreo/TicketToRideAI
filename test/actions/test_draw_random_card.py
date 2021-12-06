@@ -110,10 +110,10 @@ class DrawRandomCardActionTest(unittest.TestCase):
 
     def test_as_string(self):
         self.game.current_player_index = 0
-        self.assertEqual("draw_rand", str(DrawRandomCardAction(self.game)))
+        self.assertEqual("draw_RANDOM", str(DrawRandomCardAction(self.game)))
 
         self.game.current_player_index = 1
-        self.assertEqual("draw_rand", str(DrawRandomCardAction(self.game)))
+        self.assertEqual("draw_RANDOM", str(DrawRandomCardAction(self.game)))
 
     def test_turn_history(self):
         player = self.game.players[self.game.current_player_index]

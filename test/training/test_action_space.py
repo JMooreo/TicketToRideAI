@@ -37,7 +37,7 @@ class ActionSpaceTest(unittest.TestCase):
     def test_init_get_action(self):
         action = self.action_space.get_action()
 
-        self.assertEqual(DrawDestinationsAction(self.game), action)
+        self.assertEqual(DrawDestinationsAction(self.game), action[0])
 
     def test_draw_destinations_action_by_id(self):
         action = self.action_space.get_action_by_id(0)

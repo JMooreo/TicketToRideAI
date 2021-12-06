@@ -34,9 +34,13 @@ class ClaimRouteAction(Action):
 
     def execute(self):
         super().execute()
+        payment = self.route.cost.best_payment_option(self.player.hand)
+
         self.game.unclaimed_routes.pop(self.route_id)
         self.game.turn_state = TurnState.FINISHED
+        self.game.deck += payment
+
         self.player.routes.append(self.route_id)
         self.player.points += self.route.points
-        self.player.hand -= self.route.cost.best_payment_option(self.player.hand)
+        self.player.hand -= payment
         self.player.trains -= self.route.cost.amount
