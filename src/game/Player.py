@@ -18,6 +18,18 @@ class Player:
                 f"Hand: {self.hand}\n" + \
                 f"Turn History {self.turn_history}\n"
 
+    def __repr__(self):
+        return str(self)
+
+    def __eq__(self, other):
+        return isinstance(other, Player) and \
+                self.points == other.points and \
+                self.trains == other.trains and \
+                all([d in other.destinations for d in self.destinations]) and \
+                all([r in other.routes for r in self.routes]) and \
+                self.hand == other.hand and \
+                self.turn_history == other.turn_history
+
     def points_from_routes(self):
         return sum((route.points for route in self.routes.values()))
 

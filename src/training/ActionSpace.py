@@ -91,3 +91,6 @@ class ActionSpace:
             return SelectDestinationAction(self.game, action_id - 3 - len(TrainColor) - len(self.game.map.routes.keys()))
 
         return None
+
+    def get_valid_action_ids(self):
+        return np.where(self.to_np_array() == 1)[0].tolist()

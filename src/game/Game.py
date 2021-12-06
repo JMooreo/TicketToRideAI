@@ -53,6 +53,37 @@ class Game:
 
         return message
 
+    def __repr__(self):
+        return str(self)
+
+    def __eq__(self, other):
+        print(self.map == other.map,
+              self.players == other.players,
+              self.state == other.state,
+              self.turn_state == other.turn_state,
+              all([r in other.unclaimed_routes for r in self.unclaimed_routes]),
+              all([d in other.unclaimed_destinations for d in self.unclaimed_destinations]),
+              self.available_destinations == other.available_destinations,
+              self.deck == other.deck,
+              self.visible_cards == other.visible_cards,
+              self.current_player_index == other.current_player_index,
+              self.turn_count == other.turn_count,
+              self.last_turn_count == other.last_turn_count)
+
+        return isinstance(other, Game) and \
+               self.map == other.map and \
+               self.players == other.players and \
+               self.state == other.state and \
+               self.turn_state == other.turn_state and \
+               all([r in other.unclaimed_routes for r in self.unclaimed_routes]) and \
+               all([d in other.unclaimed_destinations for d in self.unclaimed_destinations]) and \
+               self.available_destinations == other.available_destinations and \
+               self.deck == other.deck and \
+               self.visible_cards == other.visible_cards and \
+               self.current_player_index == other.current_player_index and \
+               self.turn_count == other.turn_count and \
+               self.last_turn_count == other.last_turn_count
+
     def take_destinations(self, destination_ids):
         for i in destination_ids:
             self.unclaimed_destinations.pop(i)

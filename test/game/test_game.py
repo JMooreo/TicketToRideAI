@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 from src.game.CardList import CardList
@@ -7,6 +8,7 @@ from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
+from src.training.GameTree import GameTree
 
 
 class GameTest(unittest.TestCase):
@@ -90,6 +92,24 @@ class GameTest(unittest.TestCase):
         expected = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
 
         self.assertEqual(expected, self.game.deck + player.hand + opponent.hand + self.game.visible_cards)
+
+    def test_deepcopy(self):
+        game = Game([Player(), Player()], USMap())
+        tree = GameTree(game)
+        tree.simulate_for_n_turns(3)
+
+        self.assertEqual(GameState.PLAYING, game.state)
+
+        game_copy = copy.deepcopy(game)
+
+        self.assertIsNot(game, game_copy)
+        self.assertIsNot(game.players, game_copy.players)
+        self.assertIsNot(game.players[0], game_copy.players[0])
+        self.assertIsNot(game.players[0].hand, game_copy.players[0].hand)
+
+        self.assertEqual(game, game_copy)
+        self.assertEqual(game.players[0], game_copy.players[0])
+        self.assertEqual(game.players[1], game_copy.players[1])
 
 
 

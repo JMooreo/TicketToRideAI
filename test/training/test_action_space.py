@@ -94,3 +94,15 @@ class ActionSpaceTest(unittest.TestCase):
 
         self.assertIsNotNone(action)
         self.assertIsNone(next_none)
+
+    def test_get_valid_action_ids_new_game(self):
+        self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
+
+    def test_get_valid_action_ids_after_one_turn(self):
+        GameTree(self.game).simulate_for_n_turns(1)
+        self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
+
+    def test_get_valid_action_ids_after_two_turn(self):
+        GameTree(self.game).simulate_for_n_turns(2)
+
+        self.assertTrue(len(self.action_space.get_valid_action_ids()) > 1)

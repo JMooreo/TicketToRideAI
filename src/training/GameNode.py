@@ -22,7 +22,6 @@ class GameNode(ABC):
 class TrainingNode(GameNode):
     def __init__(self, game):
         super().__init__(game)
-        self.game.current_player_index = 0
 
     def next(self, action: Action):
         action.execute()
@@ -38,6 +37,7 @@ class TrainingNode(GameNode):
                 return
 
             self.game.turn_count += 1
+            self.game.current_player_index = 1
             return OpponentNode(self.game)
 
         return self
@@ -46,7 +46,6 @@ class TrainingNode(GameNode):
 class OpponentNode(GameNode):
     def __init__(self, game):
         super().__init__(game)
-        self.game.current_player_index = 1
 
     def next(self, action: Action):
         action.execute()
@@ -64,6 +63,7 @@ class OpponentNode(GameNode):
                 return
 
             self.game.turn_count += 1
+            self.game.current_player_index = 0
             return TrainingNode(self.game)
 
         return self

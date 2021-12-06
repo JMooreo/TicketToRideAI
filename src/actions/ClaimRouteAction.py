@@ -8,7 +8,7 @@ class ClaimRouteAction(Action):
 
     def __init__(self, game: Game, route_id: int):
         if not isinstance(route_id, int):
-            raise ValueError
+            raise ValueError("Route ID was not an int:", route_id)
 
         if not 0 <= route_id < len(game.map.routes):
             raise IndexError

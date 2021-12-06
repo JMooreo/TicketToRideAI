@@ -8,6 +8,11 @@ from src.game.RouteCost import RouteCost
 
 
 class USMap:
+    def __eq__(self, other):
+        return isinstance(other, USMap) and \
+            all([r in other.routes for r in self.routes]) and \
+            all([d in other.destinations for d in self.destinations])
+
     def __init__(self):
         self.routes: Dict[Route] = {
             # ([City1, City2], RouteCost(Color, Amount), optional* adjacent route)
