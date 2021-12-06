@@ -67,3 +67,7 @@ class Game:
     def take_random(self):
         card = self.deck.get_random(1)
         self.players[self.current_player_index].hand += card
+
+    def calculate_final_scores(self):
+        for player in self.players:
+            player.points += player.points_from_destinations()

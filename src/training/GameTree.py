@@ -33,3 +33,9 @@ class GameTree:
         self.current_node = self.current_node.next(action)
 
         # print(self.game)
+
+    def simulate_random(self, game):
+        action_space = ActionSpace(game)
+        while game.state != GameState.GAME_OVER:
+            action, chance = action_space.get_action()
+            self.next(action, chance)

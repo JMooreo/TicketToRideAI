@@ -61,6 +61,22 @@ class ClaimRouteActionTest(unittest.TestCase):
 
         self.assertFalse(action.is_valid())
 
+    def test_player_cannot_go_below_zero_trains(self):
+        player = self.game.players[self.game.current_player_index]
+        player.trains = 3
+
+        action = ClaimRouteAction(self.game, 42)
+
+        self.assertFalse(action.is_valid())
+
+    def test_player_can_hit_zero_trains(self):
+        player = self.game.players[self.game.current_player_index]
+        player.trains = 4
+
+        action = ClaimRouteAction(self.game, 42)
+
+        self.assertTrue(action.is_valid())
+
     def test_all_game_states(self):
         for turn_state in TurnState:
             self.game.turn_state = turn_state
@@ -130,17 +146,18 @@ class ClaimRouteActionTest(unittest.TestCase):
 
         action.execute()
 
-        self.assertEqual([2], player.routes)
+        self.assertEqual({2: self.game.map.routes.get(2)}, player.routes)
 
     def test_existing_routes_are_not_destroyed(self):
         action = ClaimRouteAction(self.game, 2)
         player = self.game.players[self.game.current_player_index]
-        player.routes = [4]
+        routes = self.game.map.routes
+        player.routes = {4: routes.get(4)}
         self.assertTrue(action.is_valid())
 
         action.execute()
 
-        self.assertEqual([4, 2], player.routes)
+        self.assertEqual({2: routes.get(2), 4: routes.get(4)}, player.routes)
 
     def test_player_points_are_updated_appropriately(self):
         action = ClaimRouteAction(self.game, 2)

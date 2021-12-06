@@ -23,11 +23,12 @@ class ClaimRouteAction(Action):
 
     def __eq__(self, other):
         return isinstance(other, ClaimRouteAction) and \
-                self.game == other.game
+               self.game == other.game
 
     def is_valid(self):
         return self.game.turn_state == TurnState.INIT and \
                self.game.state in [GameState.PLAYING, GameState.LAST_ROUND] and \
+               self.player.trains >= self.route.cost.amount and \
                self.route.cost.best_payment_option(self.player.hand) is not None and \
                self.route_id in self.game.unclaimed_routes and \
                self.route.adjacent_route_id not in self.player.routes
@@ -40,7 +41,7 @@ class ClaimRouteAction(Action):
         self.game.turn_state = TurnState.FINISHED
         self.game.deck += payment
 
-        self.player.routes.append(self.route_id)
+        self.player.routes[self.route_id] = self.route
         self.player.points += self.route.points
         self.player.hand -= payment
         self.player.trains -= self.route.cost.amount

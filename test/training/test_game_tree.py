@@ -74,8 +74,6 @@ class GameTreeTest(unittest.TestCase):
             action, chance = action_space.get_action()
             self.tree.next(action, chance)
 
-        print(self.game)
-
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
         self.assertEqual(self.game.turn_count + 1, self.game.last_turn_count)
 
@@ -92,6 +90,48 @@ class GameTreeTest(unittest.TestCase):
             action, chance = action_space.get_action()
             self.tree.next(action, chance)
 
-        # print(self.game)
+        self.assertEqual(GameState.GAME_OVER, self.game.state)
+
+    def test_random_simulation_state(self):
+        self.tree.simulate_random(self.game)
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
+        self.assertEqual(TurnState.FINISHED, self.game.turn_state)
+
+    def test_random_simulation_no_destinations_lost(self):
+        self.tree.simulate_random(self.game)
+        expected = len(self.game.map.destinations.keys())
+        actual = len(self.players[0].destinations.keys()) + \
+                 len(self.players[1].destinations.keys()) + \
+                 len(self.game.unclaimed_destinations.keys())
+
+        self.assertEqual(expected, actual)
+
+    def test_random_simulation_no_routes_lost(self):
+        self.tree.simulate_random(self.game)
+        expected = len(self.game.map.routes.keys())
+        actual = len(self.players[0].routes.keys()) + \
+                 len(self.players[1].routes.keys()) + \
+                 len(self.game.unclaimed_routes.keys())
+
+        self.assertEqual(expected, actual)
+
+    def test_random_simulation_no_train_cards_lost(self):
+        self.tree.simulate_random(self.game)
+        expected = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
+        actual = self.players[0].hand + \
+                 self.players[1].hand + \
+                 self.game.visible_cards + \
+                 self.game.deck
+
+        self.assertEqual(expected, actual)
+
+    def test_player_points_are_accurate_total_scores(self):
+        self.tree.simulate_random(self.game)
+        expected = [player.points_from_routes() + player.points_from_destinations()
+                    for player in self.game.players]
+
+        actual = [player.points for player in self.game.players]
+
+        self.assertEqual(expected, actual)
+        print(self.game)

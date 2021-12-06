@@ -10,6 +10,10 @@ class GameNode(ABC):
         self.game = game
         self.game.turn_state = TurnState.INIT
 
+    def do_game_over(self):
+        self.game.state = GameState.GAME_OVER
+        self.game.calculate_final_scores()
+
     @abstractmethod
     def next(self, action: Action):
         pass
@@ -30,7 +34,7 @@ class TrainingNode(GameNode):
                 self.game.state = GameState.LAST_ROUND
                 self.game.last_turn_count = self.game.turn_count + 2
             elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
-                self.game.state = GameState.GAME_OVER
+                self.do_game_over()
                 return
 
             self.game.turn_count += 1
@@ -56,7 +60,7 @@ class OpponentNode(GameNode):
                 self.game.state = GameState.LAST_ROUND
                 self.game.last_turn_count = self.game.turn_count + 2
             elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
-                self.game.state = GameState.GAME_OVER
+                self.do_game_over()
                 return
 
             self.game.turn_count += 1

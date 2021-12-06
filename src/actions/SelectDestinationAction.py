@@ -28,11 +28,12 @@ class SelectDestinationAction(Action):
 
     def execute(self):
         super().execute()
+        destination = self.game.map.destinations.get(self.destination_id)
 
         if self.destination_id in self.game.available_destinations:
             self.game.available_destinations.remove(self.destination_id)
             self.game.unclaimed_destinations.pop(self.destination_id)
-            self.game.players[self.game.current_player_index].destinations.append(self.destination_id)
+            self.game.players[self.game.current_player_index].destinations[self.destination_id] = destination
 
         if not self.game.available_destinations:
             self.game.turn_state = TurnState.FINISHED
