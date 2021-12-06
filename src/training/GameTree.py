@@ -14,28 +14,27 @@ class GameTree:
         self.current_node: TrainingNode | OpponentNode = TrainingNode(game)
         self.current_node.game.state = GameState.FIRST_ROUND
 
-    def next(self, action: Action, chance=None):
-        # if self.game.turn_state == TurnState.INIT:
-        #     if isinstance(self.current_node, TrainingNode):
-        #         print("\nPlayer 1:")
-        #     else:
-        #         print("\nPlayer 2:")
-        #
-        # log = f"EXECUTING {action}"
-        # if chance is not None:
-        #     log += f" ({round(100*chance, 2)}%)"
-        #
-        # print(log)
-        # print()
+    def next(self, action: Action):
         if action is None or not action.is_valid():
             raise ValueError(f"The action could not be executed because it was invalid.\n{action}")
 
         self.current_node = self.current_node.next(action)
 
-        # print(self.game)
-
-    def simulate_random(self, game):
-        action_space = ActionSpace(game)
-        while game.state != GameState.GAME_OVER:
+    def simulate_random_until_game_over(self):
+        action_space = ActionSpace(self.game)
+        while self.game.state != GameState.GAME_OVER:
             action, chance = action_space.get_action()
-            self.next(action, chance)
+            self.next(action)
+
+    def simulate_for_n_turns(self, num_turns):
+        action_space = ActionSpace(self.game)
+        for _ in range(num_turns):
+            if self.game.state == GameState.GAME_OVER:
+                break
+
+            node_type = self.current_node.__class__
+
+            while isinstance(self.current_node, node_type):
+                action, chance = action_space.get_action()
+                self.next(action)
+

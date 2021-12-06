@@ -87,9 +87,7 @@ class ActionSpace:
             return DrawWildCardAction(self.game)
         elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()):
             return ClaimRouteAction(self.game, action_id - 3 - len(TrainColor))
-        elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()) + len(
-                self.game.map.destinations.keys()):
-            return SelectDestinationAction(self.game,
-                                           action_id - 3 - len(TrainColor) - len(self.game.map.routes.keys()))
+        elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()) + len(self.game.map.destinations.keys()):
+            return SelectDestinationAction(self.game, action_id - 3 - len(TrainColor) - len(self.game.map.routes.keys()))
 
         return None

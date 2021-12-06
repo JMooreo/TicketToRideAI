@@ -35,6 +35,8 @@ class ClaimRouteAction(Action):
 
     def execute(self):
         super().execute()
+        # TODO: let the AI choose how it wants to pay for a route
+        #       instead of choosing the first valid option
         payment = self.route.cost.best_payment_option(self.player.hand)
 
         self.game.unclaimed_routes.pop(self.route_id)

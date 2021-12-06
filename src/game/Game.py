@@ -35,22 +35,24 @@ class Game:
         self.visible_cards += self.deck.get_random(5)
 
     def __str__(self):
-        message = "Players:\n"
-        for player in self.players:
-            message += str(player) + "\n"
+        message = ""
+        for i, player in enumerate(self.players):
+            message += f"\nPLAYER {i + 1}"
+            message += "\n" + str(player)
 
-        message += f"Current Player Index: {self.current_player_index}\n" + \
-                f"Game state: {self.state}\n" + \
-                f"Turn state: {self.turn_state}\n" + \
-                f"Unclaimed Routes: {self.unclaimed_routes}\n" + \
-                f"Unclaimed Destinations: {self.unclaimed_destinations}\n" + \
-                f"Available Destinations: {self.available_destinations}\n" + \
-                f"Deck: {self.deck}\n" + \
-                f"Visible Cards: {self.visible_cards}\n" + \
-                f"Turn Count: {self.turn_count}\n"
+        message += f"\nGAME INFORMATION\n" + \
+                   f"Current Player: Player {self.current_player_index + 1}\n" + \
+                   f"Game State: {self.state}\n" + \
+                   f"Turn State: {self.turn_state}\n" + \
+                   f"Unclaimed Routes: {self.unclaimed_routes}\n" + \
+                   f"Unclaimed Destinations: {self.unclaimed_destinations}\n" + \
+                   f"Available Destinations: {self.available_destinations}\n" + \
+                   f"Deck: {self.deck}\n" + \
+                   f"Visible Cards: {self.visible_cards}\n" + \
+                   f"Turn Count: {self.turn_count}\n"
 
         return message
-                
+
     def take_destinations(self, destination_ids):
         for i in destination_ids:
             self.unclaimed_destinations.pop(i)

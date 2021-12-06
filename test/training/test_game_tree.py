@@ -72,7 +72,7 @@ class GameTreeTest(unittest.TestCase):
 
         while not any([player.trains < 3 for player in self.game.players]):
             action, chance = action_space.get_action()
-            self.tree.next(action, chance)
+            self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
         self.assertEqual(self.game.turn_count + 1, self.game.last_turn_count)
@@ -82,24 +82,24 @@ class GameTreeTest(unittest.TestCase):
 
         while not any([player.trains < 3 for player in self.game.players]):
             action, chance = action_space.get_action()
-            self.tree.next(action, chance)
+            self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
 
         while self.game.turn_state != TurnState.FINISHED:
             action, chance = action_space.get_action()
-            self.tree.next(action, chance)
+            self.tree.next(action)
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
 
     def test_random_simulation_state(self):
-        self.tree.simulate_random(self.game)
+        self.tree.simulate_random_until_game_over()
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
     def test_random_simulation_no_destinations_lost(self):
-        self.tree.simulate_random(self.game)
+        self.tree.simulate_random_until_game_over()
         expected = len(self.game.map.destinations.keys())
         actual = len(self.players[0].destinations.keys()) + \
                  len(self.players[1].destinations.keys()) + \
@@ -108,7 +108,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_routes_lost(self):
-        self.tree.simulate_random(self.game)
+        self.tree.simulate_random_until_game_over()
         expected = len(self.game.map.routes.keys())
         actual = len(self.players[0].routes.keys()) + \
                  len(self.players[1].routes.keys()) + \
@@ -117,7 +117,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_train_cards_lost(self):
-        self.tree.simulate_random(self.game)
+        self.tree.simulate_random_until_game_over()
         expected = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
         actual = self.players[0].hand + \
                  self.players[1].hand + \
@@ -127,11 +127,26 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_player_points_are_accurate_total_scores(self):
-        self.tree.simulate_random(self.game)
+        self.tree.simulate_random_until_game_over()
         expected = [player.points_from_routes() + player.points_from_destinations()
                     for player in self.game.players]
 
         actual = [player.points for player in self.game.players]
 
         self.assertEqual(expected, actual)
-        print(self.game)
+
+    def test_simulate_for_one_turn(self):
+        self.tree.simulate_for_n_turns(1)
+
+        self.assertEqual(GameState.FIRST_ROUND, self.game.state)
+
+    def test_simulate_for_two_turns(self):
+        self.tree.simulate_for_n_turns(2)
+
+        self.assertEqual(GameState.PLAYING, self.game.state)
+
+    def test_simulate_for_way_too_many_turns_ends_early(self):
+        self.tree.simulate_for_n_turns(2000)
+
+        self.assertEqual(GameState.GAME_OVER, self.game.state)
+        self.assertLess(self.game.turn_count, 200)
