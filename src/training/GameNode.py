@@ -25,6 +25,15 @@ class TrainingNode(GameNode):
 
         if self.game.turn_state == TurnState.FINISHED:
             self.game.players[0].turn_history = []
+
+            if self.game.state == GameState.PLAYING and any([player.trains < 3 for player in self.game.players]):
+                self.game.state = GameState.LAST_ROUND
+                self.game.last_turn_count = self.game.turn_count + 2
+            elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
+                self.game.state = GameState.GAME_OVER
+                return
+
+            self.game.turn_count += 1
             return OpponentNode(self.game)
 
         return self
@@ -40,8 +49,15 @@ class OpponentNode(GameNode):
 
         if self.game.turn_state == TurnState.FINISHED:
             self.game.players[1].turn_history = []
-            if self.game.state == GameState.FIRST_TURN:
+
+            if self.game.state == GameState.FIRST_ROUND:
                 self.game.state = GameState.PLAYING
+            elif self.game.state == GameState.PLAYING and any([player.trains < 3 for player in self.game.players]):
+                self.game.state = GameState.LAST_ROUND
+                self.game.last_turn_count = self.game.turn_count + 2
+            elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
+                self.game.state = GameState.GAME_OVER
+                return
 
             self.game.turn_count += 1
             return TrainingNode(self.game)

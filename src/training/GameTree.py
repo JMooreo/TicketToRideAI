@@ -12,7 +12,7 @@ class GameTree:
     def __init__(self, game: Game):
         self.game = game
         self.current_node: TrainingNode | OpponentNode = TrainingNode(game)
-        self.current_node.game.state = GameState.FIRST_TURN
+        self.current_node.game.state = GameState.FIRST_ROUND
 
     def next(self, action: Action, chance=None):
         # if self.game.turn_state == TurnState.INIT:
@@ -27,9 +27,9 @@ class GameTree:
         #
         # print(log)
         # print()
-        # print(self.game)
-
         if action is None or not action.is_valid():
             raise ValueError(f"The action could not be executed because it was invalid.\n{action}")
 
         self.current_node = self.current_node.next(action)
+
+        # print(self.game)

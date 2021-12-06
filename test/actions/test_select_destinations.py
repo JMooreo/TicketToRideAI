@@ -16,7 +16,7 @@ class SelectDestinationsActionTest(unittest.TestCase):
     def setUp(self):
         self.players = [Player(), Player()]
         self.game = Game(self.players, USMap())
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
 
     def test_init(self):
@@ -92,7 +92,7 @@ class SelectDestinationsActionTest(unittest.TestCase):
             for state in GameState:
                 self.game.state = state
 
-                if state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
+                if state in [GameState.FIRST_ROUND, GameState.PLAYING, GameState.LAST_ROUND] and \
                         turn_state == TurnState.SELECTING_DESTINATIONS:
                     self.assertTrue(action.is_valid(), state)
                 else:

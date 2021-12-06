@@ -124,7 +124,7 @@ class DrawVisibleCardActionTest(unittest.TestCase):
             for state in GameState:
                 self.game.state = state
 
-                if state in [GameState.PLAYING, GameState.LAST_TURN] and \
+                if state in [GameState.PLAYING, GameState.LAST_ROUND] and \
                         turn_state in [TurnState.INIT, TurnState.DRAWING_CARDS]:
                     self.assertTrue(action.is_valid())
                 else:

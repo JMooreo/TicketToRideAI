@@ -27,7 +27,7 @@ class ClaimRouteAction(Action):
 
     def is_valid(self):
         return self.game.turn_state == TurnState.INIT and \
-               self.game.state in [GameState.PLAYING, GameState.LAST_TURN] and \
+               self.game.state in [GameState.PLAYING, GameState.LAST_ROUND] and \
                self.route.cost.best_payment_option(self.player.hand) is not None and \
                self.route_id in self.game.unclaimed_routes and \
                self.route.adjacent_route_id not in self.player.routes

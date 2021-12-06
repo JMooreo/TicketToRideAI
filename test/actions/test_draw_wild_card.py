@@ -81,7 +81,7 @@ class DrawWildCardActionTest(unittest.TestCase):
             for state in GameState:
                 self.game.state = state
 
-                if state in [GameState.PLAYING, GameState.LAST_TURN] and \
+                if state in [GameState.PLAYING, GameState.LAST_ROUND] and \
                         turn_state == TurnState.INIT:
                     self.assertTrue(self.action.is_valid())
                 else:

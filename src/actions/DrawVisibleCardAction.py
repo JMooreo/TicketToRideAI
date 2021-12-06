@@ -22,7 +22,7 @@ class DrawVisibleCardAction(Action):
         return self.game.visible_cards.has(CardList((self.color, 1))) and \
                self.game.turn_state in [TurnState.INIT, TurnState.DRAWING_CARDS] and \
                self.color != TrainColor.WILD and \
-               self.game.state in [GameState.PLAYING, GameState.LAST_TURN]
+               self.game.state in [GameState.PLAYING, GameState.LAST_ROUND]
 
     def execute(self):
         super().execute()

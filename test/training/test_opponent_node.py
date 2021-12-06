@@ -105,7 +105,7 @@ class OpponentNodeTest(unittest.TestCase):
         self.assertEqual(0, self.game.current_player_index)
         self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
 
-        self.assertEqual(1, self.game.turn_count)
+        self.assertEqual(2, self.game.turn_count)
         self.assertTrue(self.game.turn_state == TurnState.INIT)
         self.assertTrue(self.game.state == GameState.PLAYING)
 

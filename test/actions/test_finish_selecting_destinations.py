@@ -25,13 +25,13 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
             FinishSelectingDestinationsAction(None)
 
     def test_has_not_selected_any_destinations_during_first_turn(self):
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
 
         self.assertFalse(self.action.is_valid())
 
     def test_only_selected_one_destination_during_first_turn(self):
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
         self.game.available_destinations = [1, 2, 3]
 
@@ -40,7 +40,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.assertFalse(self.action.is_valid())
 
     def test_selected_two_destinations_during_first_turn(self):
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
         self.game.available_destinations = [1, 2, 3]
 
@@ -50,7 +50,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.assertTrue(self.action.is_valid())
 
     def test_selected_three_destinations_during_first_turn(self):
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
         self.game.available_destinations = [1, 2, 3]
 
@@ -119,7 +119,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.assertFalse(self.action.is_valid())
 
     def test_turn_state_after(self):
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
         self.game.available_destinations = [1, 2, 3]
 
@@ -130,7 +130,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
     def test_turn_history_after(self):
-        self.game.state = GameState.FIRST_TURN
+        self.game.state = GameState.FIRST_ROUND
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
         self.game.available_destinations = [1, 2, 3]
 
@@ -142,6 +142,21 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.action.execute()
 
         self.assertEqual([select, self.action], player.turn_history)
+
+    def test_finish_selecting_destinations_clears_available_destinations(self):
+        self.game.state = GameState.PLAYING
+        self.game.turn_state = TurnState.SELECTING_DESTINATIONS
+        self.game.available_destinations = [1, 2, 3]
+
+        player = self.game.players[self.game.current_player_index]
+
+        select = SelectDestinationAction(self.game, 1)
+        select.execute()
+
+        self.action.execute()
+
+        self.assertEqual([], self.game.available_destinations)
+
 
     def test_action_space(self):
         for game_state in GameState:

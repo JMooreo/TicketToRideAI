@@ -15,8 +15,8 @@ class DrawDestinationsAction(Action):
 
     def is_valid(self):
         return len(self.game.unclaimed_destinations) > 0 and \
-                self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
-                self.game.turn_state == TurnState.INIT
+               self.game.state in [GameState.FIRST_ROUND, GameState.PLAYING, GameState.LAST_ROUND] and \
+               self.game.turn_state == TurnState.INIT
 
     def execute(self):
         super().execute()

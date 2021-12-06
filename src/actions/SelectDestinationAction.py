@@ -23,8 +23,8 @@ class SelectDestinationAction(Action):
 
     def is_valid(self):
         return self.destination_id in self.game.available_destinations and \
-            self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
-            self.game.turn_state == TurnState.SELECTING_DESTINATIONS
+               self.game.state in [GameState.FIRST_ROUND, GameState.PLAYING, GameState.LAST_ROUND] and \
+               self.game.turn_state == TurnState.SELECTING_DESTINATIONS
 
     def execute(self):
         super().execute()

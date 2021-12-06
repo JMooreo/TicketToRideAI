@@ -24,7 +24,8 @@ class GameTest(unittest.TestCase):
         self.assertEqual(my_game.turn_state, TurnState.INIT)
         self.assertEqual(my_game.turn_count, 0)
         self.assertEqual([], my_game.available_destinations)
-        self.assertEqual(GameState.FIRST_TURN, my_game.state)
+        self.assertEqual(GameState.FIRST_ROUND, my_game.state)
+        self.assertEqual(my_game.last_turn_count, 1000)
 
         for route in my_map.routes.keys():
             self.assertTrue(route in my_game.unclaimed_routes)

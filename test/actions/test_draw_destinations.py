@@ -92,7 +92,7 @@ class DrawDestinationsActionTest(unittest.TestCase):
             for state in GameState:
                 self.game.state = state
 
-                if (self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and
+                if (self.game.state in [GameState.FIRST_ROUND, GameState.PLAYING, GameState.LAST_ROUND] and
                         self.game.turn_state == TurnState.INIT):
                     self.assertTrue(self.action.is_valid())
                 else:

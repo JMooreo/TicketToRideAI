@@ -12,12 +12,13 @@ from src.game.enums.TurnState import TurnState
 
 class Game:
     def __init__(self, players: List[Player], game_map: Map):
+        self.last_turn_count = None
         if not players or not game_map:
             raise ValueError
 
         self.map = game_map
         self.players = players
-        self.state = GameState.FIRST_TURN
+        self.state = GameState.FIRST_ROUND
         self.turn_state = TurnState.INIT
         self.unclaimed_routes = copy.deepcopy(game_map.routes)
         self.unclaimed_destinations = copy.deepcopy(game_map.destinations)
@@ -26,6 +27,7 @@ class Game:
         self.visible_cards = CardList()
         self.current_player_index = 0
         self.turn_count = 0
+        self.last_turn_count = 1000
 
         for player in players:
             player.hand += self.deck.get_random(4)

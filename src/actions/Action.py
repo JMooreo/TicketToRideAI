@@ -11,6 +11,9 @@ class Action(ABC):
     def __eq__(self, other):
         return False
 
+    def __repr__(self):
+        return str(self)
+
     @abstractmethod
     def is_valid(self):
         pass

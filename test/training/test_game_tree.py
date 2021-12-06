@@ -7,10 +7,11 @@ from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
+from src.game.enums.GameState import GameState
+from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
 from src.training.GameNode import TrainingNode
-from src.training.Strategy import Strategy
 
 
 class GameTreeTest(unittest.TestCase):
@@ -66,13 +67,31 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual([], self.players[0].turn_history)
         self.assertEqual([], self.players[1].turn_history)
 
-    def test_simulate_random(self):
+    def test_last_round(self):
         action_space = ActionSpace(self.game)
-        print("\nINITIAL GAME STATE:")
-        print(self.game)
 
         while not any([player.trains < 3 for player in self.game.players]):
             action, chance = action_space.get_action()
             self.tree.next(action, chance)
 
         print(self.game)
+
+        self.assertEqual(GameState.LAST_ROUND, self.game.state)
+        self.assertEqual(self.game.turn_count + 1, self.game.last_turn_count)
+
+    def test_game_over(self):
+        action_space = ActionSpace(self.game)
+
+        while not any([player.trains < 3 for player in self.game.players]):
+            action, chance = action_space.get_action()
+            self.tree.next(action, chance)
+
+        self.assertEqual(GameState.LAST_ROUND, self.game.state)
+
+        while self.game.turn_state != TurnState.FINISHED:
+            action, chance = action_space.get_action()
+            self.tree.next(action, chance)
+
+        # print(self.game)
+
+        self.assertEqual(GameState.GAME_OVER, self.game.state)

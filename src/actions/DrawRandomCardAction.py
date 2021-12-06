@@ -15,7 +15,7 @@ class DrawRandomCardAction(Action):
     def is_valid(self):
         return self.game.deck != CardList() and \
                 self.game.turn_state in [TurnState.INIT, TurnState.DRAWING_CARDS] and \
-                self.game.state in [GameState.PLAYING, GameState.LAST_TURN]
+                self.game.state in [GameState.PLAYING, GameState.LAST_ROUND]
 
     def execute(self):
         super().execute()

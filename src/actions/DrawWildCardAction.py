@@ -17,7 +17,7 @@ class DrawWildCardAction(Action):
         return self.game is not None and \
                self.game.turn_state == TurnState.INIT and \
                self.game.visible_cards.has(CardList((TrainColor.WILD, 1))) and \
-               self.game.state in [GameState.PLAYING, GameState.LAST_TURN]
+               self.game.state in [GameState.PLAYING, GameState.LAST_ROUND]
 
     def execute(self):
         super().execute()

@@ -37,8 +37,9 @@ class TrainingNodeTest(unittest.TestCase):
 
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
-        self.assertEqual(GameState.FIRST_TURN, self.game.state)
+        self.assertEqual(GameState.FIRST_ROUND, self.game.state)
         self.assertEqual(1, self.game.current_player_index)
+        self.assertEqual(1, self.game.turn_count)
 
     def test_select_one_destination_then_end_first_turn(self):
         with self.assertRaises(ValueError):
@@ -68,7 +69,7 @@ class TrainingNodeTest(unittest.TestCase):
 
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
-        self.assertEqual(GameState.FIRST_TURN, self.game.state)
+        self.assertEqual(GameState.FIRST_ROUND, self.game.state)
         self.assertEqual(1, self.game.current_player_index)
 
     def test_draw_random_card_after_first_turn(self):

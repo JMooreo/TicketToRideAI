@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class GameState(Enum):
-    FIRST_TURN = 0
+    FIRST_ROUND = 0
     PLAYING = 1
-    LAST_TURN = 2
+    LAST_ROUND = 2
     GAME_OVER = 3
