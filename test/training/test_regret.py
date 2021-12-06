@@ -32,10 +32,10 @@ class RegretTest(unittest.TestCase):
         action_space = ActionSpace(self.game)
         utils = np.array([67 if i == 0 else 0 for i in range(len(action_space))])
 
-        expected = np.array([0 if i == 0 else -67 for i in range(len(action_space))])
-        actual = Regret(utils).from_action_id(0)
+        expected = np.array([0 if i == 0 else -0.67 for i in range(len(action_space))])
+        actual = Regret(utils, 0.01).from_action_id(0)
 
-        self.assertTrue((expected == actual).all())
+        self.assertEqual(expected.tolist(), actual.tolist())
 
     def test_multiple_utils(self):
         action_space = ActionSpace(self.game)
@@ -44,8 +44,8 @@ class RegretTest(unittest.TestCase):
                             else 0 for i in range(len(action_space))])
 
         expected = np.array([0 if i == 0
-                             else 20 if i == 5
-                                else -20 for i in range(len(action_space))])
+                             else 20 * 0.02 if i == 5
+                                else -20 * 0.02 for i in range(len(action_space))])
 
-        actual = Regret(utils).from_action_id(0)
-        self.assertTrue((expected == actual).all())
+        actual = Regret(utils, 0.02).from_action_id(0)
+        self.assertEqual(expected.tolist(), actual.tolist())

@@ -28,9 +28,9 @@ class ActionUtility:
         utilities = np.zeros(len(action_space))
 
         for _id in valid_action_ids:
-            sub_game = copy.deepcopy(self.game)
-            action = ActionSpace(sub_game).get_action_by_id(_id)
+            game_copy = copy.deepcopy(self.game)
+            action = ActionSpace(game_copy).get_action_by_id(_id)
             print("Simulating Sub Game for", action)
-            utilities[_id] = ActionUtility(sub_game).of(action)
+            utilities[_id] = ActionUtility(game_copy).of(action)
 
         return utilities
