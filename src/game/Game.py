@@ -32,10 +32,27 @@ class Game:
 
         self.visible_cards += self.deck.get_random(5)
 
+    def __str__(self):
+        message = "Players:\n"
+        for player in self.players:
+            message += str(player) + "\n"
+
+        message += f"Current Player Index: {self.current_player_index}\n" + \
+                f"Game state: {self.state}\n" + \
+                f"Turn state: {self.turn_state}\n" + \
+                f"Unclaimed Routes: {self.unclaimed_routes}\n" + \
+                f"Unclaimed Destinations: {self.unclaimed_destinations}\n" + \
+                f"Available Destinations: {self.available_destinations}\n" + \
+                f"Deck: {self.deck}\n" + \
+                f"Visible Cards: {self.visible_cards}\n" + \
+                f"Turn Count: {self.turn_count}\n"
+
+        return message
+                
     def take_destinations(self, destination_ids):
         for i in destination_ids:
             self.unclaimed_destinations.pop(i)
-            self.players[self.current_player_index].owned_destinations.append(i)
+            self.players[self.current_player_index].destinations.append(i)
 
         self.available_destinations = []
 

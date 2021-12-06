@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 from src.actions.ClaimRouteAction import ClaimRouteAction
@@ -17,6 +19,14 @@ class ActionSpace:
 
     def __len__(self):
         return self.to_np_array().shape[0]
+
+    def __str__(self):
+        return f"Finish Selecting Destinations: {self.can_finish_selecting_destinations()}\n" + \
+               f"Draw Random: {self.can_draw_random_card()}\n" + \
+               f"Draw Visible Cards: {np.concatenate([self.drawable_visible_colored_cards(), self.can_draw_wild()])}\n" + \
+               f"Claim Route: {self.claimable_routes()}\n" + \
+               f"Draw Destinations: {self.can_draw_destinations()}\n" + \
+               f"Select Destinations {self.selectable_destinations()}\n"
 
     # Everything that you can do given the current game state
 
@@ -53,14 +63,16 @@ class ActionSpace:
             self.can_draw_wild(),
             self.claimable_routes(),
             self.selectable_destinations(),
-            ], axis=None)
+        ], axis=None)
 
     def get_action(self, strategy=None):
         if strategy is None:
             random_strategy = Strategy.random(len(self))
             strategy = Strategy.normalize(random_strategy, self.to_np_array())
 
-        return self.get_action_by_id(np.random.choice(len(self), p=strategy))
+        action_id = np.random.choice(len(self), p=strategy)
+
+        return self.get_action_by_id(action_id), strategy[action_id]
 
     def get_action_by_id(self, action_id):
         if action_id == 0:
@@ -70,10 +82,14 @@ class ActionSpace:
         elif action_id == 2:
             return DrawRandomCardAction(self.game)
         elif action_id < 3 + len(TrainColor) - 1:
-            return DrawVisibleCardAction(self.game, TrainColor(action_id-3))
+            return DrawVisibleCardAction(self.game, TrainColor(action_id - 3))
         elif action_id < 3 + len(TrainColor):
             return DrawWildCardAction(self.game)
         elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()):
             return ClaimRouteAction(self.game, action_id - 3 - len(TrainColor))
+        elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()) + len(
+                self.game.map.destinations.keys()):
+            return SelectDestinationAction(self.game,
+                                           action_id - 3 - len(TrainColor) - len(self.game.map.routes.keys()))
 
         return None

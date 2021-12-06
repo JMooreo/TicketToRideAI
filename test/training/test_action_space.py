@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
@@ -12,6 +14,7 @@ from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.TrainColor import TrainColor
 from src.training.ActionSpace import ActionSpace
+from src.training.GameTree import GameTree
 
 
 class ActionSpaceTest(unittest.TestCase):
@@ -71,3 +74,23 @@ class ActionSpaceTest(unittest.TestCase):
             action = self.action_space.get_action_by_id(i)
 
             self.assertEqual(ClaimRouteAction(self.game, i-offset), action)
+
+    def test_select_destination_action_by_id(self):
+        dest_ids = self.game.map.destinations.keys()
+        offset = 3 + len(TrainColor) + len(self.game.map.routes.keys())
+        for i in range(offset, offset + len(dest_ids)):
+            action = self.action_space.get_action_by_id(i)
+
+            self.assertEqual(SelectDestinationAction(self.game, i-offset), action)
+
+    def test_get_random_action(self):
+        random_choice = np.random.choice(3, p=np.array([0.5, 0.5, 0]))
+        for i in range(1000):
+            self.assertTrue(random_choice in [0, 1])
+
+    def test_get_maximum_action(self):
+        action = self.action_space.get_action_by_id(140)
+        next_none = self.action_space.get_action_by_id(141)
+
+        self.assertIsNotNone(action)
+        self.assertIsNone(next_none)

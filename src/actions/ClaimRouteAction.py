@@ -30,13 +30,13 @@ class ClaimRouteAction(Action):
                self.game.state in [GameState.PLAYING, GameState.LAST_TURN] and \
                self.route.cost.best_payment_option(self.player.hand) is not None and \
                self.route_id in self.game.unclaimed_routes and \
-               self.route.adjacent_route_id not in self.player.owned_routes
+               self.route.adjacent_route_id not in self.player.routes
 
     def execute(self):
         super().execute()
         self.game.unclaimed_routes.pop(self.route_id)
         self.game.turn_state = TurnState.FINISHED
-        self.player.owned_routes.append(self.route_id)
+        self.player.routes.append(self.route_id)
         self.player.points += self.route.points
         self.player.hand -= self.route.cost.best_payment_option(self.player.hand)
         self.player.trains -= self.route.cost.amount

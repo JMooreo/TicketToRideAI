@@ -89,7 +89,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.game.available_destinations = [1]
 
         player = self.game.players[self.game.current_player_index]
-        player.owned_destinations = [2, 3]
+        player.destinations = [2, 3]
 
         select_action = SelectDestinationAction(self.game, 2)
         select_action2 = SelectDestinationAction(self.game, 3)
@@ -105,7 +105,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.game.available_destinations = [1, 2, 3]
 
         player = self.game.players[self.game.current_player_index]
-        player.owned_destinations = []
+        player.destinations = []
 
         select_action = SelectDestinationAction(self.game, 1)
         select_action2 = SelectDestinationAction(self.game, 2)
@@ -152,3 +152,6 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
                 actual = ActionSpace(self.game).can_finish_selecting_destinations()
                 self.assertTrue((expected == actual).all())
                 self.assertEqual((1,), actual.shape)
+
+    def test_to_string(self):
+        self.assertEqual("finish_select_dest", str(FinishSelectingDestinationsAction(self.game)))

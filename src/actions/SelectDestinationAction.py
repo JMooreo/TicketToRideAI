@@ -6,7 +6,7 @@ from src.game.enums.TurnState import TurnState
 class SelectDestinationAction(Action):
     def __init__(self, game, destination_id):
         if not isinstance(destination_id, int):
-            raise ValueError
+            raise ValueError("destination Id was: ", destination_id)
 
         if destination_id < 0 or destination_id > len(game.map.destinations):
             raise IndexError
@@ -16,6 +16,10 @@ class SelectDestinationAction(Action):
 
     def __str__(self):
         return f"select_dest_{str(self.game.map.destinations.get(self.destination_id))}"
+
+    def __eq__(self, other):
+        return isinstance(other, SelectDestinationAction) and \
+                self.game == other.game
 
     def is_valid(self):
         return self.destination_id in self.game.available_destinations and \
@@ -28,7 +32,7 @@ class SelectDestinationAction(Action):
         if self.destination_id in self.game.available_destinations:
             self.game.available_destinations.remove(self.destination_id)
             self.game.unclaimed_destinations.pop(self.destination_id)
-            self.game.players[self.game.current_player_index].owned_destinations.append(self.destination_id)
+            self.game.players[self.game.current_player_index].destinations.append(self.destination_id)
 
         if not self.game.available_destinations:
             self.game.turn_state = TurnState.FINISHED

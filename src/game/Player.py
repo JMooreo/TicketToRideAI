@@ -5,7 +5,15 @@ class Player:
     def __init__(self):
         self.points = 0
         self.trains = 45
-        self.owned_destinations = []
-        self.owned_routes = []
+        self.destinations = []
+        self.routes = []
         self.hand = CardList()
         self.turn_history = []
+
+    def __str__(self):
+        return f"Points: {self.points}\n" + \
+                f"Trains Left: {self.trains}\n" + \
+                f"Destinations: {self.destinations}\n" + \
+                f"Routes: {self.routes}\n" + \
+                f"Hand: {self.hand}\n" + \
+                f"Turn History {self.turn_history}\n"

@@ -114,7 +114,7 @@ class TrainingNodeTest(unittest.TestCase):
         self.assertEqual(3, len(self.game.available_destinations))
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
         self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
-        self.assertEqual(3, len(self.players[0].owned_destinations))
+        self.assertEqual(3, len(self.players[0].destinations))
 
     def test_draw_and_select_destinations_after_first_turn(self):
         self.__do_first_turn()
@@ -126,7 +126,7 @@ class TrainingNodeTest(unittest.TestCase):
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
         self.assertEqual([], self.game.available_destinations)
-        self.assertEqual(6, len(self.players[0].owned_destinations))
+        self.assertEqual(6, len(self.players[0].destinations))
 
     def test_claim_route_action_after_first_turn(self):
         self.__do_first_turn()
@@ -136,6 +136,6 @@ class TrainingNodeTest(unittest.TestCase):
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
         self.assertFalse(2 in self.game.unclaimed_routes)
-        self.assertTrue(2 in self.players[0].owned_routes)
+        self.assertTrue(2 in self.players[0].routes)
         self.assertEqual(1, self.players[0].points)
         self.assertEqual(44, self.players[0].trains)

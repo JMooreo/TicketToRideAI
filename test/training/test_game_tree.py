@@ -7,8 +7,10 @@ from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
+from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
 from src.training.GameNode import TrainingNode
+from src.training.Strategy import Strategy
 
 
 class GameTreeTest(unittest.TestCase):
@@ -41,8 +43,8 @@ class GameTreeTest(unittest.TestCase):
                     break
                 self.tree.next(select)
 
-        self.assertEqual(15, len(self.players[0].owned_destinations))
-        self.assertEqual(15, len(self.players[1].owned_destinations))
+        self.assertEqual(15, len(self.players[0].destinations))
+        self.assertEqual(15, len(self.players[1].destinations))
         self.assertEqual([], self.game.available_destinations)
 
     def test_draw_random_cards_until_there_are_none_left(self):
@@ -64,3 +66,13 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual([], self.players[0].turn_history)
         self.assertEqual([], self.players[1].turn_history)
 
+    def test_simulate_random(self):
+        action_space = ActionSpace(self.game)
+        print("\nINITIAL GAME STATE:")
+        print(self.game)
+
+        while not any([player.trains < 3 for player in self.game.players]):
+            action, chance = action_space.get_action()
+            self.tree.next(action, chance)
+
+        print(self.game)

@@ -10,6 +10,9 @@ class FinishSelectingDestinationsAction(Action):
         return isinstance(other, FinishSelectingDestinationsAction) and \
             self.game == other.game
 
+    def __str__(self):
+        return "finish_select_dest"
+
     def is_valid(self):
         return self.game.state in [GameState.FIRST_TURN, GameState.PLAYING, GameState.LAST_TURN] and \
                self.game.turn_state == TurnState.SELECTING_DESTINATIONS and \

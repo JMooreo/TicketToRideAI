@@ -89,7 +89,7 @@ class ClaimRouteActionTest(unittest.TestCase):
         action = ClaimRouteAction(self.game, 2)
         self.assertTrue(action.is_valid())
 
-        self.game.players[self.game.current_player_index].owned_routes = [1]
+        self.game.players[self.game.current_player_index].routes = [1]
 
         self.assertFalse(action.is_valid())
 
@@ -116,17 +116,17 @@ class ClaimRouteActionTest(unittest.TestCase):
 
         action.execute()
 
-        self.assertEqual([2], player.owned_routes)
+        self.assertEqual([2], player.routes)
 
     def test_existing_routes_are_not_destroyed(self):
         action = ClaimRouteAction(self.game, 2)
         player = self.game.players[self.game.current_player_index]
-        player.owned_routes = [4]
+        player.routes = [4]
         self.assertTrue(action.is_valid())
 
         action.execute()
 
-        self.assertEqual([4, 2], player.owned_routes)
+        self.assertEqual([4, 2], player.routes)
 
     def test_player_points_are_updated_appropriately(self):
         action = ClaimRouteAction(self.game, 2)

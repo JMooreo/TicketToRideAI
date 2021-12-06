@@ -62,7 +62,7 @@ class SelectDestinationsActionTest(unittest.TestCase):
 
         action.execute()
 
-        self.assertTrue(2 in self.players[0].owned_destinations)
+        self.assertTrue(2 in self.players[0].destinations)
 
     def test_unchosen_destinations_go_back_into_the_deck(self):
         self.game.available_destinations = [2, 3, 5]
