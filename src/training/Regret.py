@@ -3,11 +3,11 @@ from numpy import ndarray
 
 
 class Regret:
-    def __init__(self, utils: ndarray, impact=0.25):
+    def __init__(self, utils: ndarray, impact=0.005):
         if not isinstance(utils, ndarray):
             raise ValueError
 
-        if impact <= 0 or impact > 3:
+        if impact <= 0 or impact > 1:
             raise ValueError(f"regret impact was weird: {impact}. Between 0 and 1 is recommended")
 
         self.utils = utils

@@ -11,7 +11,7 @@ from src.game.enums.TurnState import TurnState
 
 
 class Game:
-    def __init__(self, players: List[Player], game_map: Map):
+    def __init__(self, players: List[Player], game_map: Map) -> object:
         self.last_turn_count = None
         if not players or not game_map:
             raise ValueError

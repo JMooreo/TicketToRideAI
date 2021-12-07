@@ -9,7 +9,7 @@ class CardList:
         self.list = [0 for _ in TrainColor]
 
         for color, amount in colors:
-            self.list[TrainColor(color).value] += amount
+            self.list[color.value] += amount
 
     @staticmethod
     def from_numbers(numbers: List[int]):
@@ -57,10 +57,12 @@ class CardList:
     def has(self, other):
         if other is None:
             return False
-        try:
-            return all([x - y >= 0 for x, y in zip(self.list, other.list)])
-        except ValueError:
-            return False
+
+        for x, y in zip(self.list, other.list):
+            if x - y < 0:
+                return False
+
+        return True
 
     def get_random(self, amount: int):
         card_list = CardList()
@@ -73,8 +75,8 @@ class CardList:
         if sum(self.list) > 0:
             color = random.choice(list(TrainColor))
             choice = CardList((color, 1))
-            if self.list[color] > 0:
-                self.list[color] -= 1
+            if self.list[color.value] > 0:
+                self.list[color.value] -= 1
                 return choice
             else:
                 return self.draw_train_card()  # No cards of that color, try again.

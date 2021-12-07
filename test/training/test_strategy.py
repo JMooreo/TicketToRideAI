@@ -68,9 +68,9 @@ class StrategyTest(unittest.TestCase):
         regrets = np.array([30 if i == 0 else -30 for i in range(10)])
 
         filtered_regrets = np.array([30 if i == 0 else 0 for i in range(10)])
-        expected = Strategy.normalize(strategy + filtered_regrets, np.ones(len(strategy)))
+        expected = strategy + filtered_regrets
 
-        actual = Strategy.normalize_from_regrets(strategy, regrets)
+        actual = Strategy.from_regrets(strategy, regrets)
 
         self.assertEqual(expected.tolist(), actual.tolist())
 

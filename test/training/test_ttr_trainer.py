@@ -1,4 +1,8 @@
+import os
+import time
 import unittest
+import numpy as np
+from datetime import datetime
 
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -15,6 +19,7 @@ class TrainerTest(unittest.TestCase):
 
     def setUp(self):
         self.trainer = Trainer()
+        self.trainer.checkpoint_directory += "/test"
 
     def test_init(self):
         action_space = ActionSpace(Game([Player(), Player()], USMap()))
@@ -48,12 +53,67 @@ class TrainerTest(unittest.TestCase):
 
     def test_training_step_from_opponent_node(self):
         self.trainer.tree.simulate_for_n_turns(1)
+        self.assertTrue(isinstance(self.trainer.tree.current_node, OpponentNode))
 
         self.trainer.training_step()
-
         self.assertEqual(GameState.PLAYING, self.trainer.tree.game.state)
 
     def test_train_every_training_node_for_one_game_cycle(self):
+        self.trainer.tree.simulate_for_n_turns(90)
         self.trainer.train(1)
 
-        self.assertEqual(GameState.GAME_OVER, self.trainer.tree.game.state)
+        self.assertEqual(GameState.FIRST_ROUND, self.trainer.tree.game.state)
+
+    def test_load_np_array(self):
+        with open(f"{self.trainer.checkpoint_directory}test_check-asdfasdf.txt", "w") as f:
+            np.savetxt(f, np.ones(141))
+
+        loaded = np.loadtxt(f"{self.trainer.checkpoint_directory}test_check-asdfasdf.txt")
+        self.assertEqual(loaded.tolist(), np.ones(141).tolist())
+
+        os.remove(f"{self.trainer.checkpoint_directory}test_check-asdfasdf.txt")
+
+    def test_load_latest_checkpoint(self):
+        try:
+            os.mkdir(self.trainer.checkpoint_directory)
+            os.chmod(self.trainer.checkpoint_directory, 0o777)
+        except:
+            pass
+
+        with open(f"{self.trainer.checkpoint_directory}/checkpoint-{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.txt", "w") as f:
+            np.savetxt(f, np.ones(141))
+
+        time.sleep(1)
+
+        with open(f"{self.trainer.checkpoint_directory}/checkpoint-{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.txt", "w") as f:
+            np.savetxt(f, np.zeros(141))
+
+        expected = np.zeros(141)
+        self.trainer.load_latest_checkpoint()
+        actual = self.trainer.strategy
+
+        self.assertEqual(expected.tolist(), actual.tolist())
+
+        try:
+            os.rmdir(self.trainer.checkpoint_directory)
+        except:
+            pass
+
+    def test_load_latest_checkpoint_no_checkpoints(self):
+        self.trainer.checkpoint_directory += "/directory_that_does_not_exist"
+        try:
+            os.mkdir(self.trainer.checkpoint_directory)
+        except:
+            pass
+
+        self.trainer.load_latest_checkpoint()
+
+        expected = Strategy.random(len(ActionSpace(self.trainer.tree.game))).tolist()
+        actual = self.trainer.strategy.tolist()
+
+        self.assertEqual(expected, actual)
+
+        try:
+            os.rmdir(self.trainer.checkpoint_directory)
+        except:
+            pass

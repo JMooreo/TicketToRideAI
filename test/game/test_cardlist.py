@@ -14,25 +14,26 @@ class CardListTest(unittest.TestCase):
     def test_initialization_one_card(self):
         card_list = CardList((TrainColor.BLACK, 1))
 
-        self.assertEqual(1, card_list[TrainColor.BLACK])
+        self.assertEqual(1, card_list[TrainColor.BLACK.value])
+        print(card_list)
 
     def test_initialization_multiple_cards(self):
         card_list = CardList((TrainColor.BLACK, 2))
 
-        self.assertEqual(2, card_list[TrainColor.BLACK])
+        self.assertEqual(2, card_list[TrainColor.BLACK.value])
 
     def test_initialization_multiple_colors(self):
         card_list = CardList((TrainColor.BLACK, 1), (TrainColor.YELLOW, 1))
 
-        self.assertEqual(1, card_list[TrainColor.BLACK])
-        self.assertEqual(1, card_list[TrainColor.YELLOW])
+        self.assertEqual(1, card_list[TrainColor.BLACK.value])
+        self.assertEqual(1, card_list[TrainColor.YELLOW.value])
 
     def test_initialization_multiple_colors_multiple_cards(self):
         card_list = CardList((TrainColor.BLACK, 2), (TrainColor.YELLOW, 3), (TrainColor.GREEN, 5))
 
-        self.assertEqual(2, card_list[TrainColor.BLACK])
-        self.assertEqual(3, card_list[TrainColor.YELLOW])
-        self.assertEqual(5, card_list[TrainColor.GREEN])
+        self.assertEqual(2, card_list[TrainColor.BLACK.value])
+        self.assertEqual(3, card_list[TrainColor.YELLOW.value])
+        self.assertEqual(5, card_list[TrainColor.GREEN.value])
 
     def test_from_numbers_valid(self):
         card_list = CardList.from_numbers([0, 1, 2, 3, 4, 5, 6, 7])
