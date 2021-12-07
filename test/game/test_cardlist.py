@@ -15,7 +15,6 @@ class CardListTest(unittest.TestCase):
         card_list = CardList((TrainColor.BLACK, 1))
 
         self.assertEqual(1, card_list[TrainColor.BLACK.value])
-        print(card_list)
 
     def test_initialization_multiple_cards(self):
         card_list = CardList((TrainColor.BLACK, 2))
@@ -39,7 +38,7 @@ class CardListTest(unittest.TestCase):
         card_list = CardList.from_numbers([0, 1, 2, 3, 4, 5, 6, 7])
 
         for i in range(8):
-            self.assertEqual(i, card_list[i])
+            self.assertEqual(i, card_list.list[i])
 
     def test_from_numbers_too_long(self):
         with self.assertRaises(IndexError):

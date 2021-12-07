@@ -1,6 +1,6 @@
 from typing import Dict
 
-from src.game.CardList import TrainColor
+from src.game.enums.TrainColor import TrainColor
 from src.game.enums.City import City
 from src.game.Destination import Destination
 from src.game.Route import Route

@@ -5,10 +5,13 @@ from src.game.CardList import TrainColor, CardList
 
 class RouteCost:
     def __init__(self, color: TrainColor, amount: int):
+        if not isinstance(color, TrainColor):
+            raise ValueError
+
         if amount <= 0 or amount > 6:
             raise IndexError
 
-        if color < 0 or color >= len(TrainColor):
+        if color.value < 0 or color.value >= len(TrainColor):
             raise IndexError
 
         self.color = color

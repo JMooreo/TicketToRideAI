@@ -57,19 +57,6 @@ class Game:
         return str(self)
 
     def __eq__(self, other):
-        print(self.map == other.map,
-              self.players == other.players,
-              self.state == other.state,
-              self.turn_state == other.turn_state,
-              all([r in other.unclaimed_routes for r in self.unclaimed_routes]),
-              all([d in other.unclaimed_destinations for d in self.unclaimed_destinations]),
-              self.available_destinations == other.available_destinations,
-              self.deck == other.deck,
-              self.visible_cards == other.visible_cards,
-              self.current_player_index == other.current_player_index,
-              self.turn_count == other.turn_count,
-              self.last_turn_count == other.last_turn_count)
-
         return isinstance(other, Game) and \
                self.map == other.map and \
                self.players == other.players and \

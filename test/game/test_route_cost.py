@@ -39,11 +39,11 @@ class RouteCostTest(unittest.TestCase):
         self.assertEqual(6, route_cost.amount)
 
     def test_init_with_bad_train_color_below_minimum(self):
-        with self.assertRaises(IndexError):
+        with self.assertRaises(ValueError):
             RouteCost(-1, 6)
 
     def test_init_with_bad_train_color_above_maximum(self):
-        with self.assertRaises(IndexError):
+        with self.assertRaises(ValueError):
             RouteCost(len(TrainColor), 6)
 
     def test_pay_with_exact_color_and_amount(self):

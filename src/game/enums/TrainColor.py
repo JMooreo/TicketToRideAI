@@ -1,8 +1,7 @@
-from enum import Enum
+from fastenum import Enum
 
 
-class TrainColor(int, Enum):
-
+class TrainColor(Enum):
     def __str__(self):
         return self.name
 
