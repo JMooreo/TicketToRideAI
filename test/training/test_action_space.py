@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 import numpy as np
@@ -106,3 +107,16 @@ class ActionSpaceTest(unittest.TestCase):
         GameTree(self.game).simulate_for_n_turns(2)
 
         self.assertTrue(len(self.action_space.get_valid_action_ids()) > 1)
+
+    def test_action_space_on_deepcopy_is_the_same(self):
+        game = Game([Player(), Player()], USMap())
+        tree = GameTree(game)
+
+        tree.simulate_for_n_turns(4)
+
+        game_copy = copy.deepcopy(game)
+
+        a1_ids = ActionSpace(game).get_valid_action_ids()
+        a2_ids = ActionSpace(game_copy).get_valid_action_ids()
+
+        self.assertEqual(a1_ids, a2_ids)

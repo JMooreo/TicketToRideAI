@@ -99,6 +99,7 @@ class GameTest(unittest.TestCase):
         tree.simulate_for_n_turns(3)
 
         self.assertEqual(GameState.PLAYING, game.state)
+        self.game.turn_state = TurnState.SELECTING_DESTINATIONS
 
         game_copy = copy.deepcopy(game)
 
@@ -108,6 +109,7 @@ class GameTest(unittest.TestCase):
         self.assertIsNot(game.players[0].hand, game_copy.players[0].hand)
 
         self.assertEqual(game, game_copy)
+        self.assertEqual(game.turn_state, game_copy.turn_state)
         self.assertEqual(game.players[0], game_copy.players[0])
         self.assertEqual(game.players[1], game_copy.players[1])
 

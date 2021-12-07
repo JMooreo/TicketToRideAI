@@ -10,8 +10,7 @@ class DrawDestinationsAction(Action):
         return "draw_dest"
 
     def __eq__(self, other):
-        return isinstance(other, DrawDestinationsAction) and \
-               self.game == other.game
+        return isinstance(other, DrawDestinationsAction)
 
     def is_valid(self):
         return len(self.game.unclaimed_destinations) > 0 and \

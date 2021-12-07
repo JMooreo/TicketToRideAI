@@ -41,4 +41,3 @@ class GameTree:
             while isinstance(self.current_node, node_type):
                 action, chance = action_space.get_action()
                 self.next(action)
-

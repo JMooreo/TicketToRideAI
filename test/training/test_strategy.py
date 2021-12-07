@@ -66,13 +66,13 @@ class StrategyTest(unittest.TestCase):
     def test_update_from_regrets_negative(self):
         strategy = np.repeat(1, 10)
         regrets = np.array([30 if i == 0 else -30 for i in range(10)])
-        weighted_strategy = strategy + regrets
 
-        expected = Strategy.normalize(strategy + regrets, np.ones(len(strategy)))
+        filtered_regrets = np.array([30 if i == 0 else 0 for i in range(10)])
+        expected = Strategy.normalize(strategy + filtered_regrets, np.ones(len(strategy)))
+
         actual = Strategy.normalize_from_regrets(strategy, regrets)
 
-        self.assertTrue((expected == actual).all())
-        self.assertEqual(abs(regrets[0] - regrets[1]), abs(weighted_strategy[0] - weighted_strategy[1]))
+        self.assertEqual(expected.tolist(), actual.tolist())
 
     def test_normalize_multiple_times_doesnt_do_anything(self):
         strategy = np.repeat(1, 10)

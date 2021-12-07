@@ -10,10 +10,6 @@ class Strategy:
     @classmethod
     def normalize(cls, strategy: ndarray, _filter: ndarray):
         filtered_strategy = strategy * _filter
-        minimum_value = filtered_strategy.min()
-        if minimum_value < 0:
-            for idx, val in enumerate(filtered_strategy):
-                filtered_strategy[idx] = val + -1 * minimum_value + 1
 
         normalizing_sum = sum(filtered_strategy)
         if normalizing_sum == 0:
@@ -23,4 +19,8 @@ class Strategy:
 
     @classmethod
     def normalize_from_regrets(cls, strategy: ndarray, regrets: ndarray):
+        for idx, val in enumerate(regrets):
+            if val <= 0:
+                regrets[idx] = 0
+
         return Strategy.normalize(strategy + regrets, np.ones(len(strategy)))

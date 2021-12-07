@@ -10,27 +10,33 @@ from src.training.GameTree import GameTree
 
 
 class ActionUtility:
+    @staticmethod
+    def of(action: Action, game: Game):
+        print(f"Finding action utility of {action} for game:", game)
+        action.game = game  # ensure this is true for safety
+        tree = GameTree(game)
+        if game.state != GameState.GAME_OVER:
+            tree.next(action)
+            tree.simulate_random_until_game_over(game)
 
-    def __init__(self, game: Game):
-        self.game = copy.deepcopy(game)
-        self.tree = GameTree(self.game)
+        return game.players[0].points - game.players[1].points
 
-    def of(self, action: Action):
-        if self.game.state != GameState.GAME_OVER:
-            self.tree.next(action)
-            self.tree.simulate_random_until_game_over(self.game)
-
-        return self.game.players[0].points - self.game.players[1].points
-
-    def from_all_branches(self):
-        action_space = ActionSpace(self.game)
+    @staticmethod
+    def from_all_branches(game: Game):
+        print("Finding action utils for all branches for game", game)
+        action_space = ActionSpace(game)
         valid_action_ids = action_space.get_valid_action_ids()
         utilities = np.zeros(len(action_space))
+        print("Detected Valid Actions")
+        print(valid_action_ids)
 
         for _id in valid_action_ids:
-            game_copy = copy.deepcopy(self.game)
+            game_copy = copy.deepcopy(game)
             action = ActionSpace(game_copy).get_action_by_id(_id)
-            print("Simulating Sub Game for", action)
-            utilities[_id] = ActionUtility(game_copy).of(action)
+            print("Simulating Sub Game for", action, "with game", game)
+            print(f"Does {game} == {game_copy}?: {game == game_copy}")
+            utilities[_id] = ActionUtility.of(action, game_copy)
+            print("Game Info:")
+            print(game_copy)
 
         return utilities

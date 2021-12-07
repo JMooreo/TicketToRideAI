@@ -8,7 +8,6 @@ from src.game.enums.TurnState import TurnState
 class GameNode(ABC):
     def __init__(self, game):
         self.game = game
-        self.game.turn_state = TurnState.INIT
 
     def do_game_over(self):
         self.game.state = GameState.GAME_OVER
@@ -38,6 +37,7 @@ class TrainingNode(GameNode):
 
             self.game.turn_count += 1
             self.game.current_player_index = 1
+            self.game.turn_state = TurnState.INIT
             return OpponentNode(self.game)
 
         return self
@@ -64,6 +64,7 @@ class OpponentNode(GameNode):
 
             self.game.turn_count += 1
             self.game.current_player_index = 0
+            self.game.turn_state = TurnState.INIT
             return TrainingNode(self.game)
 
         return self

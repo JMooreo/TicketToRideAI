@@ -65,14 +65,19 @@ class ActionSpace:
             self.selectable_destinations(),
         ], axis=None)
 
-    def get_action(self, strategy=None):
+    def get_action_id(self, strategy=None):
         if strategy is None:
             random_strategy = Strategy.random(len(self))
             strategy = Strategy.normalize(random_strategy, self.to_np_array())
+        else:
+            strategy = Strategy.normalize(strategy, self.to_np_array())
 
         action_id = np.random.choice(len(self), p=strategy)
+        return action_id, strategy[action_id]
 
-        return self.get_action_by_id(action_id), strategy[action_id]
+    def get_action(self):
+        action_id, chance = self.get_action_id()
+        return self.get_action_by_id(action_id), chance
 
     def get_action_by_id(self, action_id):
         if action_id == 0:
