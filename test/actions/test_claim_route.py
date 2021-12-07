@@ -28,8 +28,9 @@ class ClaimRouteActionTest(unittest.TestCase):
         self.assertEqual(3, action.route_id)
 
     def test_route_id_below_minimum(self):
-        with self.assertRaises(IndexError):
-            ClaimRouteAction(self.game, -1)
+        action = ClaimRouteAction(self.game, -1)
+
+        self.assertFalse(action.is_valid())
 
     def test_route_id_minimum(self):
         action = ClaimRouteAction(self.game, 0)
@@ -42,16 +43,17 @@ class ClaimRouteActionTest(unittest.TestCase):
         self.assertTrue(action.is_valid())
 
     def test_route_id_above_maximum(self):
-        with self.assertRaises(IndexError):
-            ClaimRouteAction(self.game, len(self.game.map.routes))
+        action = ClaimRouteAction(self.game, len(self.game.map.routes))
 
-    def test_route_id_is_not_None(self):
-        with self.assertRaises(ValueError):
-            ClaimRouteAction(self.game, None)
+        self.assertFalse(action.is_valid())
 
-    def test_route_id_is_not_a_string(self):
-        with self.assertRaises(ValueError):
-            ClaimRouteAction(self.game, "1")
+    # def test_route_id_is_not_None(self):
+    #     with self.assertRaises(ValueError):
+    #         ClaimRouteAction(self.game, None)
+    #
+    # def test_route_id_is_not_a_string(self):
+    #     with self.assertRaises(ValueError):
+    #         ClaimRouteAction(self.game, "1")
 
     def test_cannot_claim_an_already_claimed_route(self):
         self.game.unclaimed_routes = {0: None, 5: None, 8: None}

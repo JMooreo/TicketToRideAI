@@ -137,7 +137,8 @@ class CardListTest(unittest.TestCase):
     def test_has_none(self):
         card_list = CardList((TrainColor.BLACK, 3), (TrainColor.GREEN, 4), (TrainColor.WILD, 2))
 
-        self.assertFalse(card_list.has(None))
+        with self.assertRaises(AttributeError):
+            card_list.has(None)
 
     def test_has_one_card(self):
         card_list = CardList((TrainColor.BLACK, 3), (TrainColor.GREEN, 4), (TrainColor.WILD, 2))
