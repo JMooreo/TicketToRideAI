@@ -6,15 +6,19 @@ from typing import List
 
 class CardList:
     def __init__(self, *colors: [(TrainColor, int)]):
-        self.list = [0 for _ in TrainColor]
+        # Assumes no duplicates when creating a card list
+        self.cards = {}
 
         for color, amount in colors:
-            self.list[color.value] += amount
+            if amount > 0:
+                if color in self.cards:
+                    self.cards[color] += amount
+                else:
+                    self.cards[color] = amount
 
     @staticmethod
     def from_numbers(numbers: List[int]):
         cl = CardList()
-        cl.list = [0 for _ in TrainColor]
 
         if len(numbers) > len(TrainColor):
             raise IndexError
@@ -23,43 +27,67 @@ class CardList:
             if number < 0:
                 raise ValueError
 
-            cl.list[index] = number
+            if number > 0:
+                cl.cards[TrainColor(index)] = number
 
         return cl
 
     def __getitem__(self, color: TrainColor):
-        return self.list[color]
+        return self.cards.get(color, 0)
 
     def __len__(self):
-        return len(self.list)
+        return len(self.cards)
 
     def __str__(self):
-        return str(self.list)
+        return str(self.cards)
 
     def __add__(self, other):
-        return CardList.from_numbers([x + y for x, y in zip(self.list, other.list)])
+        cards = {}
+
+        for color in TrainColor:
+            value = self.cards.get(color, 0) + other.cards.get(color, 0)
+            if value > 0:
+                cards[color] = value
+
+        new_list = CardList()
+        new_list.cards = cards
+        return new_list
 
     def __sub__(self, other):
-        return CardList.from_numbers([x - y for x, y in zip(self.list, other.list)])
+        cards = {}
+
+        for color in TrainColor:
+            value = self.cards.get(color, 0) - other.cards.get(color, 0)
+            if value < 0:
+                raise ValueError
+
+            if value > 0:
+                cards[color] = value
+
+        new_list = CardList()
+        new_list.cards = cards
+        return new_list
 
     def __eq__(self, other):
-        return self.list == other.list
+        return self.cards == other.cards
 
     def __repr__(self):
         return str(self)
 
     def __copy__(self):
-        return CardList() + self
+        new_list = CardList()
+        new_list.cards = self.cards
+        return new_list
 
     def number_of_cards(self):
-        return sum(self.list)
+        return sum(self.cards.values())
 
     def has(self, other):
         if other is None:
             return False
 
-        for x, y in zip(self.list, other.list):
-            if x - y < 0:
+        for color, amount in other.cards.items():
+            if self.cards.get(color, 0) - amount < 0:
                 return False
 
         return True
@@ -72,14 +100,13 @@ class CardList:
         return card_list
 
     def draw_train_card(self):
-        if sum(self.list) > 0:
-            color = random.choice(list(TrainColor))
-            choice = CardList((color, 1))
-            if self.list[color.value] > 0:
-                self.list[color.value] -= 1
-                return choice
+        if self.number_of_cards() > 0:
+            color = random.choice(list(self.cards.keys()))
+            assert self.cards[color] > 0
+            if self.cards[color] == 1:
+                self.cards.pop(color)
             else:
-                return self.draw_train_card()  # No cards of that color, try again.
-        else:
-            # No more cards to draw
-            return CardList()
+                self.cards[color] -= 1
+            return CardList((color, 1))
+
+        return CardList()

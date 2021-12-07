@@ -1,4 +1,4 @@
-from typing import List, Generator
+from typing import Generator
 
 from src.game.CardList import TrainColor, CardList
 

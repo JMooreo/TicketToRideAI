@@ -111,7 +111,7 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_claiming_a_route_puts_cards_back_in_the_deck(self):
         self.game.unclaimed_routes = {1: None, 2: None, 3: None}
-        deck_before = CardList.from_numbers(self.game.deck.list)
+        deck_before = self.game.deck
         route = self.game.map.routes.get(3)
         player = self.game.players[self.game.current_player_index]
         expected_payment = route.cost.best_payment_option(player.hand)
