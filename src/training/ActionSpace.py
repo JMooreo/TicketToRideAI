@@ -75,8 +75,8 @@ class ActionSpace:
         action_id = np.random.choice(len(self), p=strategy)
         return action_id, strategy[action_id]
 
-    def get_action(self):
-        action_id, chance = self.get_action_id()
+    def get_action(self, strategy=None):
+        action_id, chance = self.get_action_id(strategy)
         return self.get_action_by_id(action_id), chance
 
     def get_action_by_id(self, action_id):

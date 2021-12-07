@@ -77,7 +77,7 @@ class CardList:
 
     def has(self, other):
         for color, amount in other.cards.items():
-            if self.cards.get(color, 0) - amount < 0:
+            if self.cards.get(color, 0) < amount:
                 return False
 
         return True

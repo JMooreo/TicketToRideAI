@@ -21,16 +21,17 @@ class GameTree:
         self.current_node = self.current_node.next(action)
         # print("ACTION", action)
 
-    def simulate_random_until_game_over(self, game: Game = None):
+    def simulate_random_until_game_over(self, game: Game = None, strategy=None):
         if game is not None:
             self.game = game
 
         action_space = ActionSpace(self.game)
+
         while self.game.state != GameState.GAME_OVER:
-            action, chance = action_space.get_action()
+            action, chance = action_space.get_action(strategy)
             self.next(action)
 
-    def simulate_for_n_turns(self, num_turns):
+    def simulate_for_n_turns(self, num_turns, strategy=None):
         action_space = ActionSpace(self.game)
         for _ in range(num_turns):
             if self.game.state == GameState.GAME_OVER:
@@ -39,5 +40,5 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
-                action, chance = action_space.get_action()
+                action, chance = action_space.get_action(strategy)
                 self.next(action)

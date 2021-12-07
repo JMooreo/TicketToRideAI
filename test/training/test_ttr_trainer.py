@@ -1,3 +1,4 @@
+import copy
 import os
 import time
 import unittest
@@ -117,3 +118,22 @@ class TrainerTest(unittest.TestCase):
             os.rmdir(self.trainer.checkpoint_directory)
         except:
             pass
+
+    def test_opponent_is_allowed_to_use_latest_checkpoint_but_doesnt_train(self):
+        self.trainer.checkpoint_directory = self.trainer.checkpoint_directory[:-5]
+        self.trainer.load_latest_checkpoint()
+
+        last_checkpoint = copy.deepcopy(self.trainer.opponent_strategy)
+        self.trainer.checkpoint_directory += "/test"
+        try:
+            os.mkdir(self.trainer.checkpoint_directory)
+        except:
+            pass
+
+        self.assertEqual(self.trainer.strategy.tolist(), self.trainer.opponent_strategy.tolist())
+
+        self.trainer.tree.simulate_for_n_turns(90)
+        self.trainer.train(1)
+
+        self.assertNotEqual(self.trainer.strategy.tolist(), self.trainer.opponent_strategy.tolist())
+        self.assertEqual(last_checkpoint.tolist(), self.trainer.opponent_strategy.tolist())

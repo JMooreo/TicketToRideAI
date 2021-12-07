@@ -1,24 +1,10 @@
-import pstats
-import cProfile
-
-from src.training.Trainer import Trainer
-
-
-def main():
-    trainer.training_step()
-
-
 if __name__ == "__main__":
+    # import os
+    # from src.training.Performance import Performance
+    # Performance(os.getcwd()).run()
+
+    from src.training.Trainer import Trainer
     trainer = Trainer()
     trainer.load_latest_checkpoint()
-    trainer.tree.simulate_for_n_turns(2)
-
-    cProfile.run('main()', 'output.dat')
-
-    with open("./output_time.txt", "w") as f:
-        p = pstats.Stats("output.dat", stream=f)
-        p.sort_stats("time").print_stats()
-
-    with open("./output_calls.txt", "w") as f:
-        p = pstats.Stats("output.dat", stream=f)
-        p.sort_stats("calls").print_stats()
+    trainer.train(1)
+    trainer.display_strategy()
