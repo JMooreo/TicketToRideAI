@@ -162,7 +162,7 @@ class CardListTest(unittest.TestCase):
     def test_init_with_the_same_color_more_than_once(self):
         card_list = CardList((TrainColor.YELLOW, 3), (TrainColor.YELLOW, 3))
 
-        self.assertEqual(CardList((TrainColor.YELLOW, 6)), card_list)
+        self.assertEqual(CardList((TrainColor.YELLOW, 3)), card_list)
 
     def test_number_of_cards_empty_list(self):
         card_list = CardList()

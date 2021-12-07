@@ -7,14 +7,7 @@ from typing import List
 class CardList:
     def __init__(self, *colors: [(TrainColor, int)]):
         # Assumes no duplicates when creating a card list
-        self.cards = {}
-
-        for color, amount in colors:
-            if amount > 0:
-                if color in self.cards:
-                    self.cards[color] += amount
-                else:
-                    self.cards[color] = amount
+        self.cards = {color: amount for color, amount in colors if amount > 0}
 
     @staticmethod
     def from_numbers(numbers: List[int]):
