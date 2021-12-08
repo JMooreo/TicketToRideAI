@@ -13,7 +13,7 @@ class ClaimRouteAction(Action):
         self.player = game.players[self.game.current_player_index]
 
     def __str__(self):
-        return f"claim_{str(self.route)}"
+        return f"claim_{str(self.route)} ({self.route.points} points)"
 
     def __eq__(self, other):
         return isinstance(other, ClaimRouteAction) and \
@@ -42,3 +42,12 @@ class ClaimRouteAction(Action):
         self.player.points += self.route.points
         self.player.hand -= payment
         self.player.trains -= self.route.cost.amount
+
+        keys_to_pop = []
+        for key, destination in self.player.uncompleted_destinations.items():
+            if destination.path_from(self.player.routes.values()) is not None:
+                keys_to_pop.append(key)
+                self.player.completed_destinations[key] = destination
+
+        for key in keys_to_pop:
+            self.player.uncompleted_destinations.pop(key)

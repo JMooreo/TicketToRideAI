@@ -16,6 +16,7 @@ from src.game.Player import Player
 from src.game.enums.TrainColor import TrainColor
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
+from src.training.StrategyStorage import StrategyStorage
 
 
 class ActionSpaceTest(unittest.TestCase):
@@ -100,11 +101,11 @@ class ActionSpaceTest(unittest.TestCase):
         self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
 
     def test_get_valid_action_ids_after_one_turn(self):
-        GameTree(self.game).simulate_for_n_turns(1)
+        GameTree(self.game).simulate_for_n_turns(1, StrategyStorage())
         self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
 
     def test_get_valid_action_ids_after_two_turn(self):
-        GameTree(self.game).simulate_for_n_turns(2)
+        GameTree(self.game).simulate_for_n_turns(2, StrategyStorage())
 
         self.assertTrue(len(self.action_space.get_valid_action_ids()) > 1)
 
@@ -112,7 +113,7 @@ class ActionSpaceTest(unittest.TestCase):
         game = Game([Player(), Player()], USMap())
         tree = GameTree(game)
 
-        tree.simulate_for_n_turns(4)
+        tree.simulate_for_n_turns(4, StrategyStorage())
 
         game_copy = copy.deepcopy(game)
 

@@ -45,7 +45,7 @@ class OpponentNodeTest(unittest.TestCase):
         self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
         self.assertEqual(3, len(self.game.available_destinations))
-        self.assertEqual(3, len(self.players[1].destinations))
+        self.assertEqual(3, len(self.players[1].uncompleted_destinations))
 
     def test_opponent_draw_and_select_destinations_after_first_turn(self):
         self.__do_first_turn()
@@ -58,7 +58,7 @@ class OpponentNodeTest(unittest.TestCase):
         self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertEqual([], self.game.available_destinations)
-        self.assertEqual(6, len(self.players[1].destinations))
+        self.assertEqual(6, len(self.players[1].uncompleted_destinations))
 
     def test_opponent_draw_random_card_after_first_turn_done(self):
         self.__do_first_turn()
@@ -109,8 +109,8 @@ class OpponentNodeTest(unittest.TestCase):
         self.assertTrue(self.game.turn_state == TurnState.INIT)
         self.assertTrue(self.game.state == GameState.PLAYING)
 
-        self.assertEqual(3, len(self.players[0].destinations))
-        self.assertEqual(3, len(self.players[1].destinations))
+        self.assertEqual(3, len(self.players[0].uncompleted_destinations))
+        self.assertEqual(3, len(self.players[1].uncompleted_destinations))
 
     def test_select_one_destination_then_end_first_turn(self):
         self.__do_training_node_turn()

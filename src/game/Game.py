@@ -74,7 +74,7 @@ class Game:
     def take_destinations(self, destination_ids):
         for i in destination_ids:
             self.unclaimed_destinations.pop(i)
-            self.players[self.current_player_index].destinations.append(i)
+            self.players[self.current_player_index].uncompleted_destinations.append(i)
 
         self.available_destinations = []
 
@@ -91,3 +91,6 @@ class Game:
     def calculate_final_scores(self):
         for player in self.players:
             player.points += player.points_from_destinations()
+
+    def current_player(self):
+        return self.players[self.current_player_index]

@@ -89,7 +89,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.game.available_destinations = [1]
 
         player = self.game.players[self.game.current_player_index]
-        player.destinations = [2, 3]
+        player.uncompleted_destinations = [2, 3]
 
         select_action = SelectDestinationAction(self.game, 2)
         select_action2 = SelectDestinationAction(self.game, 3)
@@ -105,7 +105,7 @@ class FinishSelectingDestinationsActionTest(unittest.TestCase):
         self.game.available_destinations = [1, 2, 3]
 
         player = self.game.players[self.game.current_player_index]
-        player.destinations = {}
+        player.uncompleted_destinations = {}
 
         select_action = SelectDestinationAction(self.game, 1)
         select_action2 = SelectDestinationAction(self.game, 2)

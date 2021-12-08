@@ -1,16 +1,21 @@
 import unittest
+from typing import List
 
 import numpy as np
 
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.game.CardList import CardList
+from src.game.Destination import Destination
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
+from src.game.Route import Route
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
+from src.training.GameTree import GameTree
+from src.training.StrategyStorage import StrategyStorage
 
 
 class ClaimRouteActionTest(unittest.TestCase):
@@ -218,10 +223,10 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_as_string(self):
         self.game.current_player_index = 0
-        self.assertEqual("claim_VANCOUVER_to_SEATTLE", str(ClaimRouteAction(self.game, 2)))
+        self.assertEqual("claim_VANCOUVER_to_SEATTLE (1 points)", str(ClaimRouteAction(self.game, 2)))
 
         self.game.current_player_index = 1
-        self.assertEqual("claim_VANCOUVER_to_SEATTLE", str(ClaimRouteAction(self.game, 1)))
+        self.assertEqual("claim_VANCOUVER_to_SEATTLE (1 points)", str(ClaimRouteAction(self.game, 1)))
 
     def test_turn_history(self):
         player = self.game.players[self.game.current_player_index]
@@ -233,4 +238,33 @@ class ClaimRouteActionTest(unittest.TestCase):
 
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
         self.assertEqual([action], player.turn_history)
+
+    def test_claiming_routes_that_complete_a_destination(self):
+        tree = GameTree(self.game)
+        tree.simulate_for_n_turns(2, StrategyStorage())
+        destination: Destination = USMap().destinations.get(6)
+        routes: List[Route] = [USMap().routes.get(i) for i in [32, 33]]
+
+        player = self.game.current_player()
+        player.hand = CardList((TrainColor.WILD, 10))
+        player.routes = {}
+        player.uncompleted_destinations = {6: destination}
+
+        self.assertTrue(destination.path_from(routes) is not None)
+
+        action1 = ClaimRouteAction(self.game, 32)
+        self.assertTrue(action1.is_valid())
+        action1.execute()
+
+        self.assertEqual(1, len(self.game.current_player().uncompleted_destinations))
+        self.assertEqual(0, len(self.game.current_player().completed_destinations))
+
+        self.game.turn_state = TurnState.INIT
+
+        action2 = ClaimRouteAction(self.game, 33)
+        self.assertTrue(action2.is_valid())
+        action2.execute()
+
+        self.assertEqual(0, len(self.game.current_player().uncompleted_destinations))
+        self.assertEqual(1, len(self.game.current_player().completed_destinations))
 

@@ -5,6 +5,7 @@ from src.game.Game import Game
 from src.game.enums.GameState import GameState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameNode import TrainingNode, GameNode
+from src.training.StrategyStorage import StrategyStorage
 
 
 class GameTree:
@@ -19,19 +20,16 @@ class GameTree:
                              str(self.game))
 
         self.current_node = self.current_node.next(action)
-        # print("ACTION", action)
 
-    def simulate_random_until_game_over(self, game: Game = None, strategy=None):
-        if game is not None:
-            self.game = game
-
+    def simulate_until_game_over(self, strategy_storage: StrategyStorage):
         action_space = ActionSpace(self.game)
 
         while self.game.state != GameState.GAME_OVER:
+            strategy = strategy_storage.get(self.game.current_player().uncompleted_destinations)
             action, chance = action_space.get_action(strategy)
             self.next(action)
 
-    def simulate_for_n_turns(self, num_turns, strategy=None):
+    def simulate_for_n_turns(self, num_turns, strategy_storage: StrategyStorage):
         action_space = ActionSpace(self.game)
         for _ in range(num_turns):
             if self.game.state == GameState.GAME_OVER:
@@ -40,5 +38,6 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
+                strategy = strategy_storage.get(self.game.current_player().uncompleted_destinations)
                 action, chance = action_space.get_action(strategy)
                 self.next(action)

@@ -9,6 +9,7 @@ from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
 from src.training.GameTree import GameTree
+from src.training.StrategyStorage import StrategyStorage
 
 
 class GameTest(unittest.TestCase):
@@ -96,7 +97,7 @@ class GameTest(unittest.TestCase):
     def test_deepcopy(self):
         game = Game([Player(), Player()], USMap())
         tree = GameTree(game)
-        tree.simulate_for_n_turns(3)
+        tree.simulate_for_n_turns(3, StrategyStorage())
 
         self.assertEqual(GameState.PLAYING, game.state)
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
@@ -112,6 +113,19 @@ class GameTest(unittest.TestCase):
         self.assertEqual(game.turn_state, game_copy.turn_state)
         self.assertEqual(game.players[0], game_copy.players[0])
         self.assertEqual(game.players[1], game_copy.players[1])
+
+    def test_get_current_player(self):
+        player1 = Player()
+        player2 = Player()
+        players = [player1, player2]
+
+        self.game.players = players
+
+        self.game.current_player_index = 0
+        self.assertEqual(player1, self.game.current_player())
+
+        self.game.current_player_index = 1
+        self.assertEqual(player2, self.game.current_player())
 
 
 

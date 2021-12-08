@@ -1,4 +1,5 @@
 import os
+import pickle
 from datetime import datetime
 
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
@@ -15,123 +16,112 @@ from src.training.Strategy import Strategy
 
 import numpy as np
 
+from src.training.StrategyStorage import StrategyStorage
+
 
 class Trainer:
     def __init__(self):
         self.checkpoint_directory = "D:/Programming/TicketToRideMCCFR_TDD/checkpoints"
-        self.tree = self.new_game_tree()
-        self.strategy = Strategy.random(len(ActionSpace(self.tree.game)))
-        self.opponent_strategy = Strategy.random(len(ActionSpace(self.tree.game)))
-
-    def new_game_tree(self):
-        # Skip past the first "Draw Destinations" action
-        # because there are no other choices.
-        tree = GameTree(Game([Player(), Player()], USMap()))
-        tree.next(DrawDestinationsAction(tree.game))
-        return tree
+        self.tree = GameTree(Game([Player(), Player()], USMap()))
+        self.strategy_storage = StrategyStorage()
 
     def train(self, iters):
         if iters <= 0:
             raise ValueError
 
         for i in range(iters):
-            for node_type in [TrainingNode, OpponentNode]:
-                while self.tree.game.state != GameState.GAME_OVER:
-                    self.training_step(node_type)
+            while self.tree.game.state != GameState.GAME_OVER:
+                self.training_step()
 
-                # file_path = f"{self.checkpoint_directory}/checkpoint-{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.txt"
-                # with open(file_path, "w") as f:
-                #     np.savetxt(f, self.strategy)
-                #
-                print(self.tree.game)
+            file_path = f"{self.checkpoint_directory}/{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.pkl"
+            self.save_checkpoint(file_path)
 
-                # Reset the game tree. This happens after the simulation to allow faster tests.
-                self.tree = self.new_game_tree()
-
-    # The current Training Node is allowed to learn while the game is being played.
-    # The opponent node is not. Instead, the opponent uses the last checkpoint to make its decisions.
-    # From there, the game tree will simulate action utility based on the BLUEPRINT STRATEGY for both players.
-    # The reason why we use the same strategy for both players is because we are estimating a nash equilibrium? Idk.
-    # Maybe it's worth changing this in the future?
-    def training_step(self, node_type):
-        if not isinstance(self.tree.current_node, node_type):
-            self.tree.simulate_for_n_turns(1, self.opponent_strategy)
-            if node_type == TrainingNode:
-                print("Other player took their turn")
             print(self.tree.game)
+
+            self.tree = GameTree(Game([Player(), Player()], USMap()))
+
+    # Strategy is based on which uncompleted_destinations the player has.
+    # Each Training Node is allowed to learn while the game is being played.
+    # Each Opponent Node will not learn during the game because it is impossible
+    #   for the Training Node and Opponent Node to have the exact same uncompleted_destinations in the same game.
+    def training_step(self):
+        if not isinstance(self.tree.current_node, TrainingNode):
+            self.tree.simulate_for_n_turns(1, self.strategy_storage)
+            print("Opponent took their turn")
 
         if self.tree.game.state == GameState.GAME_OVER:
             return
 
-        # Determine the possible actions from the node
+        assert isinstance(self.tree.current_node, TrainingNode)
+
+        # Determine the possible actions from the Training Node
         action_space = ActionSpace(self.tree.game)
-        print("ACTION SPACE")
-        print(action_space)
 
         import random
         take_greedy_path = random.uniform(0, 1) < 0.3
 
+        current_player = self.tree.game.current_player()
+        training_strategy = self.strategy_storage.get(current_player.uncompleted_destinations)
+
         if take_greedy_path:
-            # Choose the best valid action in the current strategy
-            normalized_strategy = Strategy.normalize(self.strategy, action_space.to_np_array())
+            # Choose the best valid action for the current set of uncompleted_destinations
+            normalized_strategy = Strategy.normalize(training_strategy, action_space.to_np_array())
             action_id = int(np.argmax(normalized_strategy))
             chance = normalized_strategy[action_id]
             action = action_space.get_action_by_id(action_id)
-            print("ACTION")
-            print(f"Chose to take the GREEDY PATH {action} (normally {round(100*chance, 2)}% probability)\n")
+            print(f"\nChose to take the GREEDY PATH {action} (normally {round(100*chance, 2)}% probability)\n")
         else:
-            # Pick one using the blueprint strategy
-            action_id, chance = action_space.get_action_id(self.strategy)
+            # Pick one using the blueprint strategy for this set of uncompleted_destinations
+            action_id, chance = action_space.get_action_id(training_strategy)
             action = action_space.get_action_by_id(action_id)
-            print("ACTION")
-            print(f"Chose to {action} with {round(100*chance, 2)}% probability\n")
+            print(f"\nChose to {action} with {round(100*chance, 2)}% probability\n")
 
         # Determine the rewards (or utility) from each possible branch
-        utils = ActionUtility.from_all_branches(self.tree.game)
-        print("UTILITY FUNCTION")
-        print(utils)
+        utils = ActionUtility.from_all_branches(self.tree.game, self.strategy_storage)
+        # print("UTILITY FUNCTION")
+        # print(utils)
+
+        # Advance the game tree after game used for utils
+        self.tree.next(action)
 
         # How much we regret not choosing a different branch
         regrets = Regret(utils).from_action_id(action_id)
-        print("REGRETS")
-        print(regrets)
+        # print("REGRETS")
+        # print(regrets)
 
         # Update the strategy
-        self.strategy = Strategy.from_regrets(self.strategy, regrets)
-        print("NEW STRATEGY")
-        print(self.strategy)
+        new_strategy = Strategy.from_regrets(training_strategy, regrets)
+        self.strategy_storage.set(current_player.uncompleted_destinations, new_strategy)
+        print(f"\nUpdated Strategy for {sorted(current_player.uncompleted_destinations)}")
+        # print(new_strategy)
 
-        # Advance the game tree
-        self.tree.next(action)
-
-        # Show the state of the game
-        print(self.tree.game)
+    def save_checkpoint(self, file_path: str):
+        with open(file_path, "wb") as f:
+            pickle.dump(self.strategy_storage.strategies, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def load_latest_checkpoint(self):
-        try:
-            latest_checkpoint = self.checkpoint_directory + "/" + os.listdir(self.checkpoint_directory)[-1]
-            print("LOADED", latest_checkpoint)
-            self.strategy = np.loadtxt(latest_checkpoint)
-            self.opponent_strategy = np.loadtxt(latest_checkpoint)
-        except IndexError:
-            print("COULDNT LOAD STRATEGY, using a random strategy instead")
-            self.strategy = Strategy.random(len(ActionSpace(self.tree.game)))
-            self.opponent_strategy = Strategy.random(len(ActionSpace(self.tree.game)))
+        file_path = self.checkpoint_directory + "/" + os.listdir(self.checkpoint_directory)[-1]
+        with open(file_path, "rb") as f:
+            self.strategy_storage.strategies = pickle.load(f)
+            print("CHECKPOINT LOADED", file_path)
+            print("LENGTH: ", len(self.strategy_storage))
+            print()
 
     def display_strategy(self):
-        normalized = Strategy.normalize(self.strategy)
-        pairs = {}
+        sorted_strategies = sorted(self.strategy_storage.strategies.items(), key=lambda x: x[0])
+        for index, (key, strategy) in enumerate(sorted_strategies):
+            if index > 100:
+                break
 
-        for idx, val in enumerate(normalized):
-            action = ActionSpace(self.tree.game).get_action_by_id(idx)
-            pairs[str(action)] = "{:.3f}%".format(round(100 * val, 3))
+            print("STRATEGY FOR", key)
+            normalized = Strategy.normalize(strategy)
+            pairs = {}
 
-        result = sorted(pairs.items(), key=lambda x: x[1])
-        for pair in result:
-            print(pair[1], pair[0])
+            for idx, val in enumerate(normalized):
+                action = ActionSpace(self.tree.game).get_action_by_id(idx)
+                pairs[str(action)] = "{:.3f}%".format(round(100 * val, 3))
 
-        print()
-        most_useful = max(pairs.items(), key=lambda x: x[1])
-        least_useful = min(pairs.items(), key=lambda x: x[1])
-        print("Most Useful Action:", most_useful[0], most_useful[1])
-        print("Least Useful Action:", least_useful[0], least_useful[1])
+            sorted_items = sorted(pairs.items(), key=lambda x: x[1])
+            print("Most Useful:", sorted_items[-3:])
+            print("Least Useful:", sorted_items[:3])
+            print()

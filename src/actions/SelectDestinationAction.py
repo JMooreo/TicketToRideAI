@@ -15,7 +15,8 @@ class SelectDestinationAction(Action):
         self.destination_id = destination_id
 
     def __str__(self):
-        return f"select_dest_{str(self.game.map.destinations.get(self.destination_id))}"
+        destination = self.game.map.destinations.get(self.destination_id)
+        return f"select_dest_{str(destination)} ({destination.points} points)"
 
     def __eq__(self, other):
         return isinstance(other, SelectDestinationAction) and \
@@ -29,11 +30,17 @@ class SelectDestinationAction(Action):
     def execute(self):
         super().execute()
         destination = self.game.map.destinations.get(self.destination_id)
+        player = self.game.current_player()
 
-        if self.destination_id in self.game.available_destinations:
-            self.game.available_destinations.remove(self.destination_id)
-            self.game.unclaimed_destinations.pop(self.destination_id)
-            self.game.players[self.game.current_player_index].destinations[self.destination_id] = destination
+        self.game.available_destinations.remove(self.destination_id)
+        self.game.unclaimed_destinations.pop(self.destination_id)
+
+        if destination.path_from(player.routes.values()) is not None:
+            player.completed_destinations[self.destination_id] = destination
+        else:
+            player.uncompleted_destinations[self.destination_id] = destination
 
         if not self.game.available_destinations:
             self.game.turn_state = TurnState.FINISHED
+
+

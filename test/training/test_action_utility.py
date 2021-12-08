@@ -11,6 +11,7 @@ from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionUtility import ActionUtility
 from src.training.GameTree import GameTree
+from src.training.StrategyStorage import StrategyStorage
 
 
 class ActionUtilityTest(unittest.TestCase):
@@ -26,23 +27,23 @@ class ActionUtilityTest(unittest.TestCase):
     def test_some_amount_of_points(self):
         self.game.players[0].points = 6
 
-        self.assertEqual(6, ActionUtility.of(DrawRandomCardAction(self.game), self.game))
+        self.assertEqual(6, ActionUtility.of(DrawRandomCardAction(self.game), StrategyStorage()))
 
     def test_claiming_routes_doesnt_matter_when_game_is_over(self):
         self.game.players[0].points = 10
         self.game.state = GameState.GAME_OVER
 
-        self.assertEqual(10, ActionUtility.of(ClaimRouteAction(self.game, 2), self.game))
+        self.assertEqual(10, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
     def test_action_gets_executed_first_by_the_simulation(self):
-        self.assertEqual(1, ActionUtility.of(ClaimRouteAction(self.game, 2), self.game))
+        self.assertEqual(1, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
     def test_action_utility_of_game_already_over(self):
         self.game.state = GameState.GAME_OVER
         self.game.players[0].points = 80
         self.game.players[1].points = 30
 
-        self.assertEqual(50, ActionUtility.of(ClaimRouteAction(self.game, 2), self.game))
+        self.assertEqual(50, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
     def test_selecting_destinations_gives_negative_utility(self):
         game = Game([Player(), Player()], USMap())
@@ -52,12 +53,12 @@ class ActionUtilityTest(unittest.TestCase):
         game.last_turn_count = game.turn_count
         game.available_destinations = [26]
 
-        self.assertEqual(-20, ActionUtility.of(SelectDestinationAction(game, 26), game))
+        self.assertEqual(-20, ActionUtility.of(SelectDestinationAction(game, 26), StrategyStorage()))
 
     def test_action_utility_from_started_game(self):
         game = Game([Player(), Player()], USMap())
-        GameTree(game).simulate_for_n_turns(2)
-        all_utilities = ActionUtility.from_all_branches(game)
+        GameTree(game).simulate_for_n_turns(2, StrategyStorage())
+        all_utilities = ActionUtility.from_all_branches(game, StrategyStorage())
 
         print("UTILITIES:")
         print(all_utilities)

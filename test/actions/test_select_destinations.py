@@ -50,7 +50,10 @@ class SelectDestinationsActionTest(unittest.TestCase):
         self.assertFalse(action.is_valid())
 
     def test_state_after_action(self):
+        self.game.turn_state = TurnState.SELECTING_DESTINATIONS
+        self.game.available_destinations = [1]
         action = SelectDestinationAction(self.game, 1)
+        self.assertTrue(action.is_valid())
 
         action.execute()
 
@@ -62,7 +65,7 @@ class SelectDestinationsActionTest(unittest.TestCase):
 
         action.execute()
 
-        self.assertTrue(2 in self.players[0].destinations)
+        self.assertTrue(2 in self.players[0].uncompleted_destinations)
 
     def test_unchosen_destinations_go_back_into_the_deck(self):
         self.game.available_destinations = [2, 3, 5]
@@ -110,8 +113,8 @@ class SelectDestinationsActionTest(unittest.TestCase):
                 self.assertEqual((len(self.game.map.destinations.keys()),), actual.shape)
 
     def test_as_string(self):
-        self.assertEqual("select_dest_CALGARY_to_PHOENIX", str(SelectDestinationAction(self.game, 1)))
-        self.assertEqual("select_dest_DALLAS_to_NEW_YORK", str(SelectDestinationAction(self.game, 5)))
+        self.assertEqual("select_dest_CALGARY_to_PHOENIX (13 points)", str(SelectDestinationAction(self.game, 1)))
+        self.assertEqual("select_dest_DALLAS_to_NEW_YORK (11 points)", str(SelectDestinationAction(self.game, 5)))
 
     def test_turn_history(self):
         self.game.available_destinations = [1, 2, 3]
@@ -136,4 +139,16 @@ class SelectDestinationsActionTest(unittest.TestCase):
 
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
         self.assertEqual([action, action2, action3], player.turn_history)
+
+    def test_select_a_destination_that_has_already_been_completed(self):
+        self.players[0].routes = {i: USMap().routes.get(i) for i in [32, 33]}
+        self.game.turn_state = TurnState.SELECTING_DESTINATIONS
+        self.game.available_destinations = [6]
+
+        action = SelectDestinationAction(self.game, 6)
+        self.assertTrue(action.is_valid())
+        action.execute()
+
+        self.assertEqual(1, len(self.players[0].completed_destinations))
+        self.assertEqual(0, len(self.players[0].uncompleted_destinations))
 

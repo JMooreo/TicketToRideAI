@@ -12,6 +12,7 @@ from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
 from src.training.GameNode import TrainingNode
+from src.training.StrategyStorage import StrategyStorage
 
 
 class GameTreeTest(unittest.TestCase):
@@ -44,8 +45,8 @@ class GameTreeTest(unittest.TestCase):
                     break
                 self.tree.next(select)
 
-        self.assertEqual(15, len(self.players[0].destinations))
-        self.assertEqual(15, len(self.players[1].destinations))
+        self.assertEqual(15, len(self.players[0].uncompleted_destinations))
+        self.assertEqual(15, len(self.players[1].uncompleted_destinations))
         self.assertEqual([], self.game.available_destinations)
 
     def test_draw_random_cards_until_there_are_none_left(self):
@@ -85,28 +86,30 @@ class GameTreeTest(unittest.TestCase):
             self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-        self.tree.simulate_for_n_turns(1)
+        self.tree.simulate_for_n_turns(1, StrategyStorage())
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-        self.tree.simulate_for_n_turns(1)
+        self.tree.simulate_for_n_turns(1, StrategyStorage())
         self.assertEqual(GameState.GAME_OVER, self.game.state)
 
     def test_random_simulation_state(self):
-        self.tree.simulate_random_until_game_over()
+        self.tree.simulate_until_game_over(StrategyStorage())
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
     def test_random_simulation_no_destinations_lost(self):
-        self.tree.simulate_random_until_game_over()
+        self.tree.simulate_until_game_over(StrategyStorage())
         expected = len(self.game.map.destinations.keys())
-        actual = len(self.players[0].destinations.keys()) + \
-                 len(self.players[1].destinations.keys()) + \
+        actual = len(self.players[0].uncompleted_destinations.keys()) + \
+                 len(self.players[0].completed_destinations.keys()) + \
+                 len(self.players[1].uncompleted_destinations.keys()) + \
+                 len(self.players[1].completed_destinations.keys()) + \
                  len(self.game.unclaimed_destinations.keys())
 
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_routes_lost(self):
-        self.tree.simulate_random_until_game_over()
+        self.tree.simulate_until_game_over(StrategyStorage())
         expected = len(self.game.map.routes.keys())
         actual = len(self.players[0].routes.keys()) + \
                  len(self.players[1].routes.keys()) + \
@@ -115,7 +118,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_train_cards_lost(self):
-        self.tree.simulate_random_until_game_over()
+        self.tree.simulate_until_game_over(StrategyStorage())
         expected = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
         actual = self.players[0].hand + \
                  self.players[1].hand + \
@@ -125,7 +128,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_player_points_are_accurate_total_scores(self):
-        self.tree.simulate_random_until_game_over()
+        self.tree.simulate_until_game_over(StrategyStorage())
         expected = [player.points_from_routes() + player.points_from_destinations()
                     for player in self.game.players]
 
@@ -133,18 +136,34 @@ class GameTreeTest(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_player_points_from_destinations_accurate(self):
+        self.tree.simulate_until_game_over(StrategyStorage())
+        expected = [player.points_from_destinations() for player in self.game.players]
+
+        actual = []
+        for player in self.game.players:
+            completed_check = sum(destination.points if destination.path_from(player.routes.values()) is not None
+                                  else -destination.points for destination in player.completed_destinations.values())
+
+            uncompleted_check = sum(destination.points if destination.path_from(player.routes.values()) is not None
+                                    else -destination.points for destination in player.uncompleted_destinations.values())
+
+            actual.append(completed_check + uncompleted_check)
+
+        self.assertEqual(expected, actual)
+
     def test_simulate_for_one_turn(self):
-        self.tree.simulate_for_n_turns(1)
+        self.tree.simulate_for_n_turns(1, StrategyStorage())
 
         self.assertEqual(GameState.FIRST_ROUND, self.game.state)
 
     def test_simulate_for_two_turns(self):
-        self.tree.simulate_for_n_turns(2)
+        self.tree.simulate_for_n_turns(2, StrategyStorage())
 
         self.assertEqual(GameState.PLAYING, self.game.state)
 
     def test_simulate_for_way_too_many_turns_ends_early(self):
-        self.tree.simulate_for_n_turns(2000)
+        self.tree.simulate_for_n_turns(2000, StrategyStorage())
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
         self.assertLess(self.game.turn_count, 200)
