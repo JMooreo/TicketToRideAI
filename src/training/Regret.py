@@ -14,4 +14,4 @@ class Regret:
         self.impact = impact
 
     def from_action_id(self, action_id):
-        return np.array([(value - self.utils[action_id]) * self.impact for value in self.utils])
+        return np.array([(value - self.utils[action_id] if value != 0 else 0) * self.impact for value in self.utils])

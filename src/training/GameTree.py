@@ -4,13 +4,13 @@ from src.actions.Action import Action
 from src.game.Game import Game
 from src.game.enums.GameState import GameState
 from src.training.ActionSpace import ActionSpace
-from src.training.GameNode import TrainingNode, OpponentNode
+from src.training.GameNode import TrainingNode, GameNode
 
 
 class GameTree:
     def __init__(self, game: Game):
         self.game = game
-        self.current_node: TrainingNode | OpponentNode = TrainingNode(game)
+        self.current_node: GameNode = TrainingNode(game)
 
     def next(self, action: Action):
         if action is None or not action.is_valid():

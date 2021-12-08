@@ -8,7 +8,7 @@ from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.training.ActionSpace import ActionSpace
 from src.training.ActionUtility import ActionUtility
-from src.training.GameNode import TrainingNode
+from src.training.GameNode import TrainingNode, OpponentNode
 from src.training.GameTree import GameTree
 from src.training.Regret import Regret
 from src.training.Strategy import Strategy
@@ -35,30 +35,35 @@ class Trainer:
             raise ValueError
 
         for i in range(iters):
-            while self.tree.game.state != GameState.GAME_OVER:
-                self.training_step()
+            for node_type in [TrainingNode, OpponentNode]:
+                while self.tree.game.state != GameState.GAME_OVER:
+                    self.training_step(node_type)
 
-            file_path = f"{self.checkpoint_directory}/checkpoint-{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.txt"
-            with open(file_path, "w") as f:
-                np.savetxt(f, self.strategy)
+                # file_path = f"{self.checkpoint_directory}/checkpoint-{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.txt"
+                # with open(file_path, "w") as f:
+                #     np.savetxt(f, self.strategy)
+                #
+                print(self.tree.game)
 
-            print(self.tree.game)
-
-            # Reset the game tree. This happens after the simulation to allow faster tests.
-            self.tree = self.new_game_tree()
+                # Reset the game tree. This happens after the simulation to allow faster tests.
+                self.tree = self.new_game_tree()
 
     # The current Training Node is allowed to learn while the game is being played.
     # The opponent node is not. Instead, the opponent uses the last checkpoint to make its decisions.
-    def training_step(self):
-        if not isinstance(self.tree.current_node, TrainingNode):
+    # From there, the game tree will simulate action utility based on the BLUEPRINT STRATEGY for both players.
+    # The reason why we use the same strategy for both players is because we are estimating a nash equilibrium? Idk.
+    # Maybe it's worth changing this in the future?
+    def training_step(self, node_type):
+        if not isinstance(self.tree.current_node, node_type):
             self.tree.simulate_for_n_turns(1, self.opponent_strategy)
-            print("Opponent took their turn")
+            if node_type == TrainingNode:
+                print("Other player took their turn")
             print(self.tree.game)
 
         if self.tree.game.state == GameState.GAME_OVER:
             return
 
-        # Determine the possible actions
+        # Determine the possible actions from the node
         action_space = ActionSpace(self.tree.game)
         print("ACTION SPACE")
         print(action_space)
