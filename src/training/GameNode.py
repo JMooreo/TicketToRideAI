@@ -9,7 +9,7 @@ class GameNode(ABC):
     def __init__(self, game):
         self.game = game
 
-    def do_game_over(self):
+    def __do_game_over(self):
         self.game.state = GameState.GAME_OVER
         self.game.calculate_final_scores()
 
@@ -21,22 +21,24 @@ class GameNode(ABC):
 
         return self
 
-    def pass_turn(self):
-        self.game.players[self.player_index()].turn_history = []
-
+    def __handle_game_state_change(self):
         if self.game.current_player_index == len(self.game.players) - 1 and self.game.state == GameState.FIRST_ROUND:
             self.game.state = GameState.PLAYING
         elif self.game.state == GameState.PLAYING and any([player.trains < 3 for player in self.game.players]):
             self.game.state = GameState.LAST_ROUND
             self.game.last_turn_count = self.game.turn_count + len(self.game.players)
         elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
-            self.do_game_over()
-            return
+            self.__do_game_over()
 
-        self.game.turn_count += 1
-        self.game.current_player_index = self.next_node().player_index()
-        self.game.turn_state = TurnState.INIT
-        return self.next_node()
+    def pass_turn(self):
+        self.game.players[self.player_index()].turn_history = []
+        self.__handle_game_state_change()
+
+        if self.game.state != GameState.GAME_OVER:
+            self.game.turn_count += 1
+            self.game.current_player_index = self.next_node().player_index()
+            self.game.turn_state = TurnState.INIT
+            return self.next_node()
 
     @abstractmethod
     def player_index(self):
