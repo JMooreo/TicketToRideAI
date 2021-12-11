@@ -14,12 +14,13 @@ class ActionUtility:
     @staticmethod
     def of(action: Action, strategy_storage: StrategyStorage):
         game = action.game
+        training_player_idx = game.current_player_index
         tree = GameTree(game)
         if game.state != GameState.GAME_OVER:
             tree.next(action)
             tree.greedy_simulation_until_game_over(strategy_storage)
 
-        return round(game.players[0].points, 2)
+        return game.players[training_player_idx].points
 
     @staticmethod
     def from_all_branches(game: Game, strategy_storage: StrategyStorage):

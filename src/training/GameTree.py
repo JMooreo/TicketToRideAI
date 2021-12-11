@@ -7,7 +7,7 @@ from src.game.Game import Game
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
-from src.training.GameNode import TrainingNode, GameNode
+from src.training.GameNode import Player1Node, GameNode
 from src.training.Strategy import Strategy
 from src.training.StrategyStorage import StrategyStorage
 
@@ -15,7 +15,7 @@ from src.training.StrategyStorage import StrategyStorage
 class GameTree:
     def __init__(self, game: Game):
         self.game = game
-        self.current_node: GameNode = TrainingNode(self.game)
+        self.current_node: GameNode = Player1Node(self.game)
 
     def next(self, action: Action):
         if action is None or not action.is_valid():
@@ -61,7 +61,7 @@ class GameTree:
                     self.current_node = self.current_node.pass_turn()
                     continue
 
-                take_greedy_path = random.uniform(0, 1) < 0.9
+                take_greedy_path = random.uniform(0, 1) < 0.3
 
                 if take_greedy_path:
                     # Choose the best valid action for the current set of uncompleted_destinations

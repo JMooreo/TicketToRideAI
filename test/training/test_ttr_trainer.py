@@ -5,7 +5,7 @@ import unittest
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
-from src.training.GameNode import TrainingNode
+from src.training.GameNode import Player1Node
 from src.training.GameTree import GameTree
 from src.training.Strategy import Strategy
 from src.training.StrategyStorage import StrategyStorage
@@ -38,7 +38,7 @@ class TrainerTest(unittest.TestCase):
 
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.trainer.tree.game.turn_state)
         self.assertEqual(0, self.trainer.tree.game.current_player_index)
-        self.assertTrue(isinstance(self.trainer.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.trainer.tree.current_node, Player1Node))
         self.assertEqual(Strategy.random(len(ActionSpace(self.trainer.tree.game))).tolist(),
                          self.trainer.strategy_storage.get({}).tolist())
 
@@ -48,7 +48,7 @@ class TrainerTest(unittest.TestCase):
 
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.trainer.tree.game.turn_state)
         self.assertEqual(0, self.trainer.tree.game.current_player_index)
-        self.assertTrue(isinstance(self.trainer.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.trainer.tree.current_node, Player1Node))
         self.assertEqual(Strategy.random(len(ActionSpace(self.trainer.tree.game))).tolist(),
                          self.trainer.strategy_storage.get({}).tolist())
 

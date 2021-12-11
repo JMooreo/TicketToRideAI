@@ -1,7 +1,6 @@
 import unittest
 
 from src.actions.ClaimRouteAction import ClaimRouteAction
-from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.Game import Game
@@ -49,16 +48,17 @@ class ActionUtilityTest(unittest.TestCase):
 
         self.assertEqual(expected, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
-    # def test_action_utility_of_game_player_1(self):
-    #     self.game.state = GameState.GAME_OVER
-    #     self.game.players[0].points = 80
-    #     self.game.players[1].points = 30
-    #
-    #     self.assertEqual(1, self.game.current_player_index)
-    #
-    #     expected = self.game.players[1].points
-    #
-    #     self.assertEqual(expected, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
+    def test_action_utility_of_game_player_1(self):
+        self.game.last_turn_count = 1000
+        GameTree(self.game).simulate_for_n_turns(1, StrategyStorage())
+        self.assertEqual(1, self.game.current_player_index)
+        self.game.state = GameState.GAME_OVER
+        self.game.players[0].points = 80
+        self.game.players[1].points = 30
+
+        expected = self.game.players[1].points
+
+        self.assertEqual(expected, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
     def test_selecting_destinations_gives_negative_utility(self):
         game = Game([Player(), Player()], USMap())
@@ -75,7 +75,5 @@ class ActionUtilityTest(unittest.TestCase):
         GameTree(game).simulate_for_n_turns(2, StrategyStorage())
         all_utilities = ActionUtility.from_all_branches(game, StrategyStorage())
 
-        print("UTILITIES:")
-        print(all_utilities)
         self.assertEqual(141, len(all_utilities))
         self.assertEqual(GameState.PLAYING, game.state)

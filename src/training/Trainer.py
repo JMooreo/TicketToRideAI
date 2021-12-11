@@ -10,7 +10,7 @@ from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.ActionUtility import ActionUtility
-from src.training.GameNode import TrainingNode, OpponentNode
+from src.training.GameNode import Player1Node, Player2Node
 from src.training.GameTree import GameTree
 from src.training.Regret import Regret
 from src.training.Strategy import Strategy
@@ -46,26 +46,13 @@ class Trainer:
     # Each Opponent Node will not learn during the game because it is impossible
     #   for the Training Node and Opponent Node to have the exact same uncompleted_destinations in the same game.
     def training_step(self):
-
-        # Temporary to allow players to experience the full action space
-        self.tree.game.available_destinations = [_id for _id in self.tree.game.unclaimed_destinations]
-
-        # Temporary to allow players to experience the full action space
-        for player in self.tree.game.players:
-            player.hand = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
-
-        # Temporary to allow players to experience the full action space
-        self.tree.game.visible_cards = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
-
-        if not isinstance(self.tree.current_node, TrainingNode):
+        if not isinstance(self.tree.current_node, Player1Node):
             self.tree.greedy_simulation_for_n_turns(1, self.strategy_storage)
             # print("Opponent took their turn")
             # print(self.tree.game)
 
         if self.tree.game.state == GameState.GAME_OVER:
             return
-
-        assert isinstance(self.tree.current_node, TrainingNode)
 
         # Determine the possible actions from the Training Node
         action_space = ActionSpace(self.tree.game)

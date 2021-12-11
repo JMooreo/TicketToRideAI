@@ -11,7 +11,7 @@ from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
-from src.training.GameNode import TrainingNode
+from src.training.GameNode import Player1Node
 from src.training.StrategyStorage import StrategyStorage
 
 
@@ -29,7 +29,7 @@ class GameTreeTest(unittest.TestCase):
                 self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
     def test_init(self):
-        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player1Node))
 
     def test_draw_destination_cards_until_there_are_none_left(self):
         self.__do_first_turn()

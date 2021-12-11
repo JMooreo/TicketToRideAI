@@ -14,7 +14,7 @@ from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
-from src.training.GameNode import OpponentNode, TrainingNode
+from src.training.GameNode import Player2Node, Player1Node
 from src.training.GameTree import GameTree
 
 
@@ -42,7 +42,7 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.tree.next(DrawDestinationsAction(self.game))
 
-        self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player2Node))
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.game.turn_state)
         self.assertEqual(3, len(self.game.available_destinations))
         self.assertEqual(3, len(self.players[1].uncompleted_destinations))
@@ -55,7 +55,7 @@ class OpponentNodeTest(unittest.TestCase):
         for _ in range(3):
             self.tree.next(SelectDestinationAction(self.game, self.game.available_destinations[0]))
 
-        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player1Node))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertEqual([], self.game.available_destinations)
         self.assertEqual(6, len(self.players[1].uncompleted_destinations))
@@ -66,7 +66,7 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.tree.next(DrawRandomCardAction(self.game))
 
-        self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player2Node))
         self.assertTrue(self.game.turn_state == TurnState.DRAWING_CARDS)
         self.assertEqual(3, self.game.players[0].hand.number_of_cards())
         self.assertEqual(5, self.game.players[1].hand.number_of_cards())
@@ -79,7 +79,7 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.tree.next(DrawWildCardAction(self.game))
 
-        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player1Node))
         self.assertTrue(self.game.turn_state == TurnState.INIT)
         self.assertEqual(3, self.players[0].hand.number_of_cards())
         self.assertTrue(self.players[1].hand.has(CardList((TrainColor.WILD, 1))))
@@ -93,7 +93,7 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.tree.next(DrawVisibleCardAction(self.game, TrainColor.GREEN))
 
-        self.assertTrue(isinstance(self.tree.current_node, OpponentNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player2Node))
         self.assertTrue(self.game.turn_state == TurnState.DRAWING_CARDS)
         self.assertEqual(3, self.players[0].hand.number_of_cards())
         self.assertTrue(self.players[1].hand.has(CardList((TrainColor.GREEN, 1))))
@@ -103,7 +103,7 @@ class OpponentNodeTest(unittest.TestCase):
         self.__do_first_turn()
 
         self.assertEqual(0, self.game.current_player_index)
-        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player1Node))
 
         self.assertEqual(2, self.game.turn_count)
         self.assertTrue(self.game.turn_state == TurnState.INIT)
@@ -129,7 +129,7 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.tree.next(FinishSelectingDestinationsAction(self.game))
 
-        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player1Node))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertEqual(GameState.PLAYING, self.game.state)
         self.assertEqual(0, self.game.current_player_index)
@@ -143,7 +143,7 @@ class OpponentNodeTest(unittest.TestCase):
 
         self.tree.next(FinishSelectingDestinationsAction(self.game))
 
-        self.assertTrue(isinstance(self.tree.current_node, TrainingNode))
+        self.assertTrue(isinstance(self.tree.current_node, Player1Node))
         self.assertEqual(TurnState.INIT, self.game.turn_state)
         self.assertEqual(GameState.PLAYING, self.game.state)
         self.assertEqual(0, self.game.current_player_index)

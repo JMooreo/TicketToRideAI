@@ -21,48 +21,49 @@ class GameNode(ABC):
 
         return self
 
-    @abstractmethod
     def pass_turn(self):
-        pass
+        self.game.players[self.player_index()].turn_history = []
 
-
-class TrainingNode(GameNode):
-    def __init__(self, game):
-        super().__init__(game)
-
-    def pass_turn(self):
-        self.game.players[0].turn_history = []
-
-        if self.game.state == GameState.PLAYING and any([player.trains < 3 for player in self.game.players]):
-            self.game.state = GameState.LAST_ROUND
-            self.game.last_turn_count = self.game.turn_count + 2
-        elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
-            self.do_game_over()
-            return
-
-        self.game.turn_count += 1
-        self.game.current_player_index = 1
-        self.game.turn_state = TurnState.INIT
-        return OpponentNode(self.game)
-
-
-class OpponentNode(GameNode):
-    def __init__(self, game):
-        super().__init__(game)
-
-    def pass_turn(self):
-        self.game.players[1].turn_history = []
-
-        if self.game.state == GameState.FIRST_ROUND:
+        if self.game.current_player_index == len(self.game.players) - 1 and self.game.state == GameState.FIRST_ROUND:
             self.game.state = GameState.PLAYING
         elif self.game.state == GameState.PLAYING and any([player.trains < 3 for player in self.game.players]):
             self.game.state = GameState.LAST_ROUND
-            self.game.last_turn_count = self.game.turn_count + 2
+            self.game.last_turn_count = self.game.turn_count + len(self.game.players)
         elif self.game.state == GameState.LAST_ROUND and self.game.turn_count == self.game.last_turn_count:
             self.do_game_over()
             return
 
         self.game.turn_count += 1
-        self.game.current_player_index = 0
+        self.game.current_player_index = self.next_node().player_index()
         self.game.turn_state = TurnState.INIT
-        return TrainingNode(self.game)
+        return self.next_node()
+
+    @abstractmethod
+    def player_index(self):
+        pass
+
+    @abstractmethod
+    def next_node(self):
+        pass
+
+
+class Player1Node(GameNode):
+    def __init__(self, game):
+        super().__init__(game)
+
+    def player_index(self):
+        return 0
+
+    def next_node(self):
+        return Player2Node(self.game)
+
+
+class Player2Node(GameNode):
+    def __init__(self, game):
+        super().__init__(game)
+
+    def player_index(self):
+        return 1
+
+    def next_node(self):
+        return Player1Node(self.game)
