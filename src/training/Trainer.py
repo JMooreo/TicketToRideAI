@@ -31,23 +31,21 @@ class Trainer:
             raise ValueError
 
         for i in range(iters):
-            while self.tree.game.state != GameState.GAME_OVER:
-                self.training_step()
+            for node_type in [Player1Node, Player2Node]:
+                self.tree = GameTree(Game([Player(), Player()], USMap()))
 
-            file_path = f"{self.checkpoint_directory}/{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.pkl"
-            self.save_checkpoint(file_path)
+                while self.tree.game.state != GameState.GAME_OVER:
+                    self.training_step(node_type)
 
-            print(self.tree.game)
+                file_path = f"{self.checkpoint_directory}/{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.pkl"
+                self.save_checkpoint(file_path)
 
-            self.tree = GameTree(Game([Player(), Player()], USMap()))
+                print(self.tree.game)
 
-    # Strategy is based on which uncompleted_destinations the player has.
-    # Each Training Node is allowed to learn while the game is being played.
-    # Each Opponent Node will not learn during the game because it is impossible
-    #   for the Training Node and Opponent Node to have the exact same uncompleted_destinations in the same game.
-    def training_step(self):
-        if not isinstance(self.tree.current_node, Player1Node):
-            self.tree.greedy_simulation_for_n_turns(1, self.strategy_storage)
+    # The Node Type that is passed in will update its regrets while the game is running.
+    def training_step(self, node_type):
+        if not isinstance(self.tree.current_node, node_type):
+            self.tree.simulate_for_n_turns(1, self.strategy_storage)
             # print("Opponent took their turn")
             # print(self.tree.game)
 
@@ -60,7 +58,7 @@ class Trainer:
         print(action_space)
 
         import random
-        take_greedy_path = random.uniform(0, 1) < 0.5
+        take_greedy_path = random.uniform(0, 1) < 0.3
 
         current_player = self.tree.game.current_player()
         training_strategy = self.strategy_storage.get(current_player.uncompleted_destinations)
@@ -119,32 +117,6 @@ class Trainer:
             print()
 
         # self.check_for_missing_keys()
-
-    def check_for_missing_keys(self):
-        # The strategies still missing from every single two-destination combo
-        missing_keys = set()
-        missing_two_dest_keys = set()
-        missing_three_dest_keys = set()
-
-        for id1, d1 in USMap().destinations.items():
-            if self.strategy_storage.get({id1: d1}).tolist() == Strategy.random(141).tolist():
-                missing_keys.add(str({id1: d1}))
-
-            for id2, d2 in USMap().destinations.items():
-                if self.strategy_storage.get({id1: d1, id2: d2}).tolist() == Strategy.random(141).tolist():
-                    missing_two_dest_keys.add(str(sorted({id1: d1, id2: d2})))
-
-                for id3, d3 in USMap().destinations.items():
-                    if self.strategy_storage.get({id1: d1, id2: d2, id3: d3}).tolist() == Strategy.random(141).tolist():
-                        missing_three_dest_keys.add(str(sorted({id1: d1, id2: d2, id3: d3})))
-        print("missing single-destination keys:", len(missing_keys))
-        print(missing_keys)
-
-        print("missing two-destination keys:", len(missing_two_dest_keys))
-        print(missing_two_dest_keys)
-
-        print("missing three-destination keys:", len(missing_three_dest_keys))
-        print(missing_three_dest_keys)
 
     def display_strategy(self):
         for index, (key, strategy) in enumerate(self.strategy_storage.strategies.items()):

@@ -72,7 +72,7 @@ class ActionUtilityTest(unittest.TestCase):
 
     def test_action_utility_from_started_game(self):
         game = Game([Player(), Player()], USMap())
-        GameTree(game).simulate_for_n_turns(2, StrategyStorage())
+        GameTree(game).simulate_for_n_turns(90, StrategyStorage())
         all_utilities = ActionUtility.from_all_branches(game, StrategyStorage())
 
         self.assertEqual(141, len(all_utilities))

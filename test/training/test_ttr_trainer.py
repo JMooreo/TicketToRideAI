@@ -5,7 +5,7 @@ import unittest
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
-from src.training.GameNode import Player1Node
+from src.training.GameNode import Player1Node, Player2Node
 from src.training.GameTree import GameTree
 from src.training.Strategy import Strategy
 from src.training.StrategyStorage import StrategyStorage
@@ -34,7 +34,7 @@ class TrainerTest(unittest.TestCase):
         self.assertTrue(isinstance(self.trainer.strategy_storage, StrategyStorage))
 
     def test_one_training_step(self):
-        self.trainer.training_step()
+        self.trainer.training_step(Player1Node)
 
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.trainer.tree.game.turn_state)
         self.assertEqual(0, self.trainer.tree.game.current_player_index)
@@ -43,8 +43,8 @@ class TrainerTest(unittest.TestCase):
                          self.trainer.strategy_storage.get({}).tolist())
 
     def test_two_training_steps(self):
-        self.trainer.training_step()
-        self.trainer.training_step()
+        self.trainer.training_step(Player1Node)
+        self.trainer.training_step(Player1Node)
 
         self.assertEqual(TurnState.SELECTING_DESTINATIONS, self.trainer.tree.game.turn_state)
         self.assertEqual(0, self.trainer.tree.game.current_player_index)
@@ -54,7 +54,7 @@ class TrainerTest(unittest.TestCase):
 
     def test_save_checkpoint(self):
         for i in range(4):
-            self.trainer.training_step()
+            self.trainer.training_step(Player1Node)
 
         self.trainer.save_checkpoint("./data.pkl")
 
@@ -66,13 +66,7 @@ class TrainerTest(unittest.TestCase):
 
         os.remove("./data.pkl")
 
-    def test_train_resets_to_first_round(self):
-        self.trainer.tree.simulate_for_n_turns(90, StrategyStorage())
-        self.trainer.train(1)
-
-        self.assertEqual(GameState.FIRST_ROUND, self.trainer.tree.game.state)
-
     def test_display_strategy(self):
-        self.trainer.tree.simulate_for_n_turns(90, StrategyStorage())
-        self.trainer.train(1)
+        self.trainer.tree.simulate_until_game_over(StrategyStorage())
+
         self.trainer.display_strategy()
