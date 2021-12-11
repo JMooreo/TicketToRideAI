@@ -38,12 +38,27 @@ class ActionUtilityTest(unittest.TestCase):
     def test_action_gets_executed_first_by_the_simulation(self):
         self.assertEqual(1, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
-    def test_action_utility_of_game_already_over(self):
+    def test_action_utility_of_game_player_0(self):
         self.game.state = GameState.GAME_OVER
         self.game.players[0].points = 80
         self.game.players[1].points = 30
 
-        self.assertEqual(50, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
+        self.assertEqual(0, self.game.current_player_index)
+
+        expected = self.game.players[0].points
+
+        self.assertEqual(expected, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
+
+    # def test_action_utility_of_game_player_1(self):
+    #     self.game.state = GameState.GAME_OVER
+    #     self.game.players[0].points = 80
+    #     self.game.players[1].points = 30
+    #
+    #     self.assertEqual(1, self.game.current_player_index)
+    #
+    #     expected = self.game.players[1].points
+    #
+    #     self.assertEqual(expected, ActionUtility.of(ClaimRouteAction(self.game, 2), StrategyStorage()))
 
     def test_selecting_destinations_gives_negative_utility(self):
         game = Game([Player(), Player()], USMap())

@@ -19,4 +19,4 @@ class Action(ABC):
         pass
 
     def execute(self):
-        self.game.players[self.game.current_player_index].turn_history.append(self)
+        self.game.current_player().turn_history.append(self)

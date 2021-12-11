@@ -1,5 +1,3 @@
-import copy
-
 from src.game import Map
 from typing import List
 
@@ -11,8 +9,7 @@ from src.game.enums.TurnState import TurnState
 
 
 class Game:
-    def __init__(self, players: List[Player], game_map: Map) -> object:
-        self.last_turn_count = None
+    def __init__(self, players: List[Player], game_map: Map):
         if not players or not game_map:
             raise ValueError
 
@@ -20,8 +17,8 @@ class Game:
         self.players = players
         self.state = GameState.FIRST_ROUND
         self.turn_state = TurnState.INIT
-        self.unclaimed_routes = copy.deepcopy(game_map.routes)
-        self.unclaimed_destinations = copy.deepcopy(game_map.destinations)
+        self.unclaimed_routes = {i: val for i, val in game_map.routes.items()}
+        self.unclaimed_destinations = {i: val for i, val in game_map.destinations.items()}
         self.available_destinations = []
         self.deck = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
         self.visible_cards = CardList()
@@ -81,8 +78,12 @@ class Game:
     def take_card(self, color: TrainColor):
         card = CardList((color, 1))
         self.visible_cards -= card
-        self.players[self.current_player_index].hand += card
-        self.visible_cards += self.deck.get_random(1)
+        self.current_player().hand += card
+        self.replenish_visible_cards()
+
+    def replenish_visible_cards(self):
+        while len(self.visible_cards) < 5 and len(self.deck) > 0:
+            self.visible_cards += self.deck.get_random(1)
 
     def take_random(self):
         card = self.deck.get_random(1)

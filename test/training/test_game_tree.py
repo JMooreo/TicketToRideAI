@@ -153,17 +153,29 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_simulate_for_one_turn(self):
+        self.assertEqual(0, self.tree.game.current_player_index)
         self.tree.simulate_for_n_turns(1, StrategyStorage())
 
         self.assertEqual(GameState.FIRST_ROUND, self.game.state)
+        self.assertEqual(1, self.tree.game.current_player_index)
 
     def test_simulate_for_two_turns(self):
+        self.assertEqual(0, self.tree.game.current_player_index)
         self.tree.simulate_for_n_turns(2, StrategyStorage())
 
         self.assertEqual(GameState.PLAYING, self.game.state)
+        self.assertEqual(0, self.tree.game.current_player_index)
 
-    def test_simulate_for_way_too_many_turns_ends_early(self):
-        self.tree.simulate_for_n_turns(2000, StrategyStorage())
+    def test_greedy_simulate_for_one_turn(self):
+        self.assertEqual(0, self.tree.game.current_player_index)
+        self.tree.greedy_simulation_for_n_turns(1, StrategyStorage())
 
-        self.assertEqual(GameState.GAME_OVER, self.game.state)
-        self.assertLess(self.game.turn_count, 200)
+        self.assertEqual(GameState.FIRST_ROUND, self.game.state)
+        self.assertEqual(1, self.tree.game.current_player_index)
+
+    def test_greedy_simulate_for_two_turns(self):
+        self.assertEqual(0, self.tree.game.current_player_index)
+        self.tree.greedy_simulation_for_n_turns(2, StrategyStorage())
+
+        self.assertEqual(GameState.PLAYING, self.game.state)
+        self.assertEqual(0, self.tree.game.current_player_index)

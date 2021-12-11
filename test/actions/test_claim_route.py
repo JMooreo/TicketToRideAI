@@ -256,15 +256,29 @@ class ClaimRouteActionTest(unittest.TestCase):
         self.assertTrue(action1.is_valid())
         action1.execute()
 
-        self.assertEqual(1, len(self.game.current_player().uncompleted_destinations))
-        self.assertEqual(0, len(self.game.current_player().completed_destinations))
+    def test_claiming_a_route_while_visible_cards_are_empty_puts_back_in_visible_cards(self):
+        tree = GameTree(self.game)
+        tree.simulate_for_n_turns(2, StrategyStorage())
 
-        self.game.turn_state = TurnState.INIT
+        tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
+        tree.game.visible_cards = CardList()
+        tree.game.deck = CardList()
 
-        action2 = ClaimRouteAction(self.game, 33)
-        self.assertTrue(action2.is_valid())
-        action2.execute()
+        tree.next(ClaimRouteAction(self.game, 56))
 
-        self.assertEqual(0, len(self.game.current_player().uncompleted_destinations))
-        self.assertEqual(1, len(self.game.current_player().completed_destinations))
+        self.assertEqual(CardList((TrainColor.BLUE, 5)), tree.game.visible_cards)
+        self.assertEqual(CardList((TrainColor.BLUE, 1)), tree.game.deck)
+
+    def test_claiming_a_route_while_deck_is_empty_puts_back_in_visible_cards_existing_visible(self):
+        tree = GameTree(self.game)
+        tree.simulate_for_n_turns(2, StrategyStorage())
+
+        tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
+        tree.game.visible_cards = CardList((TrainColor.GREEN, 3))
+        tree.game.deck = CardList()
+
+        tree.next(ClaimRouteAction(self.game, 56))
+
+        self.assertEqual(CardList((TrainColor.GREEN, 3), (TrainColor.BLUE, 2)), tree.game.visible_cards)
+        self.assertEqual(CardList((TrainColor.BLUE, 4)), tree.game.deck)
 

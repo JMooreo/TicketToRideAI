@@ -28,8 +28,11 @@ class CardList:
     def __getitem__(self, color: TrainColor):
         return self.cards.get(color, 0)
 
+    def __setitem__(self, color: TrainColor, amount: int):
+        self.cards[color] = amount
+
     def __len__(self):
-        return len(self.cards)
+        return sum([val for _id, val in self.cards.items()])
 
     def __str__(self):
         return str(self.cards)

@@ -152,3 +152,25 @@ class SelectDestinationsActionTest(unittest.TestCase):
         self.assertEqual(1, len(self.players[0].completed_destinations))
         self.assertEqual(0, len(self.players[0].uncompleted_destinations))
 
+    def test_cant_select_destinations_more_than_3_times(self):
+        self.game.state = GameState.FIRST_ROUND
+        self.game.turn_state = TurnState.SELECTING_DESTINATIONS
+        self.game.available_destinations = [1, 2, 3, 4, 5]
+
+        a1 = SelectDestinationAction(self.game, 1)
+        a2 = SelectDestinationAction(self.game, 2)
+        a3 = SelectDestinationAction(self.game, 3)
+        a4 = SelectDestinationAction(self.game, 4)
+        a5 = SelectDestinationAction(self.game, 5)
+
+        self.assertTrue(a1.is_valid())
+        a1.execute()
+
+        self.assertTrue(a2.is_valid())
+        a2.execute()
+
+        self.assertTrue(a3.is_valid())
+        a3.execute()
+
+        self.assertFalse(a4.is_valid())
+        self.assertFalse(a5.is_valid())

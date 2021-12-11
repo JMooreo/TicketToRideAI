@@ -127,5 +127,10 @@ class GameTest(unittest.TestCase):
         self.game.current_player_index = 1
         self.assertEqual(player2, self.game.current_player())
 
+    def test_replenish_visible_cards_from_empty_deck(self):
+        self.game.visible_cards = CardList((TrainColor.ORANGE, 4))
+        self.game.deck = CardList()
 
+        self.game.replenish_visible_cards()
 
+        self.assertEqual(CardList((TrainColor.ORANGE, 4)), self.game.visible_cards)

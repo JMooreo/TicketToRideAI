@@ -164,5 +164,5 @@ class USMap:
             26: Destination([City.VANCOUVER, City.MONTREAL], 20),
             27: Destination([City.VANCOUVER, City.SANTA_FE], 13),
             28: Destination([City.WINNIPEG, City.HOUSTON], 12),
-            29: Destination([City.WINNIPEG, City.LITTLE_ROCK], 20)
+            29: Destination([City.WINNIPEG, City.LITTLE_ROCK], 11)
         }

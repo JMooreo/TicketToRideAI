@@ -1,7 +1,6 @@
 from typing import Dict
 
 from numpy.core.multiarray import ndarray
-import numpy as np
 
 from src.game.Destination import Destination
 
@@ -22,7 +21,14 @@ class StrategyStorage:
         return len(self.strategies.keys())
 
     def get(self, destinations: Dict[int, Destination]):
-        return self.get_strategy_by_key(get_key(destinations))
+        key = get_key(destinations)
+
+        # This helps the AI learn faster with a new set of destinations without destroying old training data
+        if key not in self.strategies.keys():
+            first_two_destinations = {i: destinations.get(i) for i in list(destinations.keys())[:2]}
+            key = get_key(first_two_destinations)
+
+        return self.strategies.get(key, Strategy.random(141))
 
     def set(self, destinations: Dict[int, Destination], new_strategy: ndarray):
         key = get_key(destinations)

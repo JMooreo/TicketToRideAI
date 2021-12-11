@@ -18,7 +18,7 @@ class RouteCost:
         self.amount = amount
 
     def __str__(self):
-        return str(next(self.__options()))
+        return str(CardList((self.color, self.amount)))
 
     def best_payment_option(self, card_list: CardList):
         return next((option for option in self.__options() if card_list.has(option)), None)

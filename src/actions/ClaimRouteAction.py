@@ -37,6 +37,8 @@ class ClaimRouteAction(Action):
         self.game.unclaimed_routes.pop(self.route_id)
         self.game.turn_state = TurnState.FINISHED
         self.game.deck += payment
+        # print("Paid with", payment)
+        self.game.replenish_visible_cards()
 
         self.player.routes[self.route_id] = self.route
         self.player.points += self.route.points

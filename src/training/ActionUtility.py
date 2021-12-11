@@ -17,9 +17,9 @@ class ActionUtility:
         tree = GameTree(game)
         if game.state != GameState.GAME_OVER:
             tree.next(action)
-            tree.simulate_until_game_over(strategy_storage)
+            tree.greedy_simulation_until_game_over(strategy_storage)
 
-        return game.players[0].points - game.players[1].points
+        return round(game.players[0].points, 2)
 
     @staticmethod
     def from_all_branches(game: Game, strategy_storage: StrategyStorage):
@@ -30,7 +30,6 @@ class ActionUtility:
         for _id in valid_action_ids:
             game_copy = copy.deepcopy(game)
             action = ActionSpace(game_copy).get_action_by_id(_id)
-            print("Simulating Sub Game for", action)
             utilities[_id] = ActionUtility.of(action, strategy_storage)
 
         return utilities

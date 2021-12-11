@@ -16,7 +16,7 @@ class SelectDestinationAction(Action):
 
     def __str__(self):
         destination = self.game.map.destinations.get(self.destination_id)
-        return f"select_dest_{str(destination)} ({destination.points} points)"
+        return f"select_dest_{str(destination)}" + f" ({destination.points} points)"
 
     def __eq__(self, other):
         return isinstance(other, SelectDestinationAction) and \
@@ -40,7 +40,8 @@ class SelectDestinationAction(Action):
         else:
             player.uncompleted_destinations[self.destination_id] = destination
 
-        if not self.game.available_destinations:
+        num_times_selected_dest_this_turn = sum([1 if isinstance(action, SelectDestinationAction) else 0
+                                            for action in self.game.current_player().turn_history])
+
+        if not self.game.available_destinations or num_times_selected_dest_this_turn == 3:
             self.game.turn_state = TurnState.FINISHED
-
-

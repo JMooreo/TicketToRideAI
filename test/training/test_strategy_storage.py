@@ -77,3 +77,11 @@ class StrategyStorageTest(unittest.TestCase):
         self.assertEqual(expected, actual)
         self.assertEqual(np.arange(0, self.length_AS).tolist(), actual)
         self.assertNotEqual(self.random_strategy, actual)
+
+    def test_get_a_key_that_doesnt_exist_first_tries_to_get_a_key_from_the_first_two_uncompleted_destinations(self):
+        first_two_destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [5, 4]}
+        destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [5, 4, 3, 2, 1]}
+        self.storage.set(first_two_destinations, np.arange(141))
+
+        self.assertTrue(str(sorted(destinations)) not in self.storage.strategies.keys())
+        self.assertEqual(self.storage.get(first_two_destinations).tolist(), self.storage.get(destinations).tolist())
