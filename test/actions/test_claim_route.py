@@ -223,10 +223,10 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_as_string(self):
         self.game.current_player_index = 0
-        self.assertEqual("claim_VANCOUVER_to_SEATTLE (1 points)", str(ClaimRouteAction(self.game, 2)))
+        self.assertEqual("claim_VANCOUVER_to_SEATTLE", str(ClaimRouteAction(self.game, 2)))
 
         self.game.current_player_index = 1
-        self.assertEqual("claim_VANCOUVER_to_SEATTLE (1 points)", str(ClaimRouteAction(self.game, 1)))
+        self.assertEqual("claim_VANCOUVER_to_SEATTLE", str(ClaimRouteAction(self.game, 1)))
 
     def test_turn_history(self):
         player = self.game.players[self.game.current_player_index]

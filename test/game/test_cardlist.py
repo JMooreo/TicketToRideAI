@@ -179,3 +179,12 @@ class CardListTest(unittest.TestCase):
         card_list = CardList((TrainColor.WILD, 3), (TrainColor.BLACK, 3))
 
         self.assertEqual(6, card_list.number_of_cards())
+
+    def test_get_random_with_one_card_left(self):
+        l = CardList((TrainColor.GREEN, 1))
+        red = CardList((TrainColor.RED, 1))
+        l += red
+        l -= red
+        card = l.get_random(1)
+
+        self.assertEqual(card, CardList((TrainColor.GREEN, 1)))

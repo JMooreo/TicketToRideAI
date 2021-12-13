@@ -4,8 +4,6 @@ from numpy.core.multiarray import ndarray
 
 from src.game.Destination import Destination
 
-
-# Stores Blueprint strategies for each of the destination combinations
 from src.training.Strategy import Strategy
 
 
@@ -15,28 +13,32 @@ def get_key(destinations: Dict[int, Destination]):
 
 class StrategyStorage:
     def __init__(self):
-        self.strategies = {}
+        self.node_strategies = {}
+        self.average_strategies = {}
 
     def __len__(self):
-        return len(self.strategies.keys())
+        return len(self.node_strategies.keys())
 
-    def get(self, destinations: Dict[int, Destination]):
-        key = get_key(destinations)
+    def get_node_strategy(self, key: str):
+        return self.node_strategies.get(key, Strategy.random(141))
 
-        # This helps the AI learn faster with a new set of destinations without destroying old training data
-        if key not in self.strategies.keys():
-            first_two_destinations = {i: destinations.get(i) for i in list(destinations.keys())[:2]}
-            key = get_key(first_two_destinations)
+    def get_average_strategy(self, player_idx: int):
+        if player_idx < 0 or player_idx > 1:
+            raise ValueError
 
-        return self.strategies.get(key, Strategy.random(141))
+        return self.average_strategies.get(player_idx, Strategy.random(141))
 
-    def set(self, destinations: Dict[int, Destination], new_strategy: ndarray):
-        key = get_key(destinations)
-        if key == "[]":
+    def increment_average_strategy(self, player_idx: int, action_id: int):
+        if action_id < 0 or action_id > 140:
+            raise ValueError
+
+        current_strategy = self.get_average_strategy(player_idx)
+        current_strategy[action_id] += 1
+        self.average_strategies[player_idx] = current_strategy
+
+    def set(self, key: str, strategy: ndarray):
+        if key == "":
             return
 
-        self.strategies[key] = new_strategy
+        self.node_strategies[key] = strategy
 
-    # Only intended to be used by tests
-    def get_strategy_by_key(self, key: str):
-        return self.strategies.get(key, Strategy.random(141))

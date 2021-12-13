@@ -15,8 +15,7 @@ class DrawVisibleCardAction(Action):
         return f"draw_{str(self.color)}"
 
     def __eq__(self, other):
-        return isinstance(other, DrawVisibleCardAction) and \
-               self.game == other.game
+        return isinstance(other, DrawVisibleCardAction)
 
     def is_valid(self):
         return self.game.visible_cards.has(CardList((self.color, 1))) and \

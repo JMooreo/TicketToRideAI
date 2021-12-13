@@ -85,10 +85,6 @@ class Game:
         while len(self.visible_cards) < 5 and len(self.deck) > 0:
             self.visible_cards += self.deck.get_random(1)
 
-    def take_random(self):
-        card = self.deck.get_random(1)
-        self.players[self.current_player_index].hand += card
-
     def calculate_final_scores(self):
         for player in self.players:
             player.points += player.points_from_destinations()

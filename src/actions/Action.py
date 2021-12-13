@@ -7,6 +7,7 @@ class Action(ABC):
             raise ValueError
 
         self.game = game
+        self.executed = False
 
     def __eq__(self, other):
         return False
@@ -19,4 +20,8 @@ class Action(ABC):
         pass
 
     def execute(self):
+        if self.executed:
+            raise ReferenceError("Action at this memory location already executed.")
+
+        self.executed = True
         self.game.current_player().turn_history.append(self)

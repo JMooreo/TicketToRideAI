@@ -13,11 +13,10 @@ class ClaimRouteAction(Action):
         self.player = game.players[self.game.current_player_index]
 
     def __str__(self):
-        return f"claim_{str(self.route)} ({self.route.points} points)"
+        return f"claim_{str(self.route)}"
 
     def __eq__(self, other):
-        return isinstance(other, ClaimRouteAction) and \
-               self.game == other.game
+        return isinstance(other, ClaimRouteAction)
 
     def is_valid(self):
         return 0 <= self.route_id < len(self.game.map.routes) and \
