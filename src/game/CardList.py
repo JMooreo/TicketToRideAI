@@ -35,7 +35,7 @@ class CardList:
         return sum([val for _id, val in self.cards.items()])
 
     def __str__(self):
-        return str(self.cards)
+        return "_".join([f"{amount}{key.name}" for key, amount in self.cards.items() if amount > 0])
 
     def __add__(self, other):
         cards = {}
