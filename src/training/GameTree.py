@@ -18,6 +18,8 @@ class GameTree:
         self.current_node: GameNode = Player1Node(self.game)
         self.training_node_type = Player1Node
 
+        self.__initialize_info_sets()
+
     def next(self, action: Action):
         if action is None or not action.is_valid():
             raise ValueError(f"The action could not be executed because it was invalid.\n" +
@@ -84,12 +86,6 @@ class GameTree:
         while self.game.state != GameState.GAME_OVER:
             self.greedy_simulation_for_n_turns(1, strategy_storage)
 
-    # def __update_information_sets(self, action: Action):
-    #     # next_id = self.current_node.information_set
-    #     # player_num = self.current_node.player_index() + 1
-    #     # If the next node is not a training node, we should have perfect information from the action.
-    #     if isinstance(self.current_node, self.training_node_type):
-    #         next_id += f"p{player_num}_{str(action)} "
-    #     else:
-    #         self.current_node.
-    #     self.current_node.information_set = next_id
+    def __initialize_info_sets(self):
+        for player_idx, player in enumerate(self.game.players):
+            self.current_node.cumulative_information_sets[player_idx] = f"p{player_idx + 1}_start_cards_{player.hand} "

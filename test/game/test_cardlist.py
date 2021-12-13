@@ -55,12 +55,14 @@ class CardListTest(unittest.TestCase):
         self.assertEqual(2, len(CardList.from_numbers([1, 1])))
 
     def test_string(self):
-        expected = str({color: i + 1 for i, color in enumerate(list(TrainColor)[1:])})
+        cards = {color: i + 1 for i, color in enumerate(list(TrainColor)[1:])}
+        expected = "_".join([f"{amount}{key.name}" for key, amount in cards.items()])
         self.assertEqual(expected, str(self.card_list))
 
     def test_string_with_values(self):
         card_list = CardList.from_numbers([1, 2, 3])
-        expected = str({color: i + 1 for i, color in enumerate(list(TrainColor)[:3])})
+        cards = {color: i + 1 for i, color in enumerate(list(TrainColor)[:3])}
+        expected = "_".join([f"{amount}{key.name}" for key, amount in cards.items()])
 
         self.assertEqual(expected, str(card_list))
 
@@ -188,3 +190,13 @@ class CardListTest(unittest.TestCase):
         card = l.get_random(1)
 
         self.assertEqual(card, CardList((TrainColor.GREEN, 1)))
+
+    def test_get_string_different_order(self):
+        l1 = CardList((TrainColor.RED, 3))
+        l1 += CardList((TrainColor.WHITE, 4))
+
+        l2 = CardList((TrainColor.WHITE, 4))
+        l2 += CardList((TrainColor.RED, 3))
+
+        self.assertEqual("4WHITE_3RED", str(l1))
+        self.assertEqual(str(l1), str(l2))

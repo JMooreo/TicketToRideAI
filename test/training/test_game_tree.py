@@ -8,6 +8,7 @@ from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.GameState import GameState
+from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree

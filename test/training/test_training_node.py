@@ -142,77 +142,90 @@ class TrainingNodeTest(unittest.TestCase):
         self.assertEqual(1, self.players[0].points)
         self.assertEqual(44, self.players[0].trains)
 
-    def test_node_id(self):
-        self.assertEqual("", self.tree.current_node.get_cumulative_information_set())
+    def test_init_info_sets(self):
+        self.game.players[0].hand = CardList((TrainColor.BLUE, 4))
+        tree = GameTree(self.game)
+
+        self.assertEqual(f"p1_start_cards_{self.game.players[0].hand} ",
+                         tree.current_node.cumulative_information_sets[0])
+
+        self.assertEqual(f"p2_start_cards_{self.game.players[1].hand} ",
+                         tree.current_node.cumulative_information_sets[1])
 
     def test_node_id_added_to_when_actions_executed_training_player1(self):
         self.tree.game.unclaimed_destinations = {2: USMap().destinations.get(2)}
         self.tree.training_node_type = Player1Node
+        p1_starting_cards = self.tree.current_node.cumulative_information_sets[0]
+        p2_starting_cards = self.tree.current_node.cumulative_information_sets[1]
 
         self.tree.next(DrawDestinationsAction(self.tree.game))
         self.assertEqual("p1_draw_dest", self.tree.current_node.current_turn_information_set)
 
         self.tree.next(SelectDestinationAction(self.tree.game, 2))
-        self.assertEqual("p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY ",
+        self.assertEqual(p1_starting_cards + "p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY ",
                          self.tree.current_node.cumulative_information_sets[0])
 
         # Player 1 Turn Over, Player 2's Information Set
 
-        self.assertEqual("p1_hidden_dest_selection ", self.tree.current_node.get_cumulative_information_set())
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection ", self.tree.current_node.get_cumulative_information_set())
 
         self.tree.game.unclaimed_destinations = {i: USMap().destinations.get(i) for i in [3, 4, 5]}
         self.tree.next(DrawDestinationsAction(self.tree.game))
-        self.assertEqual("p1_hidden_dest_selection p2_draw_dest",
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection p2_draw_dest",
                          self.tree.current_node.get_cumulative_information_set())
         self.assertEqual("p2_draw_dest", self.tree.current_node.current_turn_information_set)
 
         self.tree.next(SelectDestinationAction(self.tree.game, 4))
-        self.assertEqual("p1_hidden_dest_selection p2_draw_dest_AND_select_CHICAGO_to_SANTA_FE",
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection p2_draw_dest_AND_select_CHICAGO_to_SANTA_FE",
                          self.tree.current_node.get_cumulative_information_set())
         self.assertEqual("p2_draw_dest_AND_select_CHICAGO_to_SANTA_FE",
                          self.tree.current_node.current_turn_information_set)
 
         self.tree.next(SelectDestinationAction(self.tree.game, 3))
-        self.assertEqual(
-            "p1_hidden_dest_selection p2_draw_dest_AND_select_CHICAGO_to_NEW_ORLEANS_AND_CHICAGO_to_SANTA_FE",
-            self.tree.current_node.get_cumulative_information_set())
+        self.assertEqual(p2_starting_cards +
+                         "p1_hidden_dest_selection p2_draw_dest_AND_select_CHICAGO_to_NEW_ORLEANS_AND_CHICAGO_to_SANTA_FE",
+                         self.tree.current_node.get_cumulative_information_set())
 
         self.assertEqual("p2_draw_dest_AND_select_CHICAGO_to_NEW_ORLEANS_AND_CHICAGO_to_SANTA_FE",
                          self.tree.current_node.current_turn_information_set)
 
         self.tree.next(FinishSelectingDestinationsAction(self.tree.game))
-        self.assertEqual("p1_hidden_dest_selection " +
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection " +
                          "p2_draw_dest_AND_select_CHICAGO_to_NEW_ORLEANS_AND_CHICAGO_to_SANTA_FE ",
                          self.tree.current_node.cumulative_information_sets[1])
 
         # Player 2 Turn Over, Player 1's Information Set
 
-        self.assertEqual("p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY p2_hidden_dest_selection ",
+        self.assertEqual(p1_starting_cards + "p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY p2_hidden_dest_selection ",
                          self.tree.current_node.get_cumulative_information_set())
 
     def test_node_id_added_to_when_actions_executed_training_player2(self):
         self.tree.game.unclaimed_destinations = {2: USMap().destinations.get(2)}
         self.tree.training_node_type = Player2Node
+
+        p1_starting_cards = self.tree.current_node.cumulative_information_sets[0]
+        p2_starting_cards = self.tree.current_node.cumulative_information_sets[1]
+
         self.tree.simulate_for_n_turns(1, StrategyStorage())
 
         # Player 1 Turn Over
 
-        self.assertEqual("p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY ",
+        self.assertEqual(p1_starting_cards + "p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY ",
                          self.tree.current_node.cumulative_information_sets[0])
-        self.assertEqual("p1_hidden_dest_selection ", self.tree.current_node.get_cumulative_information_set())
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection ", self.tree.current_node.get_cumulative_information_set())
 
         self.tree.game.unclaimed_destinations = {3: USMap().destinations.get(3)}
         self.tree.next(DrawDestinationsAction(self.tree.game))
-        self.assertEqual("p1_hidden_dest_selection p2_draw_dest",
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection p2_draw_dest",
                          self.tree.current_node.get_cumulative_information_set())
         self.assertEqual("p2_draw_dest", self.tree.current_node.current_turn_information_set)
 
         self.tree.next(SelectDestinationAction(self.tree.game, 3))
 
         # Player 2 Turn Over
-        self.assertEqual("p1_hidden_dest_selection p2_draw_dest_AND_select_CHICAGO_to_NEW_ORLEANS ",
+        self.assertEqual(p2_starting_cards + "p1_hidden_dest_selection p2_draw_dest_AND_select_CHICAGO_to_NEW_ORLEANS ",
                          self.tree.current_node.cumulative_information_sets[1])
-        self.assertEqual("p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY p2_hidden_dest_selection ",
+        self.assertEqual(p1_starting_cards + "p1_draw_dest_AND_select_CALGARY_to_SALT_LAKE_CITY p2_hidden_dest_selection ",
                          self.tree.current_node.get_cumulative_information_set())
 
     def test_cumulative_information_sets_are_not_the_same(self):
