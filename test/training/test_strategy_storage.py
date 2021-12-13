@@ -1,13 +1,5 @@
 import unittest
-from typing import Dict
-
 import numpy as np
-
-from src.game.Destination import Destination
-from src.game.Game import Game
-from src.game.Map import USMap
-from src.game.Player import Player
-from src.training.ActionSpace import ActionSpace
 from src.training.Strategy import Strategy
 from src.training.StrategyStorage import StrategyStorage
 
@@ -15,73 +7,47 @@ from src.training.StrategyStorage import StrategyStorage
 class StrategyStorageTest(unittest.TestCase):
     def setUp(self):
         self.storage = StrategyStorage()
-        self.destinations = USMap().destinations
-        self.game = Game([Player(), Player()], USMap())
-        self.length_AS = len(ActionSpace(self.game))
-        self.random_strategy = Strategy.random(self.length_AS).tolist()
 
     def test_init(self):
         self.assertIsNotNone(self.storage)
-        self.assertEqual({}, self.storage.strategies)
+        self.assertEqual({}, self.storage.node_strategies)
 
-    def test_get_strategy_doesnt_exist_is_random(self):
-        actual_strategy = self.storage.get({}).tolist()
+    def test_get_key_doesnt_exist(self):
+        self.assertEqual(Strategy.random(141).tolist(), self.storage.get_node_strategy("asdfasdfsfawefa").tolist())
 
-        self.assertEqual(self.random_strategy, actual_strategy)
+    def test_increment_average_strategy(self):
+        action_id = 4
+        player_idx = 0
+        self.storage.increment_average_strategy(player_idx, action_id)
 
-    def test_set_strategy_with_empty_destinations(self):
-        self.storage.set({}, np.zeros(self.length_AS))
+        expected = Strategy.random(141)
+        expected[action_id] += 1
 
-        self.assertEqual(self.random_strategy, self.storage.get({}).tolist())
+        self.assertEqual(expected.tolist(), self.storage.get_average_strategy(player_idx).tolist())
 
-    def test_set_strategy_with_one_destination_no_regrets(self):
-        destinations: Dict[int, Destination] = {1: self.destinations.get(1)}
-        self.storage.set(destinations, np.zeros(self.length_AS))
+    def test_action_id_too_low(self):
+        action_id = -1
+        player_idx = 0
 
-        self.assertEqual(np.zeros(self.length_AS).tolist(), self.storage.get(destinations).tolist())
+        with self.assertRaises(ValueError):
+            self.storage.increment_average_strategy(player_idx, action_id)
 
-    def test_set_strategy_with_two_destinations_no_regrets(self):
-        destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [1, 2]}
-        self.storage.set(destinations, np.zeros(self.length_AS))
+    def test_action_id_too_high(self):
+        action_id = 141
+        player_idx = 0
 
-        self.assertEqual(np.zeros(self.length_AS).tolist(), self.storage.get(destinations).tolist())
+        with self.assertRaises(ValueError):
+            self.storage.increment_average_strategy(player_idx, action_id)
 
-    def test_set_strategy_with_one_destination_with_regrets(self):
-        destinations: Dict[int, Destination] = {1: self.destinations.get(1)}
-        self.storage.set(destinations, np.arange(0, self.length_AS))
+    def test_player_idx_too_high(self):
+        action_id = 10
+        player_idx = 2
 
-        self.assertEqual(np.arange(0, self.length_AS).tolist(), self.storage.get(destinations).tolist())
+        with self.assertRaises(ValueError):
+            self.storage.increment_average_strategy(player_idx, action_id)
 
-    def test_get_two_destinations_order_doesnt_matter(self):
-        destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [1, 2]}
-        self.storage.set(destinations, np.array([1 if i in [2, 3, 4, 5, 6] else 0 for i in range(self.length_AS)]))
+    def test_set_strategy(self):
+        strategy = np.arange(141)
 
-        destinations_reversed: Dict[int, Destination] = {i: self.destinations.get(i) for i in [2, 1]}
-
-        expected = self.storage.get(destinations).tolist()
-        actual = self.storage.get(destinations_reversed).tolist()
-
-        self.assertEqual(expected, actual)
-        self.assertEqual(np.array([1 if i in [2, 3, 4, 5, 6] else 0 for i in range(self.length_AS)]).tolist(), actual)
-
-    def test_set_from_reversed_destinations_still_works(self):
-        destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [1, 2]}
-        self.storage.set(destinations, np.arange(0, self.length_AS))
-
-        destinations_reversed: Dict[int, Destination] = {i: self.destinations.get(i) for i in [2, 1]}
-        self.storage.set(destinations_reversed, np.arange(0, self.length_AS))
-
-        expected = self.storage.get(destinations).tolist()
-        actual = self.storage.get(destinations_reversed).tolist()
-
-        self.assertEqual(expected, actual)
-        self.assertEqual(np.arange(0, self.length_AS).tolist(), actual)
-        self.assertNotEqual(self.random_strategy, actual)
-
-    def test_get_a_key_that_doesnt_exist_first_tries_to_get_a_key_from_the_first_two_uncompleted_destinations(self):
-        first_two_destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [5, 4]}
-        destinations: Dict[int, Destination] = {i: self.destinations.get(i) for i in [5, 4, 3, 2, 1]}
-        self.storage.set(first_two_destinations, np.arange(141))
-
-        self.assertTrue(str(sorted(destinations)) not in self.storage.strategies.keys())
-        self.assertEqual(self.storage.get(first_two_destinations).tolist(), self.storage.get(destinations).tolist())
+        self.storage.set("asdf", strategy)
+        self.assertEqual(np.arange(141).tolist(), self.storage.get_node_strategy("asdf").tolist())

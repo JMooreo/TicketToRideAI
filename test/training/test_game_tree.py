@@ -30,6 +30,7 @@ class GameTreeTest(unittest.TestCase):
 
     def test_init(self):
         self.assertTrue(isinstance(self.tree.current_node, Player1Node))
+        self.assertEqual(self.tree.training_node_type, Player1Node)
 
     def test_draw_destination_cards_until_there_are_none_left(self):
         self.__do_first_turn()
@@ -153,11 +154,14 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_simulate_for_one_turn(self):
+        storage = StrategyStorage()
         self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.simulate_for_n_turns(1, StrategyStorage())
+        self.tree.simulate_for_n_turns(1, storage)
 
         self.assertEqual(GameState.FIRST_ROUND, self.game.state)
         self.assertEqual(1, self.tree.game.current_player_index)
+        self.assertEqual(0, len(storage.node_strategies))
+        self.assertLess(0, len(storage.average_strategies))
 
     def test_simulate_for_two_turns(self):
         self.assertEqual(0, self.tree.game.current_player_index)

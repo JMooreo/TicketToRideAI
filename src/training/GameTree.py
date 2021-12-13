@@ -16,6 +16,7 @@ class GameTree:
     def __init__(self, game: Game):
         self.game = game
         self.current_node: GameNode = Player1Node(self.game)
+        self.training_node_type = Player1Node
 
     def next(self, action: Action):
         if action is None or not action.is_valid():
@@ -34,9 +35,13 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
-                strategy = strategy_storage.get(self.game.current_player().uncompleted_destinations)
-                action, chance = action_space.get_action(strategy)
+                strategy = strategy_storage.get_node_strategy(self.current_node.get_cumulative_information_set())
+                action_id, chance = action_space.get_action_id(strategy)
+                action = action_space.get_action_by_id(action_id)
+                player_idx = self.game.current_player_index
+
                 self.next(action)
+                strategy_storage.increment_average_strategy(player_idx, action_id)
 
     def simulate_until_game_over(self, strategy_storage: StrategyStorage):
         while self.game.state != GameState.GAME_OVER:
@@ -52,7 +57,7 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
-                strategy = strategy_storage.get(self.game.current_player().uncompleted_destinations)
+                strategy = strategy_storage.get_node_strategy(self.current_node.get_cumulative_information_set())
                 normalized_strategy = Strategy.normalize(strategy, action_space.to_np_array())
                 if sum(normalized_strategy) == 0:
                     # print(self.game)
@@ -78,3 +83,13 @@ class GameTree:
     def greedy_simulation_until_game_over(self, strategy_storage: StrategyStorage):
         while self.game.state != GameState.GAME_OVER:
             self.greedy_simulation_for_n_turns(1, strategy_storage)
+
+    # def __update_information_sets(self, action: Action):
+    #     # next_id = self.current_node.information_set
+    #     # player_num = self.current_node.player_index() + 1
+    #     # If the next node is not a training node, we should have perfect information from the action.
+    #     if isinstance(self.current_node, self.training_node_type):
+    #         next_id += f"p{player_num}_{str(action)} "
+    #     else:
+    #         self.current_node.
+    #     self.current_node.information_set = next_id

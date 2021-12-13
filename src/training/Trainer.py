@@ -31,20 +31,20 @@ class Trainer:
             raise ValueError
 
         for i in range(iters):
-            for node_type in [Player1Node, Player2Node]:
+            for node_type_to_train in [Player1Node, Player2Node]:
                 self.tree = GameTree(Game([Player(), Player()], USMap()))
+                self.tree.training_node_type = node_type_to_train
 
                 while self.tree.game.state != GameState.GAME_OVER:
-                    self.training_step(node_type)
+                    self.training_step(node_type_to_train)
 
                 file_path = f"{self.checkpoint_directory}/{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.pkl"
                 self.save_checkpoint(file_path)
 
                 print(self.tree.game)
 
-    # The Node Type that is passed in will update its regrets while the game is running.
-    def training_step(self, node_type):
-        if not isinstance(self.tree.current_node, node_type):
+    def training_step(self, node_type_to_train):
+        if not isinstance(self.tree.current_node, node_type_to_train):
             self.tree.simulate_for_n_turns(1, self.strategy_storage)
             # print("Opponent took their turn")
             # print(self.tree.game)
@@ -52,22 +52,33 @@ class Trainer:
         if self.tree.game.state == GameState.GAME_OVER:
             return
 
+        assert isinstance(self.tree.current_node, node_type_to_train)
+
         # Determine the possible actions from the Training Node
         action_space = ActionSpace(self.tree.game)
-        print("ACTION SPACE")
+        action_space_np = action_space.to_np_array()
+
+        # Detect if the player cant do anything
+        if sum(action_space_np) == 0:
+            self.tree.game.turn_state = TurnState.FINISHED
+            self.tree.current_node = self.tree.current_node.pass_turn()
+            return
+
+        print(f"ACTION SPACE for")
         print(action_space)
 
         import random
         take_greedy_path = random.uniform(0, 1) < 0.3
 
         current_player = self.tree.game.current_player()
-        training_strategy = self.strategy_storage.get(current_player.uncompleted_destinations)
-        print("\nLOADED TRAINING STRATEGY for", current_player.uncompleted_destinations)
+        cumulative_info_set = self.tree.current_node.get_cumulative_information_set()
+        training_strategy = self.strategy_storage.get_node_strategy(cumulative_info_set)
+        print(f"\nLOADED TRAINING STRATEGY for \"{cumulative_info_set}\"")
         print(training_strategy)
 
         if take_greedy_path:
             # Choose the best valid action for the current set of uncompleted_destinations
-            normalized_strategy = Strategy.normalize(training_strategy, action_space.to_np_array())
+            normalized_strategy = Strategy.normalize(training_strategy, action_space_np)
             action_id = int(np.argmax(normalized_strategy))
             chance = normalized_strategy[action_id]
             action = action_space.get_action_by_id(action_id)
@@ -93,47 +104,43 @@ class Trainer:
 
         # Update the strategy
         new_strategy = Strategy.from_regrets(training_strategy, regrets)
-        self.strategy_storage.set(current_player.uncompleted_destinations, new_strategy)
-        print(f"\nUpdated Strategy for {sorted(current_player.uncompleted_destinations)}")
+        cumulative_info_set = self.tree.current_node.get_cumulative_information_set()
+        self.strategy_storage.set(cumulative_info_set, new_strategy)
+        print(f"\nUpdated Strategy for \"{cumulative_info_set}\"")
 
-        # Detect if the player is stuck with nothing to do (i.e. no more cards left to draw)
-        if chance == 0:
-            self.tree.game.turn_state = TurnState.FINISHED
-            self.tree.current_node = self.tree.current_node.pass_turn()
-        else:
-            # Advance the game tree with the chosen action
-            self.tree.next(action)
+        # Advance the game tree with the chosen action
+        self.tree.next(action)
 
     def save_checkpoint(self, file_path: str):
         with open(file_path, "wb") as f:
-            pickle.dump(self.strategy_storage.strategies, f, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.strategy_storage, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def load_latest_checkpoint(self):
         file_path = self.checkpoint_directory + "/" + os.listdir(self.checkpoint_directory)[-1]
         with open(file_path, "rb") as f:
-            self.strategy_storage.strategies = pickle.load(f)
+            self.strategy_storage = pickle.load(f)
             print("\nCHECKPOINT LOADED", file_path)
             print("LENGTH: ", len(self.strategy_storage))
             print()
 
         # self.check_for_missing_keys()
 
-    def display_strategy(self):
-        for index, (key, strategy) in enumerate(self.strategy_storage.strategies.items()):
-            if index > 50:
-                break
-
-            print("STRATEGY FOR", key)
-            normalized = Strategy.normalize(strategy)
-            pairs = {}
-
-            for idx, val in enumerate(normalized):
-                action = ActionSpace(self.tree.game).get_action_by_id(idx)
-                pairs[str(action)] = "{:.3f}%".format(round(100 * val, 3))
-
-            sorted_items = sorted(pairs.items(), key=lambda x: x[1])
-            print("Most Useful:", sorted_items[-3:])
-            print("Least Useful:", sorted_items[:3])
-            print()
-
-        print("SHOWING THE FIRST 50 of", len(self.strategy_storage))
+    # def display_strategy(self):
+    #     for index, (key, strategy) in enumerate(self.strategy_storage.strategies.items()):
+    #         if index > 50:
+    #             break
+    #
+    #         print("STRATEGY FOR", key)
+    #         normalized = Strategy.normalize(strategy)
+    #         pairs = {}
+    #
+    #         for idx, val in enumerate(normalized):
+    #             action = ActionSpace(self.tree.game).get_action_by_id(idx)
+    #             pairs[str(action)] = "{:.3f}%".format(round(100 * val, 3))
+    #
+    #         sorted_items = sorted(pairs.items(), key=lambda x: x[1])
+    #         print("Most Useful:", sorted_items[-3:])
+    #         print("Least Useful:", sorted_items[:3])
+    #         print()
+    #
+    #     print("SHOWING THE FIRST 50 of", len(self.strategy_storage))

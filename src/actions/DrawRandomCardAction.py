@@ -1,12 +1,18 @@
 from src.actions.Action import Action
+from src.actions.DrawVisibleCardAction import DrawVisibleCardAction
 from src.game.CardList import CardList
+from src.game.Game import Game
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 
 
 class DrawRandomCardAction(Action):
+    def __init__(self, game: Game):
+        super().__init__(game)
+        self.name = "draw_RANDOM"
+
     def __str__(self):
-        return "draw_RANDOM"
+        return self.name
 
     def __eq__(self, other):
         return isinstance(other, DrawRandomCardAction) and \
@@ -19,7 +25,10 @@ class DrawRandomCardAction(Action):
 
     def execute(self):
         super().execute()
-        self.game.take_random()
+        card = self.game.deck.get_random(1)
+        color = next((color for color in card.cards.keys()))
+        self.name = f"draw_{color}"
+        self.game.current_player().hand += card
 
         if self.game.turn_state == TurnState.INIT:
             self.game.turn_state = TurnState.DRAWING_CARDS

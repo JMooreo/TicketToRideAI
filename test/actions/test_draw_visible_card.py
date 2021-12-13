@@ -92,8 +92,8 @@ class DrawVisibleCardActionTest(unittest.TestCase):
 
         self.assertTrue(action.is_valid())
 
-        action.execute()
-        action.execute()
+        DrawVisibleCardAction(self.game, TrainColor.BLUE).execute()
+        DrawVisibleCardAction(self.game, TrainColor.BLUE).execute()
 
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
@@ -161,7 +161,8 @@ class DrawVisibleCardActionTest(unittest.TestCase):
         self.assertEqual(TurnState.DRAWING_CARDS, self.game.turn_state)
         self.assertEqual([action], player.turn_history)
 
-        action.execute()
+        action2 = DrawVisibleCardAction(self.game, TrainColor.BLUE)
+        action2.execute()
 
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
         self.assertEqual([action, action], player.turn_history)

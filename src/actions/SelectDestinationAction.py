@@ -13,14 +13,13 @@ class SelectDestinationAction(Action):
 
         super().__init__(game)
         self.destination_id = destination_id
+        self.destination = self.game.map.destinations.get(self.destination_id)
 
     def __str__(self):
-        destination = self.game.map.destinations.get(self.destination_id)
-        return f"select_dest_{str(destination)}" + f" ({destination.points} points)"
+        return f"select_dest_{str(self.destination)}"
 
     def __eq__(self, other):
-        return isinstance(other, SelectDestinationAction) and \
-                self.game == other.game
+        return isinstance(other, SelectDestinationAction)
 
     def is_valid(self):
         return self.destination_id in self.game.available_destinations and \
@@ -29,19 +28,18 @@ class SelectDestinationAction(Action):
 
     def execute(self):
         super().execute()
-        destination = self.game.map.destinations.get(self.destination_id)
         player = self.game.current_player()
 
         self.game.available_destinations.remove(self.destination_id)
         self.game.unclaimed_destinations.pop(self.destination_id)
 
-        if destination.path_from(player.routes.values()) is not None:
-            player.completed_destinations[self.destination_id] = destination
+        if self.destination.path_from(player.routes.values()) is not None:
+            player.completed_destinations[self.destination_id] = self.destination
         else:
-            player.uncompleted_destinations[self.destination_id] = destination
+            player.uncompleted_destinations[self.destination_id] = self.destination
 
         num_times_selected_dest_this_turn = sum([1 if isinstance(action, SelectDestinationAction) else 0
                                             for action in self.game.current_player().turn_history])
 
-        if not self.game.available_destinations or num_times_selected_dest_this_turn == 3:
+        if not self.game.available_destinations or num_times_selected_dest_this_turn > 2:
             self.game.turn_state = TurnState.FINISHED
