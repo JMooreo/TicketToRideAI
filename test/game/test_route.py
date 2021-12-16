@@ -53,8 +53,8 @@ class RouteTest(unittest.TestCase):
         route = Route([City.BOSTON, City.OKLAHOMA_CITY], RouteCost(TrainColor.BLACK, 1))
         route2 = Route([City.CHARLESTON, City.DALLAS], RouteCost(TrainColor.GREEN, 6))
 
-        self.assertEqual("BOSTON_to_OKLAHOMA_CITY", str(route))
-        self.assertEqual("CHARLESTON_to_DALLAS", str(route2))
+        self.assertEqual("BOSTON_to_OKLAHOMA_CITY (1 points)", str(route))
+        self.assertEqual("CHARLESTON_to_DALLAS (15 points)", str(route2))
 
     def test_to_string_in_a_list(self):
         route = Route([City.BOSTON, City.OKLAHOMA_CITY], RouteCost(TrainColor.BLACK, 1))

@@ -8,6 +8,7 @@ from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameNode import Player1Node, GameNode
+from src.training.InformationSet import InformationSet
 from src.training.Strategy import Strategy
 from src.training.StrategyStorage import StrategyStorage
 
@@ -37,7 +38,7 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
-                strategy = strategy_storage.get_node_strategy(self.current_node.get_cumulative_information_set())
+                strategy = strategy_storage.get_node_strategy(self.current_node.information_set)
                 action_id, chance = action_space.get_action_id(strategy)
                 action = action_space.get_action_by_id(action_id)
                 player_idx = self.game.current_player_index
@@ -59,7 +60,7 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
-                strategy = strategy_storage.get_node_strategy(self.current_node.get_cumulative_information_set())
+                strategy = strategy_storage.get_node_strategy(self.current_node.information_set)
                 normalized_strategy = Strategy.normalize(strategy, action_space.to_np_array())
                 if sum(normalized_strategy) == 0:
                     # print(self.game)
@@ -88,4 +89,4 @@ class GameTree:
 
     def __initialize_info_sets(self):
         for player_idx, player in enumerate(self.game.players):
-            self.current_node.cumulative_information_sets[player_idx] = f"p{player_idx + 1}_start_cards_{player.hand} "
+            self.current_node.information_set = InformationSet.from_game(self.game, player_idx)

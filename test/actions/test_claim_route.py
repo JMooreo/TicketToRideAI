@@ -223,10 +223,10 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_as_string(self):
         self.game.current_player_index = 0
-        self.assertEqual("claim_VANCOUVER_to_SEATTLE", str(ClaimRouteAction(self.game, 2)))
+        self.assertEqual("claim_VANCOUVER_to_SEATTLE (1 points)", str(ClaimRouteAction(self.game, 2)))
 
         self.game.current_player_index = 1
-        self.assertEqual("claim_VANCOUVER_to_SEATTLE", str(ClaimRouteAction(self.game, 1)))
+        self.assertEqual("claim_VANCOUVER_to_SEATTLE (1 points)", str(ClaimRouteAction(self.game, 1)))
 
     def test_turn_history(self):
         player = self.game.players[self.game.current_player_index]
@@ -271,12 +271,14 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_claiming_a_route_while_deck_is_empty_puts_back_in_visible_cards_existing_visible(self):
         tree = GameTree(self.game)
+        tree.game.unclaimed_routes = {}
         tree.simulate_for_n_turns(2, StrategyStorage())
 
         tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
         tree.game.visible_cards = CardList((TrainColor.GREEN, 3))
         tree.game.deck = CardList()
 
+        tree.game.unclaimed_routes = {56: tree.game.map.routes.get(56)}
         tree.next(ClaimRouteAction(self.game, 56))
 
         self.assertEqual(CardList((TrainColor.GREEN, 3), (TrainColor.BLUE, 2)), tree.game.visible_cards)

@@ -70,10 +70,9 @@ class Trainer:
         import random
         take_greedy_path = random.uniform(0, 1) < 0.3
 
-        current_player = self.tree.game.current_player()
-        cumulative_info_set = self.tree.current_node.get_cumulative_information_set()
-        training_strategy = self.strategy_storage.get_node_strategy(cumulative_info_set)
-        print(f"\nLOADED TRAINING STRATEGY for \"{cumulative_info_set}\"")
+        info_set = self.tree.current_node.information_set
+        training_strategy = self.strategy_storage.get_node_strategy(info_set)
+        print(f"\nLOADED TRAINING STRATEGY for \"{info_set}\"")
         print(training_strategy)
 
         if take_greedy_path:
@@ -104,7 +103,7 @@ class Trainer:
 
         # Update the strategy
         new_strategy = Strategy.from_regrets(training_strategy, regrets)
-        cumulative_info_set = self.tree.current_node.get_cumulative_information_set()
+        cumulative_info_set = self.tree.current_node.information_set
         self.strategy_storage.set(cumulative_info_set, new_strategy)
         print(f"\nUpdated Strategy for \"{cumulative_info_set}\"")
 
