@@ -162,7 +162,6 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(GameState.FIRST_ROUND, self.game.state)
         self.assertEqual(1, self.tree.game.current_player_index)
         self.assertEqual(0, len(storage.node_strategies))
-        self.assertLess(0, len(storage.average_strategies))
 
     def test_simulate_for_two_turns(self):
         self.assertEqual(0, self.tree.game.current_player_index)

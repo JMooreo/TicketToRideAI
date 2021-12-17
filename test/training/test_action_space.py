@@ -120,4 +120,4 @@ class ActionSpaceTest(unittest.TestCase):
         a1_ids = ActionSpace(game).get_valid_action_ids()
         a2_ids = ActionSpace(game_copy).get_valid_action_ids()
 
-        self.assertEqual(a1_ids, a2_ids)
+        self.assertEqual(a1_ids.tolist(), a2_ids.tolist())

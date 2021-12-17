@@ -85,4 +85,4 @@ class DestinationTest(unittest.TestCase):
 
     def test_to_string(self):
         destination = Destination([City.BOSTON, City.DULUTH], 21)
-        self.assertEqual("BOSTON_to_DULUTH (21 points)", str(destination))
+        self.assertEqual("BOSTON_to_DULUTH", str(destination))

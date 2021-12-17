@@ -113,8 +113,8 @@ class SelectDestinationsActionTest(unittest.TestCase):
                 self.assertEqual((len(self.game.map.destinations.keys()),), actual.shape)
 
     def test_as_string(self):
-        self.assertEqual("select_dest_CALGARY_to_PHOENIX (13 points)", str(SelectDestinationAction(self.game, 1)))
-        self.assertEqual("select_dest_DALLAS_to_NEW_YORK (11 points)", str(SelectDestinationAction(self.game, 5)))
+        self.assertEqual("select_dest_CALGARY_to_PHOENIX", str(SelectDestinationAction(self.game, 1)))
+        self.assertEqual("select_dest_DALLAS_to_NEW_YORK", str(SelectDestinationAction(self.game, 5)))
 
     def test_turn_history(self):
         self.game.available_destinations = [1, 2, 3]

@@ -1,15 +1,15 @@
 import cProfile
 import pstats
 
-from src.training.StrategyStorage import StrategyStorage
+from src.training.GameNode import Player1Node
 from src.training.Trainer import Trainer
 
 
 def code_to_run():
-    trainer = Trainer()
-    trainer.load_latest_checkpoint()
+    trainer = Trainer("D:/Programming/TicketToRideMCCFR_TDD/checkpoints")
+    # trainer.load_latest_checkpoint()
     trainer.tree.simulate_for_n_turns(2, trainer.strategy_storage)
-    trainer.training_step()
+    trainer.training_step(Player1Node)
 
 
 class Performance:

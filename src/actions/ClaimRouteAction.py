@@ -5,6 +5,18 @@ from src.game.enums.TurnState import TurnState
 
 
 class ClaimRouteAction(Action):
+    @staticmethod
+    def static_validation(game: Game, route_id: int):
+        player = game.current_player()
+        route = game.map.routes.get(route_id)
+
+        return 0 <= route_id < len(game.map.routes) and \
+               game.turn_state == TurnState.INIT and \
+               game.state in [GameState.PLAYING, GameState.LAST_ROUND] and \
+               player.trains >= route.cost.amount and \
+               route.cost.best_payment_option(player.hand) is not None and \
+               route_id in game.unclaimed_routes and \
+               route.adjacent_route_id not in player.routes
 
     def __init__(self, game: Game, route_id: int):
         super().__init__(game)

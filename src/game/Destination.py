@@ -12,7 +12,7 @@ class Destination:
         self.cities = cities
 
     def __str__(self):
-        return str(self.cities[0]) + "_to_" + str(self.cities[1]) + f" ({self.points} points)"
+        return str(self.cities[0]) + "_to_" + str(self.cities[1])
 
     def __repr__(self):
         return str(self)

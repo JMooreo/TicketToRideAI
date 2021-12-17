@@ -41,7 +41,7 @@ class ActionSpace:
         return np.array([1 if DrawRandomCardAction(self.game).is_valid() else 0])
 
     def claimable_routes(self):
-        return np.array([1 if ClaimRouteAction(self.game, route).is_valid()
+        return np.array([1 if ClaimRouteAction.static_validation(self.game, route)
                          else 0 for route in self.game.map.routes.keys()])
 
     def drawable_visible_colored_cards(self):
@@ -96,4 +96,7 @@ class ActionSpace:
         return None
 
     def get_valid_action_ids(self):
-        return np.where(self.to_np_array() == 1)[0].tolist()
+        return np.where(self.to_np_array() == 1)[0]
+
+    def sample(self) -> int:
+        return np.random.sample(self.get_valid_action_ids())

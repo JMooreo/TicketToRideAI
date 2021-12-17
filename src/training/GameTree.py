@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 import numpy as np
 from src.actions.Action import Action
 from src.game.Game import Game
@@ -41,10 +40,8 @@ class GameTree:
                 strategy = strategy_storage.get_node_strategy(self.current_node.information_set)
                 action_id, chance = action_space.get_action_id(strategy)
                 action = action_space.get_action_by_id(action_id)
-                player_idx = self.game.current_player_index
 
                 self.next(action)
-                strategy_storage.increment_average_strategy(player_idx, action_id)
 
     def simulate_until_game_over(self, strategy_storage: StrategyStorage):
         while self.game.state != GameState.GAME_OVER:
@@ -61,25 +58,25 @@ class GameTree:
 
             while isinstance(self.current_node, node_type):
                 strategy = strategy_storage.get_node_strategy(self.current_node.information_set)
-                normalized_strategy = Strategy.normalize(strategy, action_space.to_np_array())
-                if sum(normalized_strategy) == 0:
+                action_space_np = action_space.to_np_array()
+                normalized_strategy = Strategy.normalize(strategy, action_space_np)
+                normalized_sum = sum(normalized_strategy)
+                if normalized_sum == 0:
                     # print(self.game)
                     # print(f"Player {self.game.current_player_index + 1} couldn't take an action, so they skipped.")
                     self.game.turn_state = TurnState.FINISHED
                     self.current_node = self.current_node.pass_turn()
                     continue
 
-                take_greedy_path = random.uniform(0, 1) < 0.3
+                if normalized_sum == sum(action_space_np):
+                    # Choose an action uniform random, prevents the AI from choosing the first action every time.
+                    action, chance = action_space.get_action()
+                    self.next(action)
+                    continue
 
-                if take_greedy_path:
-                    # Choose the best valid action for the current set of uncompleted_destinations
-                    action_id = int(np.argmax(normalized_strategy))
-                    chance = normalized_strategy[action_id]
-                    action = action_space.get_action_by_id(action_id)
-                else:
-                    # Explore an action from the current strategy
-                    action_id, chance = action_space.get_action_id(strategy)
-                    action = action_space.get_action_by_id(action_id)
+                # Choose the best valid action for the current set of uncompleted_destinations
+                action_id = int(np.argmax(normalized_strategy))
+                action = action_space.get_action_by_id(action_id)
 
                 self.next(action)
 

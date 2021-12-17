@@ -63,16 +63,15 @@ class StrategyTest(unittest.TestCase):
             strategy = Strategy.random(10)
             Strategy.normalize(strategy, np.ones(7))
 
-    def test_update_from_regrets_negative(self):
-        strategy = np.repeat(1, 10)
-        regrets = np.array([30 if i == 0 else -30 for i in range(10)])
-
-        filtered_regrets = np.array([30 if i == 0 else 0 for i in range(10)])
-        expected = strategy + filtered_regrets
-
-        actual = Strategy.from_regrets(strategy, regrets)
-
-        self.assertEqual(expected.tolist(), actual.tolist())
+    # def test_update_from_regrets_negative(self):
+    #     strategy = np.repeat(1, 10)
+    #     regrets = np.array([30 if i == 0 else -30 for i in range(10)])
+    #
+    #     expected = [30 if i == 0 else 1 for i in range(10)]
+    #
+    #     actual = Strategy.from_regrets(strategy, regrets)
+    #
+    #     self.assertEqual(expected, actual.tolist())
 
     def test_normalize_multiple_times_doesnt_do_anything(self):
         strategy = np.repeat(1, 10)
@@ -85,3 +84,32 @@ class StrategyTest(unittest.TestCase):
         n3 = [round(val, 5) for val in n3]
 
         self.assertEqual(n1, n3)
+
+    # def test_update_from_regrets_both_ones(self):
+    #     strategy = np.repeat(1, 10)
+    #     new_strategy = Strategy.from_regrets(strategy, np.repeat(1, 10))
+    #
+    #     self.assertEqual(strategy.tolist(), new_strategy.tolist())
+    #
+    # def test_update_from_regrets_strategy_ones(self):
+    #     strategy = np.repeat(1, 10)
+    #     new_strategy = Strategy.from_regrets(strategy, np.repeat(2, 10))
+    #
+    #     expected = [2 for _ in range(10)]
+    #     self.assertEqual(expected, new_strategy.tolist())
+    #
+    # def test_update_from_regrets_strategy_has_existing_values_regrets_are_ones(self):
+    #     strategy = np.repeat(2, 10)
+    #     new_strategy = Strategy.from_regrets(strategy, np.repeat(1, 10))
+    #
+    #     expected = [1.5 for _ in range(10)]
+    #
+    #     self.assertEqual(expected, new_strategy.tolist())
+    #
+    # def test_update_from_regrets_strategy_has_existing_values_regrets_some_regrets_negative(self):
+    #     strategy = np.repeat(2, 10)
+    #     new_strategy = Strategy.from_regrets(strategy, np.array([6 if i == 5 else -5 for i in range(10)]))
+    #
+    #     expected = [4 if i == 5 else 2 for i in range(10)]
+    #
+    #     self.assertEqual(expected, new_strategy.tolist())

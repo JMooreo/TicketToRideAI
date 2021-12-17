@@ -37,7 +37,7 @@ class GameNode(ABC):
             self.game.current_player_index = self.next_node().player_index()
             self.game.turn_state = TurnState.INIT
             next_node = self.next_node()
-            next_node.information_set = InformationSet.from_game(self.game, next_node.player_index())
+            next_node.information_set = InformationSet.from_game(self.game, self.game.current_player_index)
             return next_node
 
     def __handle_game_state_change(self):

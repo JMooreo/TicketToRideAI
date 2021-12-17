@@ -1,289 +1,270 @@
-Tue Dec 14 03:13:02 2021    output.dat
+Thu Dec 16 00:45:19 2021    output.dat
 
-         5524475 function calls (5434517 primitive calls) in 4.430 seconds
+         18333277 function calls (17923685 primitive calls) in 9.899 seconds
 
    Ordered by: call count
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-   898865    0.208    0.000    0.270    0.000 {method 'get' of 'dict' objects}
-   580860    0.168    0.000    0.168    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\Action.py:5(__init__)
-   497850    0.076    0.000    0.076    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:100(__hash__)
-   413743    0.087    0.000    0.087    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:92(current_player)
-   403298    0.572    0.000    0.821    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:9(__init__)
-   403298    0.663    0.000    1.079    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:21(is_valid)
-349221/308100    0.042    0.000    0.405    0.000 {built-in method builtins.len}
-   238036    0.079    0.000    0.201    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:28(__getitem__)
-   199361    0.183    0.000    0.395    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:24(can_buy_with)
-   139162    0.019    0.000    0.022    0.000 {built-in method builtins.isinstance}
-   128477    0.017    0.000    0.017    0.000 {method 'items' of 'dict' objects}
-   122072    0.143    0.000    0.204    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:7(__init__)
-   122072    0.041    0.000    0.041    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:23(is_valid)
-   118560    0.025    0.000    0.025    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:83(<genexpr>)
-    59881    0.007    0.000    0.007    0.000 {built-in method builtins.id}
-    59770    0.030    0.000    0.038    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:10(<dictcomp>)
-    59770    0.040    0.000    0.078    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:8(__init__)
- 40590/15    0.059    0.000    0.136    0.009 D:\MiniConda\lib\copy.py:128(deepcopy)
-    40553    0.037    0.000    0.065    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:81(has)
-    37313    0.028    0.000    0.040    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:10(__init__)
-    37312    0.061    0.000    0.172    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:20(is_valid)
-    35155    0.159    0.000    0.159    0.000 {built-in method numpy.array}
-    23715    0.003    0.000    0.003    0.000 D:\MiniConda\lib\copy.py:182(_deepcopy_atomic)
-    17386    0.005    0.000    0.005    0.000 {built-in method builtins.getattr}
-    16594    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
-    14347    0.007    0.000    0.028    0.000 D:\MiniConda\lib\site-packages\numpy\core\numeric.py:1812(_frombuffer)
-    14347    0.011    0.000    0.011    0.000 {method 'reshape' of 'numpy.ndarray' objects}
-    14347    0.010    0.000    0.010    0.000 {built-in method numpy.frombuffer}
-    13037    0.002    0.000    0.002    0.000 {method 'keys' of 'dict' objects}
-    12725    0.195    0.000    0.195    0.000 {built-in method builtins.sum}
-    11856    0.011    0.000    0.013    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:82(__iter__)
-    11856    0.002    0.000    0.002    0.000 {method 'values' of 'collections.OrderedDict' objects}
-     9808    0.031    0.000    0.085    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
-     9574    0.002    0.000    0.002    0.000 {built-in method builtins.all}
-     9285    0.006    0.000    0.009    0.000 D:\MiniConda\lib\copy.py:242(_keep_alive)
-     8490    0.003    0.000    0.010    0.000 D:\MiniConda\lib\copy.py:263(<genexpr>)
-     7330    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:94(player_index)
-     7300    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:83(player_index)
-     6277    0.064    0.000    0.144    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:40(__add__)
-     5941    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:67(__eq__)
-     5941    0.006    0.000    0.009    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:10(__init__)
-     5941    0.018    0.000    0.027    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:21(is_valid)
-     5736    0.010    0.000    0.047    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:52(_wrapfunc)
-     5637    0.001    0.000    0.001    0.000 {built-in method builtins.issubclass}
-     5440    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Route.py:16(has_city)
-     4664    0.001    0.000    0.001    0.000 {method 'getrandbits' of '_random.Random' objects}
-     4292    0.002    0.000    0.005    0.000 {method 'join' of 'str' objects}
-  4245/15    0.014    0.000    0.135    0.009 D:\MiniConda\lib\copy.py:258(_reconstruct)
-     4233    0.002    0.000    0.002    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:88(__len__)
-     4096    0.006    0.000    0.013    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawWildCardAction.py:16(is_valid)
-     4071    0.005    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawDestinationsAction.py:15(is_valid)
-     4069    0.007    0.000    0.028    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:31(can_draw_wild)
-     4069    0.008    0.000    0.027    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:34(can_draw_destinations)
-     4069    0.006    0.000    0.017    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:37(can_finish_selecting_destinations)
-     4069    0.008    0.000    0.037    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:40(can_draw_random_card)
-     4069    0.372    0.000    2.267    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:44(<listcomp>)
-     4069    0.009    0.000    2.317    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:43(claimable_routes)
-     4069    0.049    0.000    0.264    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:48(<listcomp>)
-     4069    0.010    0.000    0.292    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:47(drawable_visible_colored_cards)
-     4069    0.103    0.000    0.348    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:52(<listcomp>)
-     4069    0.008    0.000    0.374    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:51(selectable_destinations)
-     4069    0.027    0.000    3.153    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:55(to_np_array)
-     4069    0.001    0.000    0.001    0.000 D:\MiniConda\lib\site-packages\numpy\core\multiarray.py:143(concatenate)
-     4069    0.006    0.000    0.032    0.000 <__array_function__ internals>:2(concatenate)
-     4069    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\FinishSelectingDestinationsAction.py:16(is_valid)
-     3800    0.003    0.000    0.003    0.000 {built-in method builtins.sorted}
-  3750/15    0.016    0.000    0.135    0.009 D:\MiniConda\lib\copy.py:226(_deepcopy_dict)
-     3744    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:29(<genexpr>)
-     3703    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\enums\TrainColor.py:5(__str__)
-     3646    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:12(__init__)
-     3604    0.047    0.000    0.314    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:10(normalize)
-     3547    0.001    0.000    0.001    0.000 {built-in method builtins.hasattr}
-     3541    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x00007FFC4A1EB810}
-     3541    0.001    0.000    0.001    0.000 {method 'update' of 'dict' objects}
-     3540    0.002    0.000    0.002    0.000 D:\MiniConda\lib\copyreg.py:90(__newobj__)
-     3540    0.002    0.000    0.002    0.000 {method '__reduce_ex__' of 'object' objects}
-     3503    0.115    0.000    0.115    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:21(<listcomp>)
-     3359    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:35(<listcomp>)
-     3359    0.004    0.000    0.007    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:34(__len__)
-     3152    0.002    0.000    0.009    0.000 D:\MiniConda\lib\site-packages\numpy\core\_asarray.py:14(asarray)
-     3151    0.011    0.000    0.030    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:39(_wrapit)
-     3151    0.001    0.000    0.001    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:433(_repeat_dispatcher)
-     3151    0.003    0.000    0.041    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:437(repeat)
-     3151    0.003    0.000    0.048    0.000 <__array_function__ internals>:2(repeat)
-     3151    0.004    0.000    0.052    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:6(random)
-     3151    0.009    0.000    0.009    0.000 {method 'repeat' of 'numpy.ndarray' objects}
-     3148    0.005    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:25(get_cumulative_information_set)
-     3147    0.005    0.000    0.061    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:22(get_node_strategy)
-     3074    0.001    0.000    0.001    0.000 {method 'values' of 'dict' objects}
-     3062    0.007    0.000    0.018    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:80(get_action_by_id)
-     3061    0.004    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\Action.py:22(execute)
-     3061    0.006    0.000    0.416    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:25(next)
-     3061    0.020    0.000    0.391    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:31(next)
-     3061    0.004    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:42(<listcomp>)
-     3061    0.012    0.000    0.033    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:37(for_current_player)
-     3057    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:57(<listcomp>)
-     3042    0.005    0.000    0.005    0.000 D:\MiniConda\lib\random.py:415(uniform)
-     3042    0.001    0.000    0.001    0.000 {method 'random' of '_random.Random' objects}
-     2914    0.001    0.000    0.007    0.000 {built-in method builtins.next}
-     2867    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:14(__str__)
-     2585    0.001    0.000    0.001    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:1110(_argmax_dispatcher)
-     2585    0.003    0.000    0.013    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:1114(argmax)
-     2585    0.003    0.000    0.019    0.000 <__array_function__ internals>:2(argmax)
-     2585    0.006    0.000    0.006    0.000 {method 'argmax' of 'numpy.ndarray' objects}
-     2563    0.003    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:58(<listcomp>)
-     2557    0.004    0.000    0.005    0.000 D:\MiniConda\lib\random.py:250(_randbelow_with_getrandbits)
-     2557    0.001    0.000    0.001    0.000 {method 'bit_length' of 'int' objects}
-     2551    0.002    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:78(number_of_cards)
-     2551    0.014    0.000    0.032    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:95(draw_train_card)
-     2551    0.003    0.000    0.008    0.000 D:\MiniConda\lib\random.py:285(choice)
-     2541    0.008    0.000    0.100    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:88(get_random)
-     2483    0.001    0.000    0.003    0.000 D:\MiniConda\lib\abc.py:96(__instancecheck__)
-     2483    0.002    0.000    0.002    0.000 {built-in method _abc._abc_instancecheck}
-1995/1965    0.004    0.000    0.017    0.000 D:\MiniConda\lib\copy.py:200(_deepcopy_list)
-     1872    0.003    0.000    0.004    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:104(__format__)
-     1872    0.014    0.000    0.146    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:26(execute)
-     1872    0.001    0.000    0.001    0.000 {method '__format__' of 'str' objects}
-     1838    0.001    0.000    0.002    0.000 D:\MiniConda\lib\types.py:171(__get__)
-     1838    0.000    0.000    0.000    0.000 D:\MiniConda\lib\enum.py:654(name)
-     1838    0.001    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\enums\City.py:5(__str__)
-     1833    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:15(__init__)
-     1831    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:14(__str__)
-     1830    0.007    0.000    0.023    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:46(pass_turn)
-     1830    0.005    0.000    0.007    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:57(__handle_game_state_change)
-     1826    0.002    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:80(__init__)
-     1820    0.002    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:86(next_node)
-     1820    0.002    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:91(__init__)
-     1815    0.038    0.000    4.147    0.002 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:54(greedy_simulation_for_n_turns)
-     1810    0.002    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:97(next_node)
-     1798    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:60(<listcomp>)
-     1798    0.001    0.000    0.001    0.000 {built-in method builtins.any}
-     1729    0.009    0.000    0.028    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:67(__update_other_players_information_sets)
-     1729    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:23(<listcomp>)
-     1729    0.006    0.000    0.018    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:13(for_opponents)
-     1727    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:29(<listcomp>)
-     1233    0.002    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:30(<listcomp>)
-     1185    0.013    0.000    0.028    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:52(__sub__)
-     1185    0.003    0.000    0.048    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:84(replenish_visible_cards)
-     1150    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:28(<genexpr>)
-     1025    0.001    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:35(<genexpr>)
-      958    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Route.py:7(__init__)
-      958    0.001    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:8(__init__)
-      958    0.001    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:43(<genexpr>)
-      937    0.000    0.000    0.001    0.000 {method 'pop' of 'dict' objects}
-      934    0.001    0.000    0.005    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:34(<genexpr>)
-      924    0.001    0.000    0.002    0.000 D:\MiniConda\lib\site-packages\numpy\core\numerictypes.py:286(issubclass_)
-      924    0.002    0.000    0.002    0.000 D:\MiniConda\lib\site-packages\numpy\core\getlimits.py:366(__new__)
-      917    0.002    0.000    0.005    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Route.py:19(__str__)
-      917    0.001    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:15(__str__)
-      836    0.001    0.000    0.001    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:64(__call__)
-      718    0.003    0.000    0.050    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:78(take_card)
-      691    0.002    0.000    0.052    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:26(execute)
-      575    0.002    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:30(<listcomp>)
-  575/463    0.002    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:26(search)
-      570    0.000    0.000    0.001    0.000 D:\MiniConda\lib\enum.py:278(__call__)
-      570    0.000    0.000    0.000    0.000 D:\MiniConda\lib\enum.py:557(__new__)
-      570    0.000    0.000    0.000    0.000 D:\MiniConda\lib\enum.py:644(__reduce_ex__)
-      467    0.002    0.000    0.011    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:33(best_payment_option)
-      467    0.002    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:39(__options)
-      467    0.005    0.000    0.086    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:30(execute)
-      463    0.002    0.000    0.010    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:20(path_from)
-      463    0.001    0.000    0.358    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:18(__len__)
-      462    0.002    0.000    0.787    0.002 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:66(get_action_id)
-      462    0.001    0.000    0.003    0.000 D:\MiniConda\lib\site-packages\numpy\core\numerictypes.py:360(issubdtype)
-      462    0.028    0.000    0.034    0.000 {method 'choice' of 'numpy.random.mtrand.RandomState' objects}
-      360    0.000    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:41(<genexpr>)
-      282    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.dragon4_positional}
-      150    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:10(__init__)
-    142/1    0.000    0.000    0.002    0.002 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:718(recurser)
-      142    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:913(<genexpr>)
-      142    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:918(<genexpr>)
-      142    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:922(<genexpr>)
-      142    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:923(<genexpr>)
-      141    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:695(_extendLine)
-      141    0.001    0.000    0.001    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:947(__call__)
-      141    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
-      135    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\fastenum\fastenum.py:107(__reduce_ex__)
-      102    0.000    0.000    0.000    0.000 {built-in method numpy.zeros}
-       59    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:43(<genexpr>)
-       50    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawWildCardAction.py:9(__str__)
-       31    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:42(<genexpr>)
-       30    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:41(points_from_destinations)
-       27    0.000    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawWildCardAction.py:22(execute)
-       16    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:16(__init__)
-     15/8    0.000    0.000    0.000    0.000 D:\MiniConda\lib\abc.py:100(__subclasscheck__)
-       15    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:88(calculate_final_scores)
-       15    0.000    0.000    4.155    0.277 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionUtility.py:14(of)
-       15    0.005    0.000    4.152    0.277 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:87(greedy_simulation_until_game_over)
-     15/8    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
+  3444385    0.476    0.000    0.476    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:100(__hash__)
+  2169259    0.640    0.000    0.848    0.000 {method 'get' of 'dict' objects}
+  1434051    0.835    0.000    1.099    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:10(<dictcomp>)
+  1434051    0.846    0.000    1.945    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:8(__init__)
+  1431498    0.181    0.000    0.181    0.000 {method 'items' of 'dict' objects}
+  1420586    1.088    0.000    1.983    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:81(has)
+  1220540    0.236    0.000    0.236    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:83(<genexpr>)
+   819512    0.472    0.000    1.341    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:33(<genexpr>)
+   818150    0.530    0.000    1.535    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:31(<genexpr>)
+743864/380958    0.092    0.000    4.578    0.000 {built-in method builtins.len}
+   380004    0.083    0.000    0.083    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:92(current_player)
+   376794    0.787    0.000    7.979    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:8(static_validation)
+   323226    0.927    0.000    5.715    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:24(<genexpr>)
+   256423    0.121    0.000    5.825    0.000 {built-in method builtins.next}
+   254904    0.313    0.000    7.046    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:23(best_payment_option)
+   254904    0.479    0.000    0.887    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:29(__options)
+   229192    0.076    0.000    0.102    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:88(__len__)
+   165573    0.052    0.000    0.052    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\Action.py:5(__init__)
+   126346    0.018    0.000    0.021    0.000 {built-in method builtins.isinstance}
+   122054    0.088    0.000    0.108    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:82(__iter__)
+   122054    0.020    0.000    0.020    0.000 {method 'values' of 'collections.OrderedDict' objects}
+   114182    0.177    0.000    0.252    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:7(__init__)
+   114182    0.027    0.000    0.027    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:24(is_valid)
+    55926    0.007    0.000    0.007    0.000 {built-in method builtins.id}
+ 37912/14    0.057    0.000    0.131    0.009 D:\Python_3_10\lib\copy.py:128(deepcopy)
+    35119    0.027    0.000    0.038    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:10(__init__)
+    35119    0.058    0.000    0.166    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:20(is_valid)
+    28544    0.115    0.000    0.115    0.000 {built-in method numpy.array}
+    22134    0.003    0.000    0.003    0.000 D:\Python_3_10\lib\copy.py:182(_deepcopy_atomic)
+    16439    0.004    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Route.py:16(has_city)
+    15973    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+    15536    0.004    0.000    0.004    0.000 {built-in method builtins.getattr}
+     9871    0.002    0.000    0.002    0.000 {method 'keys' of 'dict' objects}
+     9700    0.003    0.000    0.003    0.000 {built-in method builtins.issubclass}
+     8666    0.006    0.000    0.008    0.000 D:\Python_3_10\lib\copy.py:243(_keep_alive)
+     7924    0.003    0.000    0.011    0.000 D:\Python_3_10\lib\copy.py:264(<genexpr>)
+     7629    0.036    0.000    0.079    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+     6808    0.034    0.000    0.034    0.000 {built-in method builtins.sum}
+     4182    0.042    0.000    0.096    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:40(__add__)
+     4133    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:67(__eq__)
+     4133    0.006    0.000    0.007    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:10(__init__)
+     4133    0.014    0.000    0.021    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:21(is_valid)
+  3962/14    0.013    0.000    0.130    0.009 D:\Python_3_10\lib\copy.py:259(_reconstruct)
+     3905    0.007    0.000    0.016    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawWildCardAction.py:16(is_valid)
+     3811    0.004    0.000    0.004    0.000 {built-in method numpy.asarray}
+     3808    0.006    0.000    0.007    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawDestinationsAction.py:15(is_valid)
+     3806    0.007    0.000    0.027    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:31(can_draw_wild)
+     3806    0.009    0.000    0.025    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:34(can_draw_destinations)
+     3806    0.006    0.000    0.018    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:37(can_finish_selecting_destinations)
+     3806    0.007    0.000    0.037    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:40(can_draw_random_card)
+     3806    0.175    0.000    8.153    0.002 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:44(<listcomp>)
+     3806    0.010    0.000    8.211    0.002 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:43(claimable_routes)
+     3806    0.045    0.000    0.249    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:48(<listcomp>)
+     3806    0.010    0.000    0.274    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:47(drawable_visible_colored_cards)
+     3806    0.093    0.000    0.372    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:52(<listcomp>)
+     3806    0.009    0.000    0.399    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:51(selectable_destinations)
+     3806    0.001    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\multiarray.py:148(concatenate)
+     3806    0.008    0.000    0.041    0.000 <__array_function__ internals>:2(concatenate)
+     3806    0.006    0.000    0.006    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\FinishSelectingDestinationsAction.py:16(is_valid)
+     3805    0.025    0.000    9.053    0.002 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:55(to_np_array)
+     3802    0.004    0.000    0.006    0.000 D:\Python_3_10\lib\site-packages\numpy\core\numerictypes.py:284(issubclass_)
+     3802    0.008    0.000    0.038    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:51(_wrapfunc)
+     3802    0.007    0.000    0.008    0.000 D:\Python_3_10\lib\site-packages\numpy\core\getlimits.py:382(__new__)
+     3801    0.013    0.000    0.030    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:38(_wrapit)
+     3801    0.001    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:432(_repeat_dispatcher)
+     3801    0.004    0.000    0.043    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:436(repeat)
+     3801    0.005    0.000    0.052    0.000 <__array_function__ internals>:2(repeat)
+     3801    0.004    0.000    0.057    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:6(random)
+     3801    0.011    0.000    0.011    0.000 {method 'repeat' of 'numpy.ndarray' objects}
+     3512    0.003    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:35(<listcomp>)
+     3512    0.005    0.000    0.010    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:34(__len__)
+  3500/14    0.013    0.000    0.130    0.009 D:\Python_3_10\lib\copy.py:227(_deepcopy_dict)
+     3314    0.001    0.000    0.001    0.000 {method 'update' of 'dict' objects}
+     3311    0.001    0.000    0.001    0.000 {built-in method builtins.hasattr}
+     3305    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x00007FFC3C570920}
+     3304    0.002    0.000    0.002    0.000 D:\Python_3_10\lib\copyreg.py:100(__newobj__)
+     3304    0.002    0.000    0.002    0.000 {method '__reduce_ex__' of 'object' objects}
+     3248    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:7(<dictcomp>)
+     3248    0.010    0.000    0.015    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:5(from_game)
+     3248    0.003    0.000    0.003    0.000 {built-in method builtins.sorted}
+     2621    0.002    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:10(__init__)
+     2379    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:28(<genexpr>)
+     2348    0.001    0.000    0.001    0.000 {method 'getrandbits' of '_random.Random' objects}
+     2275    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:58(player_index)
+     2260    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:69(player_index)
+     1963    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+     1915    0.007    0.000    0.019    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:80(get_action_by_id)
+     1915    0.003    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\Action.py:22(execute)
+     1915    0.004    0.000    0.323    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:23(next)
+     1915    0.010    0.000    0.284    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:22(next)
+     1902    0.004    0.000    4.514    0.002 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:18(__len__)
+     1901    0.010    0.000    9.307    0.005 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:66(get_action_id)
+     1901    0.005    0.000    0.011    0.000 D:\Python_3_10\lib\site-packages\numpy\core\numerictypes.py:358(issubdtype)
+     1901    0.016    0.000    0.110    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:10(normalize)
+     1901    0.041    0.000    0.041    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:21(<listcomp>)
+     1901    0.003    0.000    0.025    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:22(get_node_strategy)
+     1901    0.119    0.000    0.138    0.000 {method 'choice' of 'numpy.random.mtrand.RandomState' objects}
+     1900    0.004    0.000    0.039    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:25(get_average_strategy)
+     1900    0.007    0.000    0.046    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:31(increment_average_strategy)
+1862/1834    0.004    0.000    0.017    0.000 D:\Python_3_10\lib\copy.py:201(_deepcopy_list)
+     1584    0.017    0.000    0.039    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:52(__sub__)
+     1584    0.003    0.000    0.075    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:84(replenish_visible_cards)
+     1321    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:15(__init__)
+     1317    0.007    0.000    0.025    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:32(pass_turn)
+     1317    0.005    0.000    0.007    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:43(__handle_game_state_change)
+     1314    0.001    0.000    0.003    0.000 D:\Python_3_10\lib\abc.py:117(__instancecheck__)
+     1314    0.002    0.000    0.002    0.000 {built-in method _abc._abc_instancecheck}
+     1311    0.001    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:55(__init__)
+     1310    0.001    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:61(next_node)
+     1310    0.001    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:66(__init__)
+     1306    0.002    0.000    0.003    0.000 D:\Python_3_10\lib\random.py:239(_randbelow_with_getrandbits)
+     1306    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
+     1305    0.015    0.000    9.730    0.007 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:31(simulate_for_n_turns)
+     1304    0.001    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:78(number_of_cards)
+     1304    0.008    0.000    0.018    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:95(draw_train_card)
+     1304    0.002    0.000    0.005    0.000 D:\Python_3_10\lib\random.py:375(choice)
+     1296    0.001    0.000    0.004    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:72(next_node)
+     1294    0.005    0.000    0.053    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:88(get_random)
+     1287    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameNode.py:46(<listcomp>)
+     1287    0.001    0.000    0.001    0.000 {built-in method builtins.any}
+     1192    0.005    0.000    0.009    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:30(<listcomp>)
+ 1192/575    0.005    0.000    0.016    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:26(search)
+     1000    0.001    0.000    0.002    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:64(__call__)
+      964    0.004    0.000    0.125    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:78(take_card)
+      865    0.003    0.000    0.116    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawVisibleCardAction.py:26(execute)
+      846    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.dragon4_positional}
+   715/10    0.002    0.000    0.006    0.001 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:751(recurser)
+      705    0.001    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:701(_extendLine)
+      705    0.001    0.000    0.002    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:715(_extendLine_pretty)
+      705    0.000    0.000    0.000    0.000 {method 'splitlines' of 'str' objects}
+      674    0.001    0.000    0.001    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Route.py:7(__init__)
+      674    0.001    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\RouteCost.py:7(__init__)
+      654    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:29(<genexpr>)
+      633    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+      620    0.002    0.000    0.003    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:21(__init__)
+      620    0.004    0.000    0.023    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:33(is_valid)
+      620    0.007    0.000    0.080    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:42(execute)
+      575    0.003    0.000    0.021    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:20(path_from)
+      532    0.000    0.000    0.001    0.000 D:\Python_3_10\lib\enum.py:359(__call__)
+      532    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\enum.py:678(__new__)
+      532    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\enum.py:786(__reduce_ex__)
+      426    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:946(<genexpr>)
+      426    0.000    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:951(<genexpr>)
+      426    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:955(<genexpr>)
+      426    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:956(<genexpr>)
+      423    0.002    0.000    0.002    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:980(__call__)
+      423    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+      327    0.001    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:104(__format__)
+      327    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\enums\TrainColor.py:5(__str__)
+      327    0.003    0.000    0.027    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawRandomCardAction.py:26(execute)
+      327    0.000    0.000    0.000    0.000 {method '__format__' of 'str' objects}
+      282    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:1193(__call__)
+      126    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\fastenum\fastenum.py:107(__reduce_ex__)
+       99    0.001    0.000    0.014    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawWildCardAction.py:22(execute)
+       64    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:42(<genexpr>)
+       62    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:43(<genexpr>)
+       42    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:41(points_from_destinations)
+       37    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+       30    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:10(__init__)
+       23    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+       20    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:70(<dictcomp>)
+       20    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:69(_wrapreduction)
+       20    0.000    0.000    0.000    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+       15    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:16(__init__)
+       15    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:88(__initialize_info_sets)
+       14    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:88(calculate_final_scores)
+       14    0.000    0.000    9.732    0.695 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionUtility.py:14(of)
+       14    0.003    0.000    9.729    0.695 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:48(simulate_until_game_over)
+       12    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
+       12    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+       12    0.000    0.000    0.012    0.001 {built-in method builtins.print}
+       11    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:2633(_amax_dispatcher)
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:2638(amax)
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:2758(_amin_dispatcher)
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:2763(amin)
+       10    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(amax)
+       10    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(amin)
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:66(<dictcomp>)
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:61(_make_options_dict)
+       10    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:367(_get_formatdict)
+       10    0.000    0.000    0.002    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:416(_get_format_function)
+       10    0.000    0.000    0.008    0.001 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:468(wrapper)
+       10    0.000    0.000    0.007    0.001 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:485(_array2string)
+       10    0.000    0.000    0.008    0.001 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:523(array2string)
+       10    0.000    0.000    0.006    0.001 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:742(_formatArray)
+       10    0.000    0.000    0.008    0.001 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:1534(_array_str_implementation)
+       10    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+       10    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+       10    0.000    0.000    0.000    0.000 {method 'discard' of 'set' objects}
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
         9    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-        8    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\FinishSelectingDestinationsAction.py:34(<genexpr>)
-        8    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
-        8    0.000    0.000    0.002    0.000 {built-in method builtins.print}
-        7    0.000    0.000    0.000    0.000 D:\MiniConda\lib\copyreg.py:99(_slotnames)
+      8/6    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\abc.py:121(__subclasscheck__)
+        8    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\FinishSelectingDestinationsAction.py:28(<genexpr>)
+      8/6    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
+        7    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\copyreg.py:109(_slotnames)
+        7    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:374(<lambda>)
+        7    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:1185(__init__)
         7    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
-        7    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
-        6    0.000    0.000    0.000    0.000 D:\MiniConda\lib\_collections_abc.py:392(__subclasshook__)
-        5    0.001    0.000    0.002    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Map.py:16(__init__)
+        7    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+        6    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\_ufunc_config.py:32(seterr)
+        6    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\_ufunc_config.py:131(geterr)
+        6    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
         5    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
-        4    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\FinishSelectingDestinationsAction.py:32(__minimum_number_of_destinations_were_selected)
-        4    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\InformationSet.py:46(<listcomp>)
-        4    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:25(get_average_strategy)
-        4    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:31(increment_average_strategy)
-        4    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
-        3    0.000    0.000    0.000    0.000 D:\MiniConda\lib\_collections_abc.py:302(__subclasshook__)
-        3    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-        3    0.000    0.000    0.000    0.000 {method 'tolist' of 'numpy.ndarray' objects}
-        2    0.000    0.000    0.000    0.000 D:\MiniConda\lib\random.py:315(sample)
+        4    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\FinishSelectingDestinationsAction.py:26(__minimum_number_of_destinations_were_selected)
+        3    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\_collections_abc.py:315(__subclasshook__)
+        3    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\_ufunc_config.py:425(__init__)
+        3    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\_ufunc_config.py:429(__enter__)
+        3    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\_ufunc_config.py:434(__exit__)
+        3    0.000    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:375(<lambda>)
+        3    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:860(_none_or_positive_arg)
+        3    0.000    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:869(__init__)
+        3    0.000    0.000    0.001    0.000 D:\Python_3_10\lib\site-packages\numpy\core\arrayprint.py:896(fillFormat)
+        2    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\types.py:176(__get__)
+        2    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\enum.py:796(name)
+        2    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\random.py:406(sample)
         2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Player.py:5(__init__)
-        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Destination.py:14(__str__)
-        2    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:71(<dictcomp>)
-        2    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:70(_wrapreduction)
-        2    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\_ufunc_config.py:32(seterr)
-        2    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\_ufunc_config.py:132(geterr)
-        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawDestinationsAction.py:25(execute)
-        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:47(<listcomp>)
-        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:34(execute)
+        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\enums\City.py:5(__str__)
+        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\DrawDestinationsAction.py:27(execute)
+        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:41(<listcomp>)
+        2    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\SelectDestinationAction.py:29(execute)
         2    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
         2    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-        2    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
-        2    0.000    0.000    0.000    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+        1    0.000    0.000    9.893    9.893 D:\Programming\TicketToRideMCCFR_TDD\src\training\Trainer.py:46(training_step)
+        1    0.000    0.000    9.898    9.898 D:\Programming\TicketToRideMCCFR_TDD\src\training\Performance.py:8(code_to_run)
         1    0.000    0.000    0.001    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\training\Trainer.py:24(__init__)
-        1    0.000    0.000    4.300    4.300 D:\Programming\TicketToRideMCCFR_TDD\src\training\Trainer.py:47(training_step)
-        1    0.000    0.000    0.106    0.106 D:\Programming\TicketToRideMCCFR_TDD\src\training\Trainer.py:121(load_latest_checkpoint)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\CardList.py:12(from_numbers)
-        1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:20(<dictcomp>)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:21(<dictcomp>)
+        1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:20(<dictcomp>)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\random.py:546(uniform)
         1    0.000    0.000    0.001    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\game\Game.py:12(__init__)
-        1    0.000    0.000    0.001    0.001 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:98(get_valid_action_ids)
-        1    0.001    0.001    4.293    4.293 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionUtility.py:26(from_all_branches)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\multiarray.py:311(where)
+        1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Map.py:16(__init__)
+        1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\game\Route.py:19(__str__)
+        1    0.000    0.000    0.005    0.005 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:21(__str__)
+        1    0.000    0.000    0.004    0.004 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionSpace.py:98(get_valid_action_ids)
+        1    0.001    0.001    9.870    9.870 D:\Programming\TicketToRideMCCFR_TDD\src\training\ActionUtility.py:26(from_all_branches)
+        1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\actions\ClaimRouteAction.py:27(__str__)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\multiarray.py:341(where)
         1    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(where)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\numerictypes.py:232(obj2sctype)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:2584(_amax_dispatcher)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:2589(amax)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:2709(_amin_dispatcher)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\fromnumeric.py:2714(amin)
-        1    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(amax)
-        1    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(amin)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\_ufunc_config.py:429(__init__)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\_ufunc_config.py:433(__enter__)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\_ufunc_config.py:438(__exit__)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:65(<dictcomp>)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:60(_make_options_dict)
-        1    0.000    0.000    0.001    0.001 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:366(<lambda>)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:358(_get_formatdict)
-        1    0.000    0.000    0.001    0.001 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:409(_get_format_function)
-        1    0.000    0.000    0.002    0.002 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:461(wrapper)
-        1    0.000    0.000    0.002    0.002 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:478(_array2string)
-        1    0.000    0.000    0.002    0.002 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:516(array2string)
-        1    0.000    0.000    0.002    0.002 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:709(_formatArray)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:827(_none_or_positive_arg)
-        1    0.000    0.000    0.001    0.001 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:836(__init__)
-        1    0.000    0.000    0.001    0.001 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:863(fillFormat)
-        1    0.000    0.000    0.002    0.002 D:\MiniConda\lib\site-packages\numpy\core\arrayprint.py:1473(_array_str_implementation)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\getlimits.py:237(_get_machar)
-        1    0.000    0.000    0.000    0.000 D:\MiniConda\lib\site-packages\numpy\core\getlimits.py:399(_init)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\numerictypes.py:230(obj2sctype)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:1117(_argmax_dispatcher)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\fromnumeric.py:1121(argmax)
+        1    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(argmax)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\getlimits.py:237(_get_machar)
+        1    0.000    0.000    0.000    0.000 D:\Python_3_10\lib\site-packages\numpy\core\getlimits.py:415(_init)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Strategy.py:23(from_regrets)
-        1    0.000    0.000    0.009    0.009 D:\Programming\TicketToRideMCCFR_TDD\src\training\GameTree.py:33(simulate_for_n_turns)
-        1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:19(__len__)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:15(__init__)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\StrategyStorage.py:39(set)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Regret.py:6(__init__)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Regret.py:17(<listcomp>)
         1    0.000    0.000    0.000    0.000 D:\Programming\TicketToRideMCCFR_TDD\src\training\Regret.py:16(from_action_id)
-        1    0.000    0.000    4.415    4.415 D:\Programming\TicketToRideMCCFR_TDD\src\training\Performance.py:8(code_to_run)
-        1    0.015    0.015    4.430    4.430 <string>:1(<module>)
-        1    0.077    0.077    0.105    0.105 {built-in method _pickle.load}
-        1    0.000    0.000    0.000    0.000 {built-in method nt.listdir}
-        1    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
-        1    0.000    0.000    0.000    0.000 {built-in method io.open}
-        1    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
-        1    0.000    0.000    0.000    0.000 {method 'discard' of 'set' objects}
-        1    0.000    0.000    4.430    4.430 {built-in method builtins.exec}
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.round}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    9.898    9.898 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 {method 'argmax' of 'numpy.ndarray' objects}
+        1    0.000    0.000    0.000    0.000 {method 'tolist' of 'numpy.ndarray' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.zeros}
         1    0.000    0.000    0.000    0.000 {method 'tobytes' of 'numpy.generic' objects}
         1    0.000    0.000    0.000    0.000 {method 'newbyteorder' of 'numpy.generic' objects}
+        1    0.000    0.000    0.000    0.000 {method 'random' of '_random.Random' objects}
+        1    0.000    0.000    9.899    9.899 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.round}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
 
 
