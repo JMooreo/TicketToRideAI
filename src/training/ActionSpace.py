@@ -1,3 +1,6 @@
+from typing import Tuple
+
+import gym
 import numpy as np
 
 from src.actions.ClaimRouteAction import ClaimRouteAction
@@ -11,12 +14,14 @@ from src.game.enums.TrainColor import TrainColor
 from src.training.Strategy import Strategy
 
 
-class ActionSpace:
+class ActionSpace(gym.Space):
     def __init__(self, game):
+        super().__init__()
         self.game = game
+        self.n = len(self)
 
     def __len__(self):
-        return self.to_np_array().shape[0]
+        return self.valid_action_mask().shape[0]
 
     def __str__(self):
         return f"Finish Selecting Destinations: {self.can_finish_selecting_destinations()}\n" + \
@@ -52,7 +57,7 @@ class ActionSpace:
         return np.array([1 if SelectDestinationAction(self.game, destination).is_valid()
                          else 0 for destination in self.game.map.destinations.keys()])
 
-    def to_np_array(self):
+    def valid_action_mask(self):
         return np.concatenate([
             self.can_draw_destinations(),
             self.can_finish_selecting_destinations(),
@@ -66,16 +71,16 @@ class ActionSpace:
     def get_action_id(self, strategy=None):
         if strategy is None:
             random_strategy = Strategy.random(len(self))
-            strategy = Strategy.normalize(random_strategy, self.to_np_array())
+            strategy = Strategy.normalize(random_strategy, self.valid_action_mask())
         else:
-            strategy = Strategy.normalize(strategy, self.to_np_array())
+            strategy = Strategy.normalize(strategy, self.valid_action_mask())
 
         action_id = np.random.choice(len(self), p=strategy)
-        return action_id, strategy[action_id]
+        return action_id
 
     def get_action(self, strategy=None):
-        action_id, chance = self.get_action_id(strategy)
-        return self.get_action_by_id(action_id), chance
+        action_id = self.get_action_id(strategy)
+        return self.get_action_by_id(action_id)
 
     def get_action_by_id(self, action_id):
         if action_id == 0:
@@ -96,7 +101,12 @@ class ActionSpace:
         return None
 
     def get_valid_action_ids(self):
-        return np.where(self.to_np_array() == 1)[0]
+        return np.where(self.valid_action_mask() == 1)[0]
 
-    def sample(self) -> int:
-        return np.random.sample(self.get_valid_action_ids())
+    # Returns a random, valid action
+    def sample(self):
+        return self.get_action_id()
+
+    def contains(self, action_id):
+        action = self.get_action_by_id(action_id)
+        return action is not None and action.is_valid()

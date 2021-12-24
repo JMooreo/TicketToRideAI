@@ -8,9 +8,7 @@ from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameNode import Player1Node, GameNode
 from src.training.InformationSet import InformationSet
-from src.training.Strategy import Strategy
-from src.training.StrategyStorage import StrategyStorage
-
+from src.training.ObservationSpace import ObservationSpace
 
 class GameTree:
     def __init__(self, game: Game):
@@ -28,8 +26,9 @@ class GameTree:
 
         self.current_node = self.current_node.next(action)
 
-    def simulate_for_n_turns(self, num_turns, strategy_storage: StrategyStorage):
+    def simulate_for_n_turns(self, num_turns, agent):
         action_space = ActionSpace(self.game)
+        observation_space = ObservationSpace(self.game)
         for _ in range(num_turns):
             if self.game.state == GameState.GAME_OVER:
                 break
@@ -37,52 +36,18 @@ class GameTree:
             node_type = self.current_node.__class__
 
             while isinstance(self.current_node, node_type):
-                strategy = strategy_storage.get_node_strategy(self.current_node.information_set)
-                action_id, chance = action_space.get_action_id(strategy)
-                action = action_space.get_action_by_id(action_id)
-
-                self.next(action)
-
-    def simulate_until_game_over(self, strategy_storage: StrategyStorage):
-        while self.game.state != GameState.GAME_OVER:
-            self.simulate_for_n_turns(1, strategy_storage)
-
-    def greedy_simulation_for_n_turns(self, num_turns, strategy_storage: StrategyStorage):
-        action_space = ActionSpace(self.game)
-
-        for _ in range(num_turns):
-            if self.game.state == GameState.GAME_OVER:
-                break
-
-            node_type = self.current_node.__class__
-
-            while isinstance(self.current_node, node_type):
-                strategy = strategy_storage.get_node_strategy(self.current_node.information_set)
-                action_space_np = action_space.to_np_array()
-                normalized_strategy = Strategy.normalize(strategy, action_space_np)
-                normalized_sum = sum(normalized_strategy)
-                if normalized_sum == 0:
-                    # print(self.game)
-                    # print(f"Player {self.game.current_player_index + 1} couldn't take an action, so they skipped.")
-                    self.game.turn_state = TurnState.FINISHED
+                if sum(action_space.valid_action_mask()) == 0:
                     self.current_node = self.current_node.pass_turn()
-                    continue
+                    break
 
-                if normalized_sum == sum(action_space_np):
-                    # Choose an action uniform random, prevents the AI from choosing the first action every time.
-                    action, chance = action_space.get_action()
-                    self.next(action)
-                    continue
-
-                # Choose the best valid action for the current set of uncompleted_destinations
-                action_id = int(np.argmax(normalized_strategy))
+                action_id = agent.choose_action_id(observation_space.to_np_array(), action_space)
                 action = action_space.get_action_by_id(action_id)
 
                 self.next(action)
 
-    def greedy_simulation_until_game_over(self, strategy_storage: StrategyStorage):
+    def simulate_until_game_over(self, model):
         while self.game.state != GameState.GAME_OVER:
-            self.greedy_simulation_for_n_turns(1, strategy_storage)
+            self.simulate_for_n_turns(1, model)
 
     def __initialize_info_sets(self):
         for player_idx, player in enumerate(self.game.players):

@@ -1,5 +1,4 @@
 from src.actions.Action import Action
-from src.actions.DrawVisibleCardAction import DrawVisibleCardAction
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.enums.GameState import GameState

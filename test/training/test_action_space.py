@@ -3,6 +3,7 @@ import unittest
 
 import numpy as np
 
+from src.DeepQLearning.Agent import Agent
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
@@ -13,15 +14,16 @@ from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
+from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
-from src.training.StrategyStorage import StrategyStorage
 
 
 class ActionSpaceTest(unittest.TestCase):
     def setUp(self):
         self.game = Game([Player(), Player()], USMap())
+        self.tree = GameTree(self.game)
         self.action_space = ActionSpace(self.game)
 
     def test_init(self):
@@ -33,13 +35,13 @@ class ActionSpaceTest(unittest.TestCase):
                     self.action_space.selectable_destinations().shape[0] +
                     self.action_space.claimable_routes().shape[0],)
 
-        self.assertEqual(expected, self.action_space.to_np_array().shape)
-        self.assertEqual((141,), self.action_space.to_np_array().shape)
+        self.assertEqual(expected, self.action_space.valid_action_mask().shape)
+        self.assertEqual((141,), self.action_space.valid_action_mask().shape)
 
     def test_init_get_action(self):
         action = self.action_space.get_action()
 
-        self.assertEqual(DrawDestinationsAction(self.game), action[0])
+        self.assertEqual(DrawDestinationsAction(self.game), action)
 
     def test_draw_destinations_action_by_id(self):
         action = self.action_space.get_action_by_id(0)
@@ -101,11 +103,11 @@ class ActionSpaceTest(unittest.TestCase):
         self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
 
     def test_get_valid_action_ids_after_one_turn(self):
-        GameTree(self.game).simulate_for_n_turns(1, StrategyStorage())
+        GameTree(self.game).simulate_for_n_turns(1, Agent.random())
         self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
 
     def test_get_valid_action_ids_after_two_turn(self):
-        GameTree(self.game).simulate_for_n_turns(2, StrategyStorage())
+        GameTree(self.game).simulate_for_n_turns(2, Agent.random())
 
         self.assertTrue(len(self.action_space.get_valid_action_ids()) > 1)
 
@@ -113,7 +115,7 @@ class ActionSpaceTest(unittest.TestCase):
         game = Game([Player(), Player()], USMap())
         tree = GameTree(game)
 
-        tree.simulate_for_n_turns(4, StrategyStorage())
+        tree.simulate_for_n_turns(4, Agent.random())
 
         game_copy = copy.deepcopy(game)
 
@@ -121,3 +123,9 @@ class ActionSpaceTest(unittest.TestCase):
         a2_ids = ActionSpace(game_copy).get_valid_action_ids()
 
         self.assertEqual(a1_ids.tolist(), a2_ids.tolist())
+
+    def test_sample_action_space_gives_a_random_valid_action(self):
+        while self.game.state != GameState.GAME_OVER:
+            action_id = self.action_space.sample()
+            action = self.action_space.get_action_by_id(action_id)
+            self.tree.next(action)

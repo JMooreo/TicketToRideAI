@@ -1,6 +1,7 @@
 import copy
 import unittest
 
+from src.DeepQLearning.Agent import Agent
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -9,7 +10,6 @@ from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
 from src.training.GameTree import GameTree
-from src.training.StrategyStorage import StrategyStorage
 
 
 class GameTest(unittest.TestCase):
@@ -97,7 +97,7 @@ class GameTest(unittest.TestCase):
     def test_deepcopy(self):
         game = Game([Player(), Player()], USMap())
         tree = GameTree(game)
-        tree.simulate_for_n_turns(3, StrategyStorage())
+        tree.simulate_for_n_turns(3, Agent.random())
 
         self.assertEqual(GameState.PLAYING, game.state)
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
@@ -134,3 +134,11 @@ class GameTest(unittest.TestCase):
         self.game.replenish_visible_cards()
 
         self.assertEqual(CardList((TrainColor.ORANGE, 4)), self.game.visible_cards)
+
+    def test_game_init_static(self):
+        game = Game.us_game()
+
+        self.assertTrue(isinstance(game, Game))
+        self.assertTrue(isinstance(game.map, USMap))
+        self.assertTrue(isinstance(game.players[0], Player))
+        self.assertTrue(isinstance(game.players[1], Player))

@@ -1,5 +1,6 @@
 import unittest
 
+from src.DeepQLearning.Agent import Agent
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.SelectDestinationAction import SelectDestinationAction
@@ -8,12 +9,10 @@ from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.GameState import GameState
-from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
 from src.training.GameNode import Player1Node
-from src.training.StrategyStorage import StrategyStorage
 
 
 class GameTreeTest(unittest.TestCase):
@@ -74,7 +73,7 @@ class GameTreeTest(unittest.TestCase):
         action_space = ActionSpace(self.game)
 
         while not any([player.trains < 3 for player in self.game.players]):
-            action, chance = action_space.get_action()
+            action = action_space.get_action()
             self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
@@ -84,23 +83,23 @@ class GameTreeTest(unittest.TestCase):
         action_space = ActionSpace(self.game)
 
         while not any([player.trains < 3 for player in self.game.players]):
-            action, chance = action_space.get_action()
+            action = action_space.get_action()
             self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-        self.tree.simulate_for_n_turns(1, StrategyStorage())
+        self.tree.simulate_for_n_turns(1, Agent.random())
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-        self.tree.simulate_for_n_turns(1, StrategyStorage())
+        self.tree.simulate_for_n_turns(1, Agent.random())
         self.assertEqual(GameState.GAME_OVER, self.game.state)
 
     def test_random_simulation_state(self):
-        self.tree.simulate_until_game_over(StrategyStorage())
+        self.tree.simulate_until_game_over(Agent.random())
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
     def test_random_simulation_no_destinations_lost(self):
-        self.tree.simulate_until_game_over(StrategyStorage())
+        self.tree.simulate_until_game_over(Agent.random())
         expected = len(self.game.map.destinations.keys())
         actual = len(self.players[0].uncompleted_destinations.keys()) + \
                  len(self.players[0].completed_destinations.keys()) + \
@@ -111,7 +110,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_routes_lost(self):
-        self.tree.simulate_until_game_over(StrategyStorage())
+        self.tree.simulate_until_game_over(Agent.random())
         expected = len(self.game.map.routes.keys())
         actual = len(self.players[0].routes.keys()) + \
                  len(self.players[1].routes.keys()) + \
@@ -120,7 +119,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_train_cards_lost(self):
-        self.tree.simulate_until_game_over(StrategyStorage())
+        self.tree.simulate_until_game_over(Agent.random())
         expected = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
         actual = self.players[0].hand + \
                  self.players[1].hand + \
@@ -130,7 +129,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_player_points_are_accurate_total_scores(self):
-        self.tree.simulate_until_game_over(StrategyStorage())
+        self.tree.simulate_until_game_over(Agent.random())
         expected = [player.points_from_routes() + player.points_from_destinations()
                     for player in self.game.players]
 
@@ -139,7 +138,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_player_points_from_destinations_accurate(self):
-        self.tree.simulate_until_game_over(StrategyStorage())
+        self.tree.simulate_until_game_over(Agent.random())
         expected = [player.points_from_destinations() for player in self.game.players]
 
         actual = []
@@ -155,31 +154,15 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_simulate_for_one_turn(self):
-        storage = StrategyStorage()
         self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.simulate_for_n_turns(1, storage)
+        self.tree.simulate_for_n_turns(1, Agent.random())
 
         self.assertEqual(GameState.FIRST_ROUND, self.game.state)
         self.assertEqual(1, self.tree.game.current_player_index)
-        self.assertEqual(0, len(storage.node_strategies))
 
     def test_simulate_for_two_turns(self):
         self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.simulate_for_n_turns(2, StrategyStorage())
-
-        self.assertEqual(GameState.PLAYING, self.game.state)
-        self.assertEqual(0, self.tree.game.current_player_index)
-
-    def test_greedy_simulate_for_one_turn(self):
-        self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.greedy_simulation_for_n_turns(1, StrategyStorage())
-
-        self.assertEqual(GameState.FIRST_ROUND, self.game.state)
-        self.assertEqual(1, self.tree.game.current_player_index)
-
-    def test_greedy_simulate_for_two_turns(self):
-        self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.greedy_simulation_for_n_turns(2, StrategyStorage())
+        self.tree.simulate_for_n_turns(2, Agent.random())
 
         self.assertEqual(GameState.PLAYING, self.game.state)
         self.assertEqual(0, self.tree.game.current_player_index)

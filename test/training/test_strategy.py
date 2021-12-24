@@ -52,7 +52,7 @@ class StrategyTest(unittest.TestCase):
 
     def test_normalize_with_action_space(self):
         strategy = Strategy.random(len(self.action_space))
-        strategy = Strategy.normalize(strategy, self.action_space.to_np_array())
+        strategy = Strategy.normalize(strategy, self.action_space.valid_action_mask())
 
         expected = np.array([1 if i == 0 else 0 for i in range(len(self.action_space))])
 

@@ -1,3 +1,4 @@
+import gym
 import numpy as np
 
 from src.game.Game import Game
@@ -8,29 +9,40 @@ from src.game.enums.TrainColor import TrainColor
 class ObservationSpace:
     def __init__(self, game: Game):
         self.game = game
+        self.shape = (len(self), 1)
 
-    # GENERAL INFORMATION
+    def __len__(self):
+        return len(self.to_np_array())
 
-    # Number of destinations of each player
+    def __str__(self):
+        return f"Player {self.game.current_player_index+1} view:\n{self.to_np_array()}"
+
+    # Number of destinations of each player, sorted by the view of the current player.
     def num_destinations_each_player(self):
-        return np.array([len(player.uncompleted_destinations) + len(player.completed_destinations)
-                         for player in self.game.players])
+        player1_view = [len(player.uncompleted_destinations) + len(player.completed_destinations)
+                         for player in self.game.players]
 
-    # Number of trains left for each player, 0 to 45
+        return np.array(self.__get_current_player_view(player1_view))
+
+    # Number of trains left for each player, 0 to 45, sorted by the view of the current player.
     def num_trains_left_each_player(self):
-        return np.array([player.trains for player in self.game.players])
+        player1_view = [player.trains for player in self.game.players]
+        return np.array(self.__get_current_player_view(player1_view))
 
-    # Number of cards in the hand of each player, 0 to 110 for each player
+    # Number of cards in the hand of each player, 0 to 110 for each player, sorted by the view of the current player.
     def num_cards_each_player(self):
-        return np.array([len(player.hand) for player in self.game.players])
+        player1_view = [len(player.hand) for player in self.game.players]
 
-    # The Visible cards as a list of 0 to 5 for each train TrainColor
+        return np.array(self.__get_current_player_view(player1_view))
+
+    # The Visible cards as a list of 0 to 5 for each train TrainColor, sorted by the view of the current player.
     def visible_cards(self):
         return np.array([self.game.visible_cards[color] for color in TrainColor])
 
-    # The current points of each player from 0 to 300
+    # The current points of each player from 0 to 300, sorted by the view of the current player.
     def points_each_player(self):
-        return np.array([player.points for player in self.game.players])
+        player1_view = [player.points for player in self.game.players]
+        return np.array(self.__get_current_player_view(player1_view))
 
     # The routes that have are available, unavailable and not claimed, claimed by us, or claimed by an opponent
     #  - 0 available
@@ -73,4 +85,8 @@ class ObservationSpace:
             self.current_player_destinations()
         ])
 
+    def __get_current_player_view(self, player1_view):
+        if self.game.current_player_index == 0:
+            return player1_view
 
+        return list(reversed(player1_view))

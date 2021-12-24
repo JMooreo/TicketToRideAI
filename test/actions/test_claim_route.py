@@ -3,6 +3,7 @@ from typing import List
 
 import numpy as np
 
+from src.DeepQLearning.Agent import Agent
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.game.CardList import CardList
 from src.game.Destination import Destination
@@ -15,7 +16,6 @@ from src.game.enums.TrainColor import TrainColor
 from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
-from src.training.StrategyStorage import StrategyStorage
 
 
 class ClaimRouteActionTest(unittest.TestCase):
@@ -241,7 +241,7 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_claiming_routes_that_complete_a_destination(self):
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, StrategyStorage())
+        tree.simulate_for_n_turns(2, Agent.random())
         destination: Destination = USMap().destinations.get(6)
         routes: List[Route] = [USMap().routes.get(i) for i in [32, 33]]
 
@@ -258,7 +258,7 @@ class ClaimRouteActionTest(unittest.TestCase):
 
     def test_claiming_a_route_while_visible_cards_are_empty_puts_back_in_visible_cards(self):
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, StrategyStorage())
+        tree.simulate_for_n_turns(2, Agent.random())
 
         tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
         tree.game.visible_cards = CardList()
@@ -272,7 +272,7 @@ class ClaimRouteActionTest(unittest.TestCase):
     def test_claiming_a_route_while_deck_is_empty_puts_back_in_visible_cards_existing_visible(self):
         tree = GameTree(self.game)
         tree.game.unclaimed_routes = {}
-        tree.simulate_for_n_turns(2, StrategyStorage())
+        tree.simulate_for_n_turns(2, Agent.random())
 
         tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
         tree.game.visible_cards = CardList((TrainColor.GREEN, 3))

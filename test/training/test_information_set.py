@@ -1,5 +1,6 @@
 import unittest
-from src.training.StrategyStorage import StrategyStorage
+
+from src.DeepQLearning.Agent import Agent
 
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -18,7 +19,7 @@ class InformationSetTest(unittest.TestCase):
         self.assertIsNotNone(info)
 
     def test_info_set_is_the_current_players_uncompleted_destinations(self):
-        self.tree.simulate_for_n_turns(2, StrategyStorage())
+        self.tree.simulate_for_n_turns(2, Agent.random())
         self.tree.game.current_player().uncompleted_destinations = {2: USMap().destinations.get(2)}
         self.tree.current_node.information_set = InformationSet.from_game(self.tree.game, 0)
 

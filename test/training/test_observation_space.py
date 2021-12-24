@@ -1,5 +1,6 @@
 import unittest
 
+from src.DeepQLearning.Agent import Agent
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.DrawWildCardAction import DrawWildCardAction
@@ -8,15 +9,16 @@ from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.TrainColor import TrainColor
+from src.training.ActionSpace import ActionSpace
 from src.training.GameTree import GameTree
 from src.training.ObservationSpace import ObservationSpace
-from src.training.StrategyStorage import StrategyStorage
 
 
 class ObservationSpaceTest(unittest.TestCase):
     def setUp(self):
         self.game = Game([Player(), Player()], USMap())
         self.obs = ObservationSpace(self.game)
+        self.action_space = ActionSpace(self.game)
 
     def test_init(self):
         self.assertIs(self.obs.game, self.game)
@@ -45,7 +47,7 @@ class ObservationSpaceTest(unittest.TestCase):
 
     def test_num_cards_for_each_player_after_drawing(self):
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, StrategyStorage())
+        tree.simulate_for_n_turns(2, Agent.random())
         tree.next(DrawRandomCardAction(self.game))
 
         self.assertEqual([5, 4], self.obs.num_cards_each_player().tolist())
@@ -59,10 +61,11 @@ class ObservationSpaceTest(unittest.TestCase):
 
     def test_points_each_player_after_claim_route(self):
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, StrategyStorage())
+        tree.simulate_for_n_turns(2, Agent.random())
         tree.next(ClaimRouteAction(self.game, 2))
 
-        self.assertEqual([1, 0], self.obs.points_each_player().tolist())
+        self.assertEqual(1, self.game.current_player_index)
+        self.assertEqual([0, 1], self.obs.points_each_player().tolist())
 
     def test_routes_all_available_on_start(self):
         expected = [0 for _ in range(len(USMap().routes))]
@@ -97,7 +100,7 @@ class ObservationSpaceTest(unittest.TestCase):
         self.assertEqual(expected, self.obs.routes().tolist())
 
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, StrategyStorage())
+        tree.simulate_for_n_turns(2, Agent.random())
         self.game.visible_cards = CardList((TrainColor.WILD, 1))
         tree.next(DrawWildCardAction(self.game))
 
@@ -131,11 +134,11 @@ class ObservationSpaceTest(unittest.TestCase):
 
     def test_full_observation(self):
         tree = GameTree(self.game)
-        tree.simulate_until_game_over(StrategyStorage())
+        tree.simulate_until_game_over(Agent.random())
 
         actual = self.obs.to_np_array()
-        print(actual)
-        print(len(actual))
+        print(self.game)
+        print(self.obs)
 
         # The current points of each player from 0 to 300
         self.assertEqual(self.obs.points_each_player().tolist(), actual[0:2].tolist())
@@ -157,4 +160,43 @@ class ObservationSpaceTest(unittest.TestCase):
         for val in actual.tolist():
             self.assertTrue(isinstance(val, int))
 
+    def test_points_view_is_for_the_current_player(self):
+        self.game.players[0].points = 15
+        self.game.players[1].points = 30
 
+        self.game.current_player_index = 0
+        self.assertEqual([15, 30], self.obs.points_each_player().tolist())
+
+        self.game.current_player_index = 1
+        self.assertEqual([30, 15], self.obs.points_each_player().tolist())
+
+    def test_trains_view_is_for_current_player(self):
+        self.game.players[0].trains = 15
+        self.game.players[1].trains = 30
+
+        self.game.current_player_index = 0
+        self.assertEqual([15, 30], self.obs.num_trains_left_each_player().tolist())
+
+        self.game.current_player_index = 1
+        self.assertEqual([30, 15], self.obs.num_trains_left_each_player().tolist())
+
+    def test_num_cards_view_is_for_current_player(self):
+        self.game.players[0].hand = CardList((TrainColor.RED, 4))
+        self.game.players[1].hand = CardList((TrainColor.YELLOW, 1))
+
+        self.game.current_player_index = 0
+        self.assertEqual([4, 1], self.obs.num_cards_each_player().tolist())
+
+        self.game.current_player_index = 1
+        self.assertEqual([1, 4], self.obs.num_cards_each_player().tolist())
+
+    def test_num_destinations_view_is_for_current_player(self):
+        self.game.players[0].uncompleted_destinations = {1: self.game.map.destinations.get(1)}
+        self.game.players[0].completed_destinations = {2: self.game.map.destinations.get(2)}
+        self.game.players[1].uncompleted_destinations = {3: self.game.map.destinations.get(3)}
+
+        self.game.current_player_index = 0
+        self.assertEqual([2, 1], self.obs.num_destinations_each_player().tolist())
+
+        self.game.current_player_index = 1
+        self.assertEqual([1, 2], self.obs.num_destinations_each_player().tolist())

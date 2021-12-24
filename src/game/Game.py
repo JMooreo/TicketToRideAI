@@ -2,6 +2,7 @@ from src.game import Map
 from typing import List
 
 from src.game.CardList import CardList
+from src.game.Map import USMap
 from src.game.Player import Player
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor
@@ -9,6 +10,10 @@ from src.game.enums.TurnState import TurnState
 
 
 class Game:
+    @staticmethod
+    def us_game():
+        return Game([Player(), Player()], USMap())
+
     def __init__(self, players: List[Player], game_map: Map):
         if not players or not game_map:
             raise ValueError
