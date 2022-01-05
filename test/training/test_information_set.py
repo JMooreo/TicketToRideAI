@@ -1,7 +1,7 @@
 import unittest
 
-from src.DeepQLearning.Agent import Agent
-
+from src.DeepQLearning.DeepQNetwork import Network
+from src.DeepQLearning.TTREnv import TTREnv
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
@@ -19,7 +19,7 @@ class InformationSetTest(unittest.TestCase):
         self.assertIsNotNone(info)
 
     def test_info_set_is_the_current_players_uncompleted_destinations(self):
-        self.tree.simulate_for_n_turns(2, Agent.random())
+        self.tree.simulate_for_n_turns(2, Network(TTREnv()))
         self.tree.game.current_player().uncompleted_destinations = {2: USMap().destinations.get(2)}
         self.tree.current_node.information_set = InformationSet.from_game(self.tree.game, 0)
 

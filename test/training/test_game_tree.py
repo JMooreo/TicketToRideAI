@@ -1,6 +1,7 @@
 import unittest
 
-from src.DeepQLearning.Agent import Agent
+from src.DeepQLearning.DeepQNetwork import Network
+from src.DeepQLearning.TTREnv import TTREnv
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.SelectDestinationAction import SelectDestinationAction
@@ -87,19 +88,19 @@ class GameTreeTest(unittest.TestCase):
             self.tree.next(action)
 
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-        self.tree.simulate_for_n_turns(1, Agent.random())
+        self.tree.simulate_for_n_turns(1, Network(TTREnv()))
         self.assertEqual(GameState.LAST_ROUND, self.game.state)
-        self.tree.simulate_for_n_turns(1, Agent.random())
+        self.tree.simulate_for_n_turns(1, Network(TTREnv()))
         self.assertEqual(GameState.GAME_OVER, self.game.state)
 
     def test_random_simulation_state(self):
-        self.tree.simulate_until_game_over(Agent.random())
+        self.tree.simulate_until_game_over(Network(TTREnv()))
 
         self.assertEqual(GameState.GAME_OVER, self.game.state)
         self.assertEqual(TurnState.FINISHED, self.game.turn_state)
 
     def test_random_simulation_no_destinations_lost(self):
-        self.tree.simulate_until_game_over(Agent.random())
+        self.tree.simulate_until_game_over(Network(TTREnv()))
         expected = len(self.game.map.destinations.keys())
         actual = len(self.players[0].uncompleted_destinations.keys()) + \
                  len(self.players[0].completed_destinations.keys()) + \
@@ -110,7 +111,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_routes_lost(self):
-        self.tree.simulate_until_game_over(Agent.random())
+        self.tree.simulate_until_game_over(Network(TTREnv()))
         expected = len(self.game.map.routes.keys())
         actual = len(self.players[0].routes.keys()) + \
                  len(self.players[1].routes.keys()) + \
@@ -119,7 +120,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_random_simulation_no_train_cards_lost(self):
-        self.tree.simulate_until_game_over(Agent.random())
+        self.tree.simulate_until_game_over(Network(TTREnv()))
         expected = CardList.from_numbers([12, 12, 12, 12, 12, 12, 12, 12, 14])
         actual = self.players[0].hand + \
                  self.players[1].hand + \
@@ -129,7 +130,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_player_points_are_accurate_total_scores(self):
-        self.tree.simulate_until_game_over(Agent.random())
+        self.tree.simulate_until_game_over(Network(TTREnv()))
         expected = [player.points_from_routes() + player.points_from_destinations()
                     for player in self.game.players]
 
@@ -138,7 +139,7 @@ class GameTreeTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_player_points_from_destinations_accurate(self):
-        self.tree.simulate_until_game_over(Agent.random())
+        self.tree.simulate_until_game_over(Network(TTREnv()))
         expected = [player.points_from_destinations() for player in self.game.players]
 
         actual = []
@@ -155,14 +156,14 @@ class GameTreeTest(unittest.TestCase):
 
     def test_simulate_for_one_turn(self):
         self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.simulate_for_n_turns(1, Agent.random())
+        self.tree.simulate_for_n_turns(1, Network(TTREnv()))
 
         self.assertEqual(GameState.FIRST_ROUND, self.game.state)
         self.assertEqual(1, self.tree.game.current_player_index)
 
     def test_simulate_for_two_turns(self):
         self.assertEqual(0, self.tree.game.current_player_index)
-        self.tree.simulate_for_n_turns(2, Agent.random())
+        self.tree.simulate_for_n_turns(2, Network(TTREnv()))
 
         self.assertEqual(GameState.PLAYING, self.game.state)
         self.assertEqual(0, self.tree.game.current_player_index)

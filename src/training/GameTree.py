@@ -10,6 +10,7 @@ from src.training.GameNode import Player1Node, GameNode
 from src.training.InformationSet import InformationSet
 from src.training.ObservationSpace import ObservationSpace
 
+
 class GameTree:
     def __init__(self, game: Game):
         self.game = game
@@ -40,14 +41,14 @@ class GameTree:
                     self.current_node = self.current_node.pass_turn()
                     break
 
-                action_id = agent.choose_action_id(observation_space.to_np_array(), action_space)
+                action_id = agent.act(observation_space.to_np_array(), action_space.valid_action_mask())
                 action = action_space.get_action_by_id(action_id)
 
                 self.next(action)
 
-    def simulate_until_game_over(self, model):
+    def simulate_until_game_over(self, agent):
         while self.game.state != GameState.GAME_OVER:
-            self.simulate_for_n_turns(1, model)
+            self.simulate_for_n_turns(1, agent)
 
     def __initialize_info_sets(self):
         for player_idx, player in enumerate(self.game.players):

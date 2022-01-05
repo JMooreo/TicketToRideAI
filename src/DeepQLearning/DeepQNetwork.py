@@ -18,12 +18,10 @@ class Network(nn.Module):
         return self.net(x)
 
     def act(self, observation: np.ndarray, action_mask: np.ndarray):
+        print(observation)
+        print(action_mask)
         obs_as_tensor = torch.as_tensor(observation, dtype=torch.float32)
         q_values = self(obs_as_tensor.unsqueeze(0)).detach().numpy()
         masked = q_values * action_mask
         filtered = np.where(masked == 0, -np.inf, masked)
-        # print(observation)
-        # print(filtered)
-        # print("MAX", int(np.argmax(filtered, axis=1)))
-        # input()
         return int(np.argmax(filtered, axis=1))

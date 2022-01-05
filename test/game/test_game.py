@@ -1,7 +1,8 @@
 import copy
 import unittest
 
-from src.DeepQLearning.Agent import Agent
+from src.DeepQLearning.DeepQNetwork import Network
+from src.DeepQLearning.TTREnv import TTREnv
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -97,7 +98,7 @@ class GameTest(unittest.TestCase):
     def test_deepcopy(self):
         game = Game([Player(), Player()], USMap())
         tree = GameTree(game)
-        tree.simulate_for_n_turns(3, Agent.random())
+        tree.simulate_for_n_turns(3, Network(TTREnv()))
 
         self.assertEqual(GameState.PLAYING, game.state)
         self.game.turn_state = TurnState.SELECTING_DESTINATIONS
