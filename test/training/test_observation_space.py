@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from src.DeepQLearning.DeepQNetwork import Network
 from src.DeepQLearning.TTREnv import TTREnv
 from src.actions.ClaimRouteAction import ClaimRouteAction
@@ -69,26 +71,29 @@ class ObservationSpaceTest(unittest.TestCase):
         self.assertEqual([0, 1], self.obs.points_each_player().tolist())
 
     def test_routes_all_available_on_start(self):
-        expected = [0 for _ in range(len(USMap().routes))]
-        self.assertEqual(expected, self.obs.routes().tolist())
+        expected = [1 for _ in range(len(USMap().routes))]
+        self.assertEqual(expected, self.obs.unclaimed_routes().tolist())
 
-    def test_claimed_routes_for_current_players_are_ones(self):
+    def test_claimed_routes_for_current_players(self):
         for i in [3, 4, 5]:
             self.game.unclaimed_routes.pop(i)
 
         self.game.current_player().routes = {i: self.game.map.routes.get(i) for i in [3, 4, 5]}
+
         expected = [1 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
 
-        self.assertEqual(expected, self.obs.routes().tolist())
+        self.assertEqual(expected, self.obs.current_player_routes().tolist())
 
-    def test_claimed_routes_for_opponent_twos(self):
+    def test_claimed_routes_for_opponent(self):
         for i in [3, 4, 5]:
             self.game.unclaimed_routes.pop(i)
 
         self.game.players[1].routes = {i: self.game.map.routes.get(i) for i in [3, 4, 5]}
-        expected = [2 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
+        expected_opponent_routes = [1 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
+        expected_unclaimed = [1 if route not in [3, 4, 5] else 0 for route in self.game.map.routes]
 
-        self.assertEqual(expected, self.obs.routes().tolist())
+        self.assertEqual(expected_opponent_routes, self.obs.routes_owned_by_opponent().tolist())
+        self.assertEqual(expected_unclaimed, self.obs.unclaimed_routes().tolist())
 
     def test_current_player_and_opponent_routes(self):
         for i in [3, 4, 5, 6, 7, 8]:
@@ -96,10 +101,13 @@ class ObservationSpaceTest(unittest.TestCase):
 
         self.game.players[0].routes = {i: self.game.map.routes.get(i) for i in [6, 7, 8]}
         self.game.players[1].routes = {i: self.game.map.routes.get(i) for i in [3, 4, 5]}
-        expected = [1 if route in [6, 7, 8] else 2 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
+        expected_current_player = [1 if route in [6, 7, 8] else 0 for route in self.game.map.routes]
+        expected_opponent = [1 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
 
-        self.assertEqual(expected, self.obs.routes().tolist())
+        self.assertEqual(expected_current_player, self.obs.current_player_routes().tolist())
+        self.assertEqual(expected_opponent, self.obs.routes_owned_by_opponent().tolist())
 
+        # Test when current player is flipped
         tree = GameTree(self.game)
         tree.simulate_for_n_turns(2, Network(TTREnv()))
         self.game.visible_cards = CardList((TrainColor.WILD, 1))
@@ -107,15 +115,20 @@ class ObservationSpaceTest(unittest.TestCase):
 
         self.assertEqual(1, self.game.current_player_index)
 
-        expected = [2 if route in [6, 7, 8] else 1 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
-        self.assertEqual(expected, self.obs.routes().tolist())
+        expected_current_player = [1 if route in [3, 4, 5] else 0 for route in self.game.map.routes]
+        expected_opponent = [1 if route in [6, 7, 8] else 0 for route in self.game.map.routes]
+
+        self.assertEqual(expected_current_player, self.obs.current_player_routes().tolist())
+        self.assertEqual(expected_opponent, self.obs.routes_owned_by_opponent().tolist())
 
     def test_current_player_cards(self):
         self.game.current_player().hand = CardList((TrainColor.ORANGE, 3), (TrainColor.WILD, 1))
         self.assertEqual([0, 0, 0, 3, 0, 0, 0, 0, 1], self.obs.current_player_cards().tolist())
 
     def test_destination_status_init(self):
-        self.assertEqual([0 for _ in self.game.map.destinations], self.obs.current_player_destinations().tolist())
+        self.assertEqual([0 for _ in self.game.map.destinations], self.obs.current_player_uncompleted_destinations().tolist())
+        self.assertEqual([0 for _ in self.game.map.destinations],
+                         self.obs.current_player_completed_destinations().tolist())
 
     def test_owned_but_uncompleted_destinations(self):
         for i in [1, 2, 3]:
@@ -123,15 +136,15 @@ class ObservationSpaceTest(unittest.TestCase):
 
         self.game.current_player().uncompleted_destinations = {i: self.game.map.destinations.get(i) for i in [1, 2, 3]}
         expected = [1 if id_ in [1, 2, 3] else 0 for id_ in self.game.map.destinations]
-        self.assertEqual(expected, self.obs.current_player_destinations().tolist())
+        self.assertEqual(expected, self.obs.current_player_uncompleted_destinations().tolist())
 
     def test_owned_and_completed_destinations(self):
         for i in [1, 2, 3]:
             self.game.unclaimed_destinations.pop(i)
 
         self.game.current_player().completed_destinations = {i: self.game.map.destinations.get(i) for i in [1, 2, 3]}
-        expected = [2 if id_ in [1, 2, 3] else 0 for id_ in self.game.map.destinations]
-        self.assertEqual(expected, self.obs.current_player_destinations().tolist())
+        expected = [1 if id_ in [1, 2, 3] else 0 for id_ in self.game.map.destinations]
+        self.assertEqual(expected, self.obs.current_player_completed_destinations().tolist())
 
     def test_full_observation(self):
         tree = GameTree(self.game)
@@ -153,10 +166,16 @@ class ObservationSpaceTest(unittest.TestCase):
         self.assertEqual(self.obs.visible_cards().tolist(), actual[8:17].tolist())
         # Current Player cards as a list of 0 to 12 or 0 to 14 for each TrainColor
         self.assertEqual(self.obs.current_player_cards().tolist(), actual[17:26].tolist())
-        # The routes that have are available, unavailable and not claimed, claimed by us, or claimed by an opponent
-        self.assertEqual(self.obs.routes().tolist(), actual[26:125].tolist())
-        # The state of current player destinations as a list of numbers from 0 to 2.
-        self.assertEqual(self.obs.current_player_destinations().tolist(), actual[125:155].tolist())
+        # The routes that are unclaimed
+        self.assertEqual(self.obs.unclaimed_routes().tolist(), actual[26:125].tolist())
+        # The routes owned by the current player
+        self.assertEqual(self.obs.current_player_routes().tolist(), actual[125:224].tolist())
+        # The routes owned by the opponent
+        self.assertEqual(self.obs.routes_owned_by_opponent().tolist(), actual[224:323].tolist())
+        # The player's uncompleted destinations
+        self.assertEqual(self.obs.current_player_uncompleted_destinations().tolist(), actual[323:353].tolist())
+        # The player's completed destinations
+        self.assertEqual(self.obs.current_player_completed_destinations().tolist(), actual[353:383].tolist())
 
         for val in actual.tolist():
             self.assertTrue(isinstance(val, int))

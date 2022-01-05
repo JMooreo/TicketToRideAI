@@ -258,17 +258,18 @@ class ClaimRouteActionTest(unittest.TestCase):
         action1.execute()
 
     def test_claiming_a_route_while_visible_cards_are_empty_puts_back_in_visible_cards(self):
-        tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, Network(TTREnv()))
+        env = Network(TTREnv())
+        env.tree = GameTree(self.game)
+        env.tree.simulate_for_n_turns(2, env)
 
-        tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
-        tree.game.visible_cards = CardList()
-        tree.game.deck = CardList()
+        env.tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
+        env.tree.game.visible_cards = CardList()
+        env.tree.game.deck = CardList()
 
-        tree.next(ClaimRouteAction(self.game, 56))
+        env.tree.next(ClaimRouteAction(self.game, 56))
 
-        self.assertEqual(CardList((TrainColor.BLUE, 5)), tree.game.visible_cards)
-        self.assertEqual(CardList((TrainColor.BLUE, 1)), tree.game.deck)
+        self.assertEqual(CardList((TrainColor.BLUE, 5)), env.tree.game.visible_cards)
+        self.assertEqual(CardList((TrainColor.BLUE, 1)), env.tree.game.deck)
 
     def test_claiming_a_route_while_deck_is_empty_puts_back_in_visible_cards_existing_visible(self):
         env = TTREnv()
