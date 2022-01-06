@@ -18,8 +18,8 @@ class ClaimRouteAction(Action):
                route_id in game.unclaimed_routes and \
                route.adjacent_route_id not in player.routes
 
-    def __init__(self, game: Game, route_id: int):
-        super().__init__(game)
+    def __init__(self, game: Game, route_id: int, action_id=-1):
+        super().__init__(game, action_id)
         self.route_id = route_id
         self.route = game.map.routes.get(route_id)
         self.player = game.players[self.game.current_player_index]

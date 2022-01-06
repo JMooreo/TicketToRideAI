@@ -84,19 +84,19 @@ class ActionSpace(gym.Space):
 
     def get_action_by_id(self, action_id):
         if action_id == 0:
-            return DrawDestinationsAction(self.game)
+            return DrawDestinationsAction(self.game, action_id)
         elif action_id == 1:
-            return FinishSelectingDestinationsAction(self.game)
+            return FinishSelectingDestinationsAction(self.game, action_id)
         elif action_id == 2:
-            return DrawRandomCardAction(self.game)
+            return DrawRandomCardAction(self.game, action_id)
         elif action_id < 3 + len(TrainColor) - 1:
-            return DrawVisibleCardAction(self.game, TrainColor(action_id - 3))
+            return DrawVisibleCardAction(self.game, TrainColor(action_id - 3), action_id)
         elif action_id < 3 + len(TrainColor):
-            return DrawWildCardAction(self.game)
+            return DrawWildCardAction(self.game, action_id)
         elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()):
-            return ClaimRouteAction(self.game, action_id - 3 - len(TrainColor))
+            return ClaimRouteAction(self.game, action_id - 3 - len(TrainColor), action_id)
         elif action_id < 3 + len(TrainColor) + len(self.game.map.routes.keys()) + len(self.game.map.destinations.keys()):
-            return SelectDestinationAction(self.game, action_id - 3 - len(TrainColor) - len(self.game.map.routes.keys()))
+            return SelectDestinationAction(self.game, action_id - 3 - len(TrainColor) - len(self.game.map.routes.keys()), action_id)
 
         return None
 

@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import numpy as np
 from src.actions.Action import Action
 from src.game.Game import Game
 from src.game.enums.GameState import GameState
-from src.game.enums.TurnState import TurnState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameNode import Player1Node, GameNode
 from src.training.InformationSet import InformationSet
@@ -41,7 +39,9 @@ class GameTree:
                     self.current_node = self.current_node.pass_turn()
                     break
 
-                action_id = agent.act(observation_space.to_np_array(), action_space.valid_action_mask())
+                action_id = agent.act(self.game.current_player().get_last_turn(),
+                                      observation_space.to_np_array(),
+                                      action_space.valid_action_mask())
                 action = action_space.get_action_by_id(action_id)
 
                 self.next(action)

@@ -1,6 +1,5 @@
 import unittest
 
-import numpy as np
 
 from src.DeepQLearning.DeepQNetwork import Network
 from src.DeepQLearning.TTREnv import TTREnv

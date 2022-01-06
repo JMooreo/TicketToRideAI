@@ -6,12 +6,11 @@ from src.game.enums.TurnState import TurnState
 
 
 class DrawRandomCardAction(Action):
-    def __init__(self, game: Game):
-        super().__init__(game)
-        self.name = "draw_RANDOM"
+    def __init__(self, game: Game, action_id=-1):
+        super().__init__(game, action_id)
 
     def __str__(self):
-        return self.name
+        return "draw_RANDOM"
 
     def __eq__(self, other):
         return isinstance(other, DrawRandomCardAction) and \
@@ -25,8 +24,6 @@ class DrawRandomCardAction(Action):
     def execute(self):
         super().execute()
         card = self.game.deck.get_random(1)
-        color = next((color for color in card.cards.keys()))
-        self.name = f"draw_{color}"
         self.game.current_player().hand += card
 
         if self.game.turn_state == TurnState.INIT:

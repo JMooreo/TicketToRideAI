@@ -7,8 +7,8 @@ from src.game.enums.TurnState import TurnState
 
 
 class DrawVisibleCardAction(Action):
-    def __init__(self, game: Game, color: TrainColor):
-        super().__init__(game)
+    def __init__(self, game: Game, color: TrainColor, action_id=-1):
+        super().__init__(game, action_id)
         self.color = color
 
     def __str__(self):

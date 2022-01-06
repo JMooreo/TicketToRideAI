@@ -2,11 +2,12 @@ from abc import ABC, abstractmethod
 
 
 class Action(ABC):
-    def __init__(self, game):
+    def __init__(self, game, action_id=-1):
         if game is None:
             raise ValueError
 
         self.game = game
+        self.id = action_id
         self.executed = False
 
     def __eq__(self, other):

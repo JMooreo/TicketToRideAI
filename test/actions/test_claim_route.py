@@ -216,7 +216,7 @@ class ClaimRouteActionTest(unittest.TestCase):
             self.game.state = game_state
             for turn_state in TurnState:
                 self.game.turn_state = turn_state
-                expected = np.array([1 if ClaimRouteAction(self.game, route).is_valid()
+                expected = np.array([1 if ClaimRouteAction(self.game, route, 8).is_valid()
                                      else 0 for route in self.game.map.routes.keys()])
                 actual = ActionSpace(self.game).claimable_routes()
                 self.assertTrue((expected == actual).all())

@@ -167,3 +167,9 @@ class GameTreeTest(unittest.TestCase):
 
         self.assertEqual(GameState.PLAYING, self.game.state)
         self.assertEqual(0, self.tree.game.current_player_index)
+
+    def test_after_one_turn_the_players_encoded_action_history_is_updated(self):
+        env = TTREnv()
+        env.tree.simulate_for_n_turns(1, Network(env))
+
+        self.assertGreater(len(env.tree.game.players[0].long_term_turn_history), 0)

@@ -21,10 +21,12 @@ class GameNode(ABC):
 
     def next(self, action: Action):
         action.execute()
-        self.information_set = InformationSet.from_game(self.game, self.player_index())
+        self.information_set = InformationSet.from_game(self.game, self.player_index())  # Probably irrelevant here.
 
         if self.game.turn_state == TurnState.FINISHED:
-            self.game.players[self.player_index()].turn_history = []
+            player = self.game.players[self.player_index()]
+            player.update_long_term_turn_history()
+            player.turn_history = []
             return self.pass_turn()
 
         return self
