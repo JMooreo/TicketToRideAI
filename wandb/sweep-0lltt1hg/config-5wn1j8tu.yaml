@@ -1,0 +1,6 @@
+wandb_version: 1
+
+epsilon_decay_period:
+  value: 8000
+learning_rate:
+  value: 0.0763271383939612

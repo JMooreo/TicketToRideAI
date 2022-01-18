@@ -4,13 +4,12 @@ from typing import List
 import numpy as np
 
 from src.DeepQLearning.DeepQNetwork import Network
-from src.DeepQLearning.TTREnv import TTREnv
+from src.Environments.TTREnv import TTREnv
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.game.CardList import CardList
 from src.game.Destination import Destination
 from src.game.Game import Game
 from src.game.Map import USMap
-from src.game.Player import Player
 from src.game.Route import Route
 from src.game.enums.GameState import GameState
 from src.game.enums.TrainColor import TrainColor

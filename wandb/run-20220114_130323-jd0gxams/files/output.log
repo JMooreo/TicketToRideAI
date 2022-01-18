@@ -1,0 +1,3 @@
+No checkpoints in directory. Starting from random.
+Beginning Training
+{'epsilon_start': 1, 'epsilon_end': 0.05, 'epsilon_decay_period': 1000, 'target_update_freq': 1000, 'logging_freq': 10, 'learning_rate': 0.01, 'epochs': 10000}

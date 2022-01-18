@@ -5,7 +5,6 @@ from src.game.Game import Game
 from src.game.enums.GameState import GameState
 from src.training.ActionSpace import ActionSpace
 from src.training.GameNode import Player1Node, GameNode
-from src.training.InformationSet import InformationSet
 from src.training.ObservationSpace import ObservationSpace
 
 
@@ -14,8 +13,6 @@ class GameTree:
         self.game = game
         self.current_node: GameNode = Player1Node(self.game)
         self.training_node_type = Player1Node
-
-        self.__initialize_info_sets()
 
     def next(self, action: Action):
         if action is None or not action.is_valid():
@@ -49,7 +46,3 @@ class GameTree:
     def simulate_until_game_over(self, agent):
         while self.game.state != GameState.GAME_OVER:
             self.simulate_for_n_turns(1, agent)
-
-    def __initialize_info_sets(self):
-        for player_idx, player in enumerate(self.game.players):
-            self.current_node.information_set = InformationSet.from_game(self.game, player_idx)

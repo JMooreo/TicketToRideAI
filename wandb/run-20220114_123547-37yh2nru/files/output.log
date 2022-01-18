@@ -1,0 +1,8 @@
+
+No checkpoints in directory. Starting from random.
+Traceback (most recent call last):
+  File "D:\Programming\TicketToRideMCCFR_TDD\train.py", line 42, in <module>
+    algorithm.train(wandb.config['epochs'])
+  File "D:\Programming\TicketToRideMCCFR_TDD\src\algorithms\SingleActorDeepQLearning.py", line 81, in train
+    for i in range(num_episodes):
+TypeError: 'float' object cannot be interpreted as an integer

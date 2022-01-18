@@ -85,6 +85,11 @@ class ObservationSpace:
         return np.array([1 if destination in current_player.completed_destinations
                               else 0 for destination in self.game.map.destinations])
 
+    # The destinations that are revealed to the player when they draw destinations
+    def available_destinations(self):
+        return np.array([1 if destination in self.game.available_destinations
+                         else 0 for destination in self.game.map.destinations])
+
     def to_np_array(self):
         return np.concatenate([
             self.points_each_player(),
@@ -97,7 +102,8 @@ class ObservationSpace:
             self.current_player_routes(),
             self.routes_owned_by_opponent(),
             self.current_player_uncompleted_destinations(),
-            self.current_player_completed_destinations()
+            self.current_player_completed_destinations(),
+            self.available_destinations()
         ])
 
     def __get_current_player_view(self, player1_view):

@@ -9,6 +9,7 @@ from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.DrawVisibleCardAction import DrawVisibleCardAction
 from src.actions.DrawWildCardAction import DrawWildCardAction
 from src.actions.FinishSelectingDestinationsAction import FinishSelectingDestinationsAction
+from src.actions.PassAction import PassAction
 from src.actions.SelectDestinationAction import SelectDestinationAction
 from src.game.enums.TrainColor import TrainColor
 from src.training.Strategy import Strategy
@@ -65,7 +66,7 @@ class ActionSpace(gym.Space):
             self.drawable_visible_colored_cards(),
             self.can_draw_wild(),
             self.claimable_routes(),
-            self.selectable_destinations(),
+            self.selectable_destinations()
         ], axis=None)
 
     def get_action_id(self, strategy=None):
@@ -105,7 +106,10 @@ class ActionSpace(gym.Space):
 
     # Returns a random, valid action
     def sample(self):
-        return self.get_action_id()
+        if sum(self.valid_action_mask()) > 0:
+            return self.get_action_id()
+
+        return -1  # TTR Env will interpret this as a pass since there are no valid actions.
 
     def contains(self, action_id):
         action = self.get_action_by_id(action_id)

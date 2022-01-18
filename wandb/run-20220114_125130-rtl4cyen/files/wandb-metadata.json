@@ -1,0 +1,26 @@
+{
+    "os": "Windows-10-10.0.19042-SP0",
+    "python": "3.9.7",
+    "heartbeatAt": "2022-01-14T17:51:32.629037",
+    "startedAt": "2022-01-14T17:51:30.609534",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [
+        "--epochs=5000",
+        "--epsilon_decay_period=10000",
+        "--learning_rate=0.054907400062687385"
+    ],
+    "state": "running",
+    "program": "D:\\Programming\\TicketToRideMCCFR_TDD\\train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/JMooreo/TicketToRideMCCFR_TDD.git",
+        "commit": "ecf3fa433814cf5c068886e9b09132136d0ea45d"
+    },
+    "email": "JustinTMoore@comcast.net",
+    "root": "D:/Programming/TicketToRideMCCFR_TDD",
+    "host": "JustinPC",
+    "username": "Justin Moore",
+    "executable": "D:\\Python_3_9\\python.exe"
+}

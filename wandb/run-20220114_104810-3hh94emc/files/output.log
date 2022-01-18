@@ -1,0 +1,12 @@
+
+CHECKPOINT LOADED D:/Programming/TicketToRideMCCFR_TDD/checkpoints/TTR-DeepQ/14-01-2022-10-12-08.pkl
+Traceback (most recent call last):
+  File "D:\Programming\TicketToRideMCCFR_TDD\main.py", line 35, in <module>
+    algorithm.load_latest_checkpoint(checkpoint_dir)
+  File "D:\Programming\TicketToRideMCCFR_TDD\src\algorithms\SingleActorDeepQLearning.py", line 135, in load_latest_checkpoint
+    self.target_net.load_state_dict(self.online_net.state_dict())
+  File "D:\Python_3_9\lib\site-packages\torch\nn\modules\module.py", line 1482, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for OneLayerTanh:
+	Missing key(s) in state_dict: "net.0.weight", "net.0.bias", "net.2.weight", "net.2.bias".
+	Unexpected key(s) in state_dict: "actor.net.0.weight", "actor.net.0.bias", "actor.net.2.weight", "actor.net.2.bias", "actor.net.4.weight", "actor.net.4.bias".

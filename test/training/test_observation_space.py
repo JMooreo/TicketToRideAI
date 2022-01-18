@@ -2,7 +2,7 @@ import unittest
 
 
 from src.DeepQLearning.DeepQNetwork import Network
-from src.DeepQLearning.TTREnv import TTREnv
+from src.Environments.TTREnv import TTREnv
 from src.actions.ClaimRouteAction import ClaimRouteAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.DrawWildCardAction import DrawWildCardAction
@@ -175,6 +175,8 @@ class ObservationSpaceTest(unittest.TestCase):
         self.assertEqual(self.obs.current_player_uncompleted_destinations().tolist(), actual[323:353].tolist())
         # The player's completed destinations
         self.assertEqual(self.obs.current_player_completed_destinations().tolist(), actual[353:383].tolist())
+        # The available destinations for choosing
+        self.assertEqual(self.obs.available_destinations().tolist(), actual[383:413].tolist())
 
         for val in actual.tolist():
             self.assertTrue(isinstance(val, int))

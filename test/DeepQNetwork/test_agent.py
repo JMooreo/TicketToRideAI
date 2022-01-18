@@ -1,7 +1,7 @@
 import unittest
 
 from src.DeepQLearning.Agent import Agent
-from src.DeepQLearning.TTREnv import TTREnv
+from src.Environments.TTREnv import TTREnv
 
 
 class AgentTest(unittest.TestCase):

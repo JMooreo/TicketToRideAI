@@ -1,7 +1,7 @@
 import unittest
 
 from src.DeepQLearning.DeepQNetwork import Network
-from src.DeepQLearning.TTREnv import TTREnv
+from src.Environments.TTREnv import TTREnv
 from src.actions.DrawDestinationsAction import DrawDestinationsAction
 from src.actions.DrawRandomCardAction import DrawRandomCardAction
 from src.actions.SelectDestinationAction import SelectDestinationAction

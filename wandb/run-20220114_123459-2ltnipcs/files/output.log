@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Programming\TicketToRideMCCFR_TDD\train.py", line 39, in <module>
+    algorithm = SingleActorDeepQLearningAlgorithm(env, OneLayerTanh, wandb, **wandb.config)
+  File "D:\Programming\TicketToRideMCCFR_TDD\src\algorithms\SingleActorDeepQLearning.py", line 28, in __init__
+    self.EPSILON_DECREMENT = (epsilon_start - epsilon_end) / epsilon_decay_period
+TypeError: unsupported operand type(s) for /: 'float' and 'str'

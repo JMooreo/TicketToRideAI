@@ -2,7 +2,7 @@ import copy
 import unittest
 
 from src.DeepQLearning.DeepQNetwork import Network
-from src.DeepQLearning.TTREnv import TTREnv
+from src.Environments.TTREnv import TTREnv
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap

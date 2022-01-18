@@ -3,7 +3,7 @@ import unittest
 import gym
 
 from src.DeepQLearning.Agent import Agent
-from src.DeepQLearning.TTREnv import TTREnv
+from src.Environments.TTREnv import TTREnv
 
 
 class DeepQNetworkTest(unittest.TestCase):

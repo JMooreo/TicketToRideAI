@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from src.actions.Action import Action
 from src.game.enums.GameState import GameState
 from src.game.enums.TurnState import TurnState
-from src.training.InformationSet import InformationSet
 
 
 class GameNode(ABC):
@@ -21,7 +20,6 @@ class GameNode(ABC):
 
     def next(self, action: Action):
         action.execute()
-        self.information_set = InformationSet.from_game(self.game, self.player_index())  # Probably irrelevant here.
 
         if self.game.turn_state == TurnState.FINISHED:
             player = self.game.players[self.player_index()]
@@ -39,7 +37,6 @@ class GameNode(ABC):
             self.game.current_player_index = self.next_node().player_index()
             self.game.turn_state = TurnState.INIT
             next_node = self.next_node()
-            next_node.information_set = InformationSet.from_game(self.game, self.game.current_player_index)
             return next_node
 
     def __handle_game_state_change(self):

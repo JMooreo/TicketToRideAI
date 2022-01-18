@@ -3,13 +3,11 @@ import unittest
 import numpy as np
 
 from src.DeepQLearning.DeepQNetwork import Network
-from src.DeepQLearning.TTREnv import TTREnv
-from src.actions.DrawDestinationsAction import DrawDestinationsAction
+from src.Environments.TTREnv import TTREnv
 from src.game.CardList import CardList
 from src.game.Game import Game
 from src.game.Map import USMap
 from src.game.Player import Player
-from src.game.enums.TurnState import TurnState
 from src.training.GameNode import Player1Node, Player2Node
 
 

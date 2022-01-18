@@ -1,0 +1,13 @@
+
+CHECKPOINT LOADED D:/Programming/TicketToRideMCCFR_TDD/checkpoints/CartPole-DeepQ/14-01-2022-11-00-10.pkl
+Traceback (most recent call last):
+  File "D:\Programming\TicketToRideMCCFR_TDD\main.py", line 32, in <module>
+    algorithm.load_latest_checkpoint(checkpoint_dir)
+  File "D:\Programming\TicketToRideMCCFR_TDD\src\algorithms\SingleActorDeepQLearning.py", line 135, in load_latest_checkpoint
+    self.target_net.load_state_dict(self.online_net.state_dict())
+  File "D:\Python_3_9\lib\site-packages\torch\nn\modules\module.py", line 1482, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for OneLayerTanh:
+	size mismatch for net.0.weight: copying a param with shape torch.Size([512, 4]) from checkpoint, the shape in current model is torch.Size([64, 4]).
+	size mismatch for net.0.bias: copying a param with shape torch.Size([512]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for net.2.weight: copying a param with shape torch.Size([2, 512]) from checkpoint, the shape in current model is torch.Size([2, 64]).
