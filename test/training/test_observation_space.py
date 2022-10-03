@@ -1,6 +1,6 @@
 import unittest
 
-
+from actors.RandomAgent import RandomAgent
 from src.DeepQLearning.DeepQNetwork import Network
 from src.Environments.TTREnv import TTREnv
 from src.actions.ClaimRouteAction import ClaimRouteAction
@@ -49,7 +49,7 @@ class ObservationSpaceTest(unittest.TestCase):
 
     def test_num_cards_for_each_player_after_drawing(self):
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, Network(TTREnv()))
+        tree.simulate_for_n_turns(2, [RandomAgent(), RandomAgent()])
         tree.next(DrawRandomCardAction(self.game))
 
         self.assertEqual([5, 4], self.obs.num_cards_each_player().tolist())
@@ -63,7 +63,7 @@ class ObservationSpaceTest(unittest.TestCase):
 
     def test_points_each_player_after_claim_route(self):
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, Network(TTREnv()))
+        tree.simulate_for_n_turns(2, [RandomAgent(), RandomAgent()])
         tree.next(ClaimRouteAction(self.game, 2))
 
         self.assertEqual(1, self.game.current_player_index)
@@ -108,7 +108,7 @@ class ObservationSpaceTest(unittest.TestCase):
 
         # Test when current player is flipped
         tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, Network(TTREnv()))
+        tree.simulate_for_n_turns(2, [RandomAgent(), RandomAgent()])
         self.game.visible_cards = CardList((TrainColor.WILD, 1))
         tree.next(DrawWildCardAction(self.game))
 
@@ -147,7 +147,7 @@ class ObservationSpaceTest(unittest.TestCase):
 
     def test_full_observation(self):
         tree = GameTree(self.game)
-        tree.simulate_until_game_over(Network(TTREnv()))
+        tree.simulate_until_game_over([RandomAgent(), RandomAgent()])
 
         actual = self.obs.to_np_array()
         print(self.game)

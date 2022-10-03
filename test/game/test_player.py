@@ -2,6 +2,7 @@ import unittest
 
 import numpy as np
 
+from actors.RandomAgent import RandomAgent
 from src.DeepQLearning.DeepQNetwork import Network
 from src.Environments.TTREnv import TTREnv
 from src.game.CardList import CardList
@@ -171,7 +172,7 @@ class PlayerTest(unittest.TestCase):
 
     def test_get_last_turn_multiple(self):
         env = TTREnv()
-        env.tree.simulate_for_n_turns(6, Network(env))
+        env.tree.simulate_for_n_turns(6, [RandomAgent(), RandomAgent()])
 
         action_ids = []
         while isinstance(env.tree.current_node, Player1Node):

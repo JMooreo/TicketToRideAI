@@ -10,6 +10,9 @@ class Action(ABC):
         self.id = action_id
         self.executed = False
 
+    def __str__(self):
+        return type(self).__name__
+
     def __eq__(self, other):
         return False
 

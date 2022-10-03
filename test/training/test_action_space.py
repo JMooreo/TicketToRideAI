@@ -3,6 +3,7 @@ import unittest
 
 import numpy as np
 
+from actors.RandomAgent import RandomAgent
 from src.DeepQLearning.DeepQNetwork import Network
 from src.Environments.TTREnv import TTREnv
 from src.actions.ClaimRouteAction import ClaimRouteAction
@@ -104,11 +105,11 @@ class ActionSpaceTest(unittest.TestCase):
         self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
 
     def test_get_valid_action_ids_after_one_turn(self):
-        GameTree(self.game).simulate_for_n_turns(1, Network(TTREnv()))
+        GameTree(self.game).simulate_for_n_turns(1, [RandomAgent(), RandomAgent()])
         self.assertTrue((np.array([0]) == self.action_space.get_valid_action_ids()).all)
 
     def test_get_valid_action_ids_after_two_turn(self):
-        GameTree(self.game).simulate_for_n_turns(2, Network(TTREnv()))
+        GameTree(self.game).simulate_for_n_turns(2, [RandomAgent(), RandomAgent()])
 
         self.assertTrue(len(self.action_space.get_valid_action_ids()) > 1)
 
@@ -116,7 +117,7 @@ class ActionSpaceTest(unittest.TestCase):
         game = Game([Player(), Player()], USMap())
         tree = GameTree(game)
 
-        tree.simulate_for_n_turns(4, Network(TTREnv()))
+        tree.simulate_for_n_turns(4, [RandomAgent(), RandomAgent()])
 
         game_copy = copy.deepcopy(game)
 

@@ -15,7 +15,7 @@ from src.game.enums.TrainColor import TrainColor
 from src.training.Strategy import Strategy
 
 
-class ActionSpace(gym.Space):
+class ActionSpace:
     def __init__(self, game):
         super().__init__()
         self.game = game

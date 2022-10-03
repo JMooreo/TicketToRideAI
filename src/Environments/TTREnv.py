@@ -1,4 +1,3 @@
-from gym import Env
 from src.actions.PassAction import PassAction
 from src.game.Game import Game
 from src.game.Map import USMap
@@ -9,7 +8,7 @@ from src.training.GameTree import GameTree
 from src.training.ObservationSpace import ObservationSpace
 
 
-class TTREnv(Env):
+class TTREnv:
     def __init__(self):
         self.tree = GameTree(Game([Player(), Player()], USMap()))
         self.action_space = ActionSpace(self.tree.game)
@@ -44,7 +43,7 @@ class TTREnv(Env):
 
         return self.observation_space.to_np_array()
 
-    def render(self, mode="human"):
+    def render(self):
         pass
 #
 #
@@ -69,6 +68,8 @@ class TTREnv(Env):
 # def main():
 #     checkpoint_directory = "D:/Programming/TicketToRideMCCFR_TDD/checkpoints"
 #     env = TTREnv()
+
+
 #
 #     GAMMA = 0.99
 #     BATCH_SIZE = 32

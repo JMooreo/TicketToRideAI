@@ -3,6 +3,7 @@ from typing import List
 
 import numpy as np
 
+from actors.RandomAgent import RandomAgent
 from src.DeepQLearning.DeepQNetwork import Network
 from src.Environments.TTREnv import TTREnv
 from src.actions.ClaimRouteAction import ClaimRouteAction
@@ -240,8 +241,6 @@ class ClaimRouteActionTest(unittest.TestCase):
         self.assertEqual([action], player.turn_history)
 
     def test_claiming_routes_that_complete_a_destination(self):
-        tree = GameTree(self.game)
-        tree.simulate_for_n_turns(2, Network(TTREnv()))
         destination: Destination = USMap().destinations.get(6)
         routes: List[Route] = [USMap().routes.get(i) for i in [32, 33]]
 
@@ -259,7 +258,7 @@ class ClaimRouteActionTest(unittest.TestCase):
     def test_claiming_a_route_while_visible_cards_are_empty_puts_back_in_visible_cards(self):
         env = Network(TTREnv())
         env.tree = GameTree(self.game)
-        env.tree.simulate_for_n_turns(2, env)
+        env.tree.simulate_for_n_turns(2, [RandomAgent(), RandomAgent()])
 
         env.tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
         env.tree.game.visible_cards = CardList()
@@ -275,7 +274,7 @@ class ClaimRouteActionTest(unittest.TestCase):
         env.tree = GameTree(self.game)
         env.tree.game.players[0].routes = {key: val for key, val in env.tree.game.unclaimed_routes.items()}
         env.tree.game.unclaimed_routes = {}
-        env.tree.simulate_for_n_turns(2, Network(env))
+        env.tree.simulate_for_n_turns(2, [RandomAgent(), RandomAgent()])
 
         env.tree.game.current_player().hand = CardList((TrainColor.BLUE, 6))
         env.tree.game.visible_cards = CardList((TrainColor.GREEN, 3))
