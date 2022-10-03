@@ -1,12 +1,11 @@
-from typing import List
-
 import numpy as np
 
 from src.game.CardList import CardList
 
 
 class Player:
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
         self.points = 0
         self.trains = 45
         self.uncompleted_destinations = {}
@@ -14,7 +13,7 @@ class Player:
         self.routes = {}
         self.hand = CardList()
         self.turn_history = []
-        self.long_term_turn_history = []
+        self.memory = []
 
     def __str__(self):
         return f"Points: {self.points}\n" + \
@@ -25,7 +24,8 @@ class Player:
                f"Completed Destinations: {self.completed_destinations}\n" + \
                f"Routes: {self.routes}\n" + \
                f"Hand: {self.hand}\n" + \
-               f"Turn History {self.turn_history}\n"
+               f"Current Turn History: {self.turn_history}\n" + \
+               f"Memory: {self.human_readable_memory()}\n"
 
     def __repr__(self):
         return str(self)
@@ -40,6 +40,23 @@ class Player:
                self.hand == other.hand and \
                self.turn_history == other.turn_history
 
+    def human_readable_memory(self):
+        from training.ActionSpace import ActionSpace
+
+        turns = []
+        for one_hot_array in self.memory:
+            action_ids = np.argwhere(one_hot_array == 1).squeeze()
+            try:
+                action_ids = list(action_ids)
+                # Took multiple actions
+            except Exception as e:
+                # Only took one action
+                action_ids = [action_ids]
+
+            turns.append([str(ActionSpace(self.game).get_action_by_id(i)) for i in action_ids])
+
+        return turns
+
     def points_from_routes(self):
         return sum((route.points for route in self.routes.values()))
 
@@ -48,18 +65,20 @@ class Player:
         uncompleted = sum(d.points for d in self.uncompleted_destinations.values())
         return completed - uncompleted
 
-    def update_long_term_turn_history(self):
+    def update_memory(self, limit=0):
         action_ids = [action.id for action in self.turn_history]
         if any([id_ < 0 for id_ in action_ids]) < 0:
             raise ValueError
 
         encoded_turn_history = np.array([1 if id_ in action_ids else 0 for id_ in range(141)], dtype=np.float32)  # 141 is action space size, covered in test
 
-        self.long_term_turn_history.append(encoded_turn_history)
-        self.long_term_turn_history = self.long_term_turn_history[-3:]
+        self.memory.append(encoded_turn_history)
+
+        if limit > 0:
+            self.memory = self.memory[-limit:]
 
     def get_last_turn(self):
-        if len(self.long_term_turn_history) > 0:
-            return self.long_term_turn_history[-1]
+        if len(self.memory) > 0:
+            return self.memory[-1]
 
         return np.zeros(141, dtype=np.float32)  # 141 is action space length, covered by test

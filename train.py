@@ -9,8 +9,8 @@ from src.Environments.TTREnv import TTREnv
 
 if __name__ == "__main__":
     env = TTREnv()
-    env.tree.simulate_until_game_over([RandomAgent(), RandomAgent()])
-    print()
+    env.tree.simulate_until_game_over([RandomAgent(), RandomAgent()], debug=True)
+    env.render()
     # wandb.init(project="ticket-to-ride-ai", entity="jmooreo")
     # wandb.config = {
     #     'epsilon_start': 1,

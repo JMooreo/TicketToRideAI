@@ -10,7 +10,7 @@ from src.training.ObservationSpace import ObservationSpace
 
 class TTREnv:
     def __init__(self):
-        self.tree = GameTree(Game([Player(), Player()], USMap()))
+        self.tree = GameTree(Game(players=2, game_map=USMap()))
         self.action_space = ActionSpace(self.tree.game)
         self.observation_space = ObservationSpace(self.tree.game)
 
@@ -44,7 +44,7 @@ class TTREnv:
         return self.observation_space.to_np_array()
 
     def render(self):
-        pass
+        return print(self.tree.game)
 #
 #
 # def replay_buffer_filled_random(env, min_replay_size, buffer_size):

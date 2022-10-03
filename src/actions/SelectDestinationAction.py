@@ -5,8 +5,10 @@ from src.game.enums.TurnState import TurnState
 
 class SelectDestinationAction(Action):
     def __init__(self, game, destination_id: int, action_id=-1):
-        if not isinstance(destination_id, int):
-            raise ValueError("destination Id was: ", destination_id)
+        try:
+            int(destination_id)
+        except TypeError:
+            raise TypeError(f"Destination Id was: {destination_id}")
 
         if destination_id < 0 or destination_id > len(game.map.destinations):
             raise IndexError

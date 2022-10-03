@@ -58,10 +58,10 @@ class GameTree:
 
                 self.next(action)
 
-    def simulate_until_game_over(self, agents: List):
+    def simulate_until_game_over(self, agents: List, debug=False):
         if len(agents) != len(self.game.players):
             raise ValueError("Number of agents must match the number of players! "
                              f"{len(agents)} != {len(self.game.players)}")
 
         while self.game.state != GameState.GAME_OVER:
-            self.simulate_for_n_turns(1, agents)
+            self.simulate_for_n_turns(1, agents, debug)

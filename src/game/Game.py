@@ -11,10 +11,11 @@ from src.game.enums.TurnState import TurnState
 
 class Game:
     @staticmethod
-    def us_game():
-        return Game([Player(), Player()], USMap())
+    def us_game(players=2):
+        return Game(players, USMap())
 
-    def __init__(self, players: List[Player], game_map: Map):
+    def __init__(self, players: int, game_map: Map):
+        players = [Player(self) for _ in range(players)]
         if not players or not game_map:
             raise ValueError
 

@@ -23,7 +23,7 @@ class GameNode(ABC):
 
         if self.game.turn_state == TurnState.FINISHED:
             player = self.game.players[self.player_index()]
-            player.update_long_term_turn_history()
+            player.update_memory(limit=3)
             player.turn_history = []
             return self.pass_turn()
 
