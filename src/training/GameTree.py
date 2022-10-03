@@ -13,7 +13,6 @@ from src.training.ObservationSpace import ObservationSpace
 class GameTree:
     def __init__(self, game: Game):
         self.game = game
-        self.agents = []
         self.current_node: GameNode = Player1Node(self.game)
         self.training_node_type = Player1Node
 
@@ -31,9 +30,7 @@ class GameTree:
 
         action_space = ActionSpace(self.game)
 
-        env = TTREnv()
-        env.action_space = action_space
-        env.observation_space = ObservationSpace(self.game)
+        env = TTREnv(self, action_space, ObservationSpace(self.game))
 
         for _ in range(num_turns):
             if self.game.state == GameState.GAME_OVER:

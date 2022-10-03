@@ -42,10 +42,11 @@ class Player:
 
     def human_readable_memory(self):
         from training.ActionSpace import ActionSpace
-
         turns = []
+
         for one_hot_array in self.memory:
             action_ids = np.argwhere(one_hot_array == 1).squeeze()
+
             try:
                 action_ids = list(action_ids)
                 # Took multiple actions

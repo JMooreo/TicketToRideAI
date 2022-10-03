@@ -15,12 +15,11 @@ class Game:
         return Game(players, USMap())
 
     def __init__(self, players: int, game_map: Map):
-        players = [Player(self) for _ in range(players)]
+        self.players = [Player(self) for _ in range(players)]
         if not players or not game_map:
             raise ValueError
 
         self.map = game_map
-        self.players = players
         self.state = GameState.FIRST_ROUND
         self.turn_state = TurnState.INIT
         self.unclaimed_routes = {i: val for i, val in game_map.routes.items()}
@@ -32,7 +31,7 @@ class Game:
         self.turn_count = 0
         self.last_turn_count = 1000
 
-        for player in players:
+        for player in self.players:
             player.hand += self.deck.get_random(4)
 
         self.visible_cards += self.deck.get_random(5)

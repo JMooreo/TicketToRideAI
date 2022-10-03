@@ -9,10 +9,10 @@ from src.training.ObservationSpace import ObservationSpace
 
 
 class TTREnv:
-    def __init__(self):
-        self.tree = GameTree(Game(players=2, game_map=USMap()))
-        self.action_space = ActionSpace(self.tree.game)
-        self.observation_space = ObservationSpace(self.tree.game)
+    def __init__(self, tree=None, action_space=None, observation_space=None):
+        self.tree = tree if tree else GameTree(Game(players=2, game_map=USMap()))
+        self.action_space = action_space if action_space else ActionSpace(self.tree.game)
+        self.observation_space = observation_space if observation_space else ObservationSpace(self.tree.game)
 
     def step(self, action_id: int):
         training_player = self.tree.game.current_player()

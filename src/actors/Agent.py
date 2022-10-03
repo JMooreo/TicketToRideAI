@@ -13,5 +13,5 @@ class Agent:
         return f"{type(self).__name__}::{self.id}"
 
     @abstractmethod
-    def act(self, env: TTREnv):
+    def act(self, env: TTREnv) -> int:
         pass

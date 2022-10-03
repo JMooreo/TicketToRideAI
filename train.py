@@ -3,13 +3,14 @@ import sys
 
 import gym
 import wandb
+from actors.NaiveAgent import NaiveAgent
 from actors.RandomAgent import RandomAgent
 
 from src.Environments.TTREnv import TTREnv
 
 if __name__ == "__main__":
     env = TTREnv()
-    env.tree.simulate_until_game_over([RandomAgent(), RandomAgent()], debug=True)
+    env.tree.simulate_until_game_over([NaiveAgent(), RandomAgent()], debug=True)
     env.render()
     # wandb.init(project="ticket-to-ride-ai", entity="jmooreo")
     # wandb.config = {
