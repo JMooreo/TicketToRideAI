@@ -28,7 +28,7 @@ Attempting to create a human-level AI which learns to complete routes and destin
 #### (in the Real-MCCFR branch)
   1. Create an abstracted version of the game
   2. Play through the game tree, training one player at a time. If there is a random event, like drawing cards, only sample one of the possibilities
-  3. If there are regrets for a particular game node, select actions with the highest regret, otherwisew play a random valid move
+  3. If there are regrets for a particular game node, select actions with the highest regret, otherwise play a random valid move
   4. Play through every action that the agent could have made for every point in the tree for a game
   5. Regret = maximum hypothetical reward - actual reward per action
   6. Update regrets for each game node after checking all the branches
