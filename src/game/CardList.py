@@ -38,6 +38,9 @@ class CardList:
         return "_".join([f"{amount}{key.name}" for key, amount in self.cards.items() if amount > 0])
 
     def __add__(self, other):
+        if not isinstance(other, CardList):
+            other = other.as_cardlist()
+
         cards = {}
 
         for color in TrainColor:
@@ -59,6 +62,17 @@ class CardList:
 
             if value > 0:
                 cards[color] = value
+
+        new_list = CardList()
+        new_list.cards = cards
+        return new_list
+
+    def subtract_clamp_at_zero(self, other):
+        cards = {}
+
+        for color in TrainColor:
+            value = self.cards.get(color, 0) - other.cards.get(color, 0)
+            cards[color] = max(value, 0)
 
         new_list = CardList()
         new_list.cards = cards

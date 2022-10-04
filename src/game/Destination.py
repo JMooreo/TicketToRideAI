@@ -18,7 +18,7 @@ class Destination:
         return str(self)
 
     def path_from(self, routes):
-        return self.search(path=[Route([self.cities[0], self.cities[0]], RouteCost(TrainColor.WILD, 1))],
+        return self.search(path=[Route(-1, [self.cities[0], self.cities[0]], RouteCost(TrainColor.WILD, 1))],
                            visited=[],
                            goal=self.cities[1],
                            routes_to_check=routes)

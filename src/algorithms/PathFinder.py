@@ -6,10 +6,10 @@ from game.Route import Route
 
 
 class PathFinder:
-    def __init__(self, available_routes: Dict[int, Route], destination: Destination, routes: Dict[int, Route]):
-        self.available_routes = available_routes
+    def __init__(self, unclaimed_routes: Dict[int, Route], destination: Destination, owned_routes: Dict[int, Route]):
+        self.available_routes = {**unclaimed_routes, **owned_routes}
         self.destination = destination
-        self.routes = routes
+        self.owned_routes = owned_routes  # Subtract these from the cost to calculate the true cost.
         self.results: List[Tuple[List[Route], int]] = []
 
     @abstractmethod

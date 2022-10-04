@@ -17,6 +17,18 @@ class RouteCost:
         self.color = color
         self.amount = amount
 
+    def as_cardlist(self):
+        return CardList((self.color, self.amount))
+
+    def __add__(self, other):
+        if isinstance(other, RouteCost):
+            return self.as_cardlist() + other.as_cardlist()
+
+        if isinstance(other, CardList):
+            return self.as_cardlist() + other
+
+        raise TypeError(f"Could not add {type(other)} to type RouteCost.")
+
     def __str__(self):
         return str(CardList((self.color, self.amount)))
 

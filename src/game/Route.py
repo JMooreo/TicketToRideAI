@@ -4,10 +4,11 @@ from src.game.RouteCost import RouteCost
 
 
 class Route:
-    def __init__(self, cities: List[City], cost: RouteCost, adjacent_route_id=None):
+    def __init__(self, _id: int, cities: List[City], cost: RouteCost, adjacent_route_id=None):
         if cost.amount <= 0:
             raise IndexError
 
+        self.id = _id
         self.adjacent_route_id = adjacent_route_id
         self.points = [1, 2, 4, 7, 10, 15][cost.amount - 1]
         self.cost = cost
